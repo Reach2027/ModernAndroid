@@ -1,0 +1,124 @@
+[versions]
+
+# Plugin
+agp = "8.2.1"
+androidTools = "31.2.1"
+kotlin = "1.9.21"
+ksp = "1.9.21-1.0.16"
+
+# Library
+# Compose
+composeBom = "2023.10.01"
+composeCompiler = "1.5.7"
+
+# Jetpack
+androidDesugarJdk = "2.0.4"
+
+androidxCore = "1.12.0"
+androidxActivityCompose = "1.8.2"
+
+androidxCollection = "1.3.0"
+
+androidxlLifecycle = "2.6.2"
+
+androidxNavigation = "2.7.6"
+
+androidxPaging = "3.2.1"
+
+# KotlinX
+kotlinxCoroutines = "1.7.3"
+kotlinxSerialization = "1.6.2"
+kotlinxDatetime = "0.5.0"
+
+# Other
+koin = "3.5.3"
+
+# Test
+junit = "4.13.2"
+
+[libraries]
+# Compsoe
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+
+compose-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+
+compose-animation = { group = "androidx.compose.animation", name = "animation" }
+
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-material-icon = { group = "androidx.compose.material", name = "material-icons-core" }
+compose-material-icon-extended = { group = "androidx.compose.material", name = "material-icons-extended" }
+
+compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
+compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
+
+compose-ui = { group = "androidx.compose.ui", name = "ui" }
+compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
+compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+
+compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
+
+# Jetpack
+android-desugar-jdk = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdk" }
+
+androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivityCompose" }
+
+androidx-collection = { group = "androidx.collection", name = "collection", version.ref = "androidxCollection" }
+
+# Lifecycle
+androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxlLifecycle" }
+androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxlLifecycle" }
+androidx-lifecycle-viewmodel-savedstate = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-savedstate", version.ref = "androidxlLifecycle" }
+androidx-lifecycle-common = { group = "androidx.lifecycle", name = "lifecycle-common-java8", version.ref = "androidxlLifecycle" }
+
+androidx-navigation = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
+
+androidx-paging = { group = "androidx.paging", name = "paging-runtime", version.ref = "androidxPaging" }
+androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "androidxPaging" }
+androidx-paging-test = { group = "androidx.paging", name = "paging-common", version.ref = "androidxPaging" }
+
+# KotlinX
+kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
+
+kotlinx-serialization-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+
+kotlinx-datetime = { group = "org.jetbrains.kotlinx", name = "kotlinx-datetime", version.ref = "kotlinxDatetime" }
+
+# other
+koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+koin-androidx-compose-navigation = { group = "io.insert-koin", name = "koin-androidx-compose-navigation", version.ref = "koin" }
+koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
+
+# Unit Test
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+
+# Dependencies of the included build-logic
+android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
+kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+kotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlinJvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+
+# Plugins defined by this project
+reach-android-application = { id = "reach.android.application", version = "unspecified" }
+reach-android-application-compose = { id = "reach.android.application.compose", version = "unspecified" }
+reach-android-library = { id = "reach.android.library", version = "unspecified" }
+reach-android-library-compose = { id = "reach.android.library.compose", version = "unspecified" }
+reach-jvm-library = { id = "reach.jvm.library", version = "unspecified" }
+reach-ui-feature = { id = "reach.ui.feature.module", version = "unspecified" }
