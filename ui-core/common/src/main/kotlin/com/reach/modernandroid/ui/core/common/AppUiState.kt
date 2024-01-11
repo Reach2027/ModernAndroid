@@ -14,20 +14,6 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.more.navigation
+package com.reach.modernandroid.ui.core.common
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.reach.modernandroid.ui.feature.more.MoreRoute
-
-const val ROUTE_MORE = "route_more"
-
-fun NavController.navToMore(navOptions: NavOptions) = navigate(ROUTE_MORE, navOptions)
-
-fun NavGraphBuilder.moreRoute() {
-    composable(route = ROUTE_MORE) {
-        MoreRoute()
-    }
-}
+interface AppUiState

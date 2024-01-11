@@ -19,7 +19,7 @@ package com.reach.modernandroid.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.reach.modernandroid.ui.feature.me.navigation.ME_ROUTE
+import com.reach.modernandroid.ui.feature.me.navigation.ROUTE_ME
 import com.reach.modernandroid.ui.feature.me.navigation.meRoute
 import com.reach.modernandroid.ui.feature.more.navigation.moreRoute
 
@@ -27,7 +27,7 @@ import com.reach.modernandroid.ui.feature.more.navigation.moreRoute
 fun AppNavHost(
     navController: NavHostController,
 ) {
-    NavHost(navController = navController, startDestination = ME_ROUTE) {
+    NavHost(navController = navController, startDestination = ROUTE_ME) {
         meRoute()
 
         moreRoute()

@@ -22,12 +22,12 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.reach.modernandroid.ui.feature.me.MeRoute
 
-const val ME_ROUTE = "me_route"
+const val ROUTE_ME = "route_me"
 
-fun NavController.navToMe(navOptions: NavOptions) = navigate(ME_ROUTE, navOptions)
+fun NavController.navToMe(navOptions: NavOptions) = navigate(ROUTE_ME, navOptions)
 
 fun NavGraphBuilder.meRoute() {
-    composable(route = ME_ROUTE) {
+    composable(route = ROUTE_ME) {
         MeRoute()
     }
 }

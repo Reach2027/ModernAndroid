@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.more.navigation
+package com.reach.modernandroid.ui.core.resource
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.reach.modernandroid.ui.feature.more.MoreRoute
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.RocketLaunch
+import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.PersonOutline
+import androidx.compose.material.icons.rounded.RocketLaunch
 
-const val ROUTE_MORE = "route_more"
+object AppIcons {
+    val MeSelected = Icons.Rounded.Person
+    val MeUnselected = Icons.Rounded.PersonOutline
 
-fun NavController.navToMore(navOptions: NavOptions) = navigate(ROUTE_MORE, navOptions)
-
-fun NavGraphBuilder.moreRoute() {
-    composable(route = ROUTE_MORE) {
-        MoreRoute()
-    }
+    val MoreSelected = Icons.Rounded.RocketLaunch
+    val MoreUnselected = Icons.Outlined.RocketLaunch
 }

@@ -75,7 +75,7 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
 
 internal fun Project.configureComposeLibraries() {
     dependencies {
-        add("implementation", project(":ui-core:design"))
+        add("implementation", project(":ui-core:resource"))
 
         implementation(libs, "androidx.lifecycle.runtime.compose")
         implementation(libs, "androidx.lifecycle.viewmodel.compose")
@@ -86,5 +86,7 @@ internal fun Project.configureComposeLibraries() {
 
         implementation(libs, "koin.androidx.compose")
         implementation(libs, "koin.androidx.compose.navigation")
+
+        implementation(libs, "coil")
     }
 }

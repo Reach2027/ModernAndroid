@@ -33,6 +33,10 @@ kotlinxDatetime = "0.5.0"
 # Other
 koin = "3.5.3"
 
+coil = "2.5.0"
+
+retrofit = "2.9.0"
+
 # Test
 junit = "4.13.2"
 
@@ -97,6 +101,10 @@ koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = 
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
 koin-androidx-compose-navigation = { group = "io.insert-koin", name = "koin-androidx-compose-navigation", version.ref = "koin" }
 koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
+
+coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
+
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 
 # Unit Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }

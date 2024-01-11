@@ -13,21 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+plugins {
+    alias(libs.plugins.reach.android.library)
+    alias(libs.plugins.reach.android.library.compose)
+}
 
-package com.reach.modernandroid.ui.feature.more.navigation
+android {
+    namespace = "com.reach.modernandroid.ui.core.resource"
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.reach.modernandroid.ui.feature.more.MoreRoute
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
 
-const val ROUTE_MORE = "route_more"
-
-fun NavController.navToMore(navOptions: NavOptions) = navigate(ROUTE_MORE, navOptions)
-
-fun NavGraphBuilder.moreRoute() {
-    composable(route = ROUTE_MORE) {
-        MoreRoute()
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
     }
 }

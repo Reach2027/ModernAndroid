@@ -25,13 +25,14 @@ include(":app")
 // UI feature
 include(":ui-feature:me")
 include(":ui-feature:more")
-include(":ui-feature:camerax")
 
 // UI common
 include(":ui-common:album")
+include(":ui-common:camerax")
 
 // UI core
-include(":ui-core:design")
+include(":ui-core:resource")
+include(":ui-core:common")
 
 // Data feature
 include(":data-feature:album")

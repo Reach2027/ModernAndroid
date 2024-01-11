@@ -26,9 +26,9 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.reach.modernandroid.navigation.TopDest
-import com.reach.modernandroid.ui.feature.me.navigation.ME_ROUTE
+import com.reach.modernandroid.ui.feature.me.navigation.ROUTE_ME
 import com.reach.modernandroid.ui.feature.me.navigation.navToMe
-import com.reach.modernandroid.ui.feature.more.navigation.MORE_ROUTE
+import com.reach.modernandroid.ui.feature.more.navigation.ROUTE_MORE
 import com.reach.modernandroid.ui.feature.more.navigation.navToMore
 
 @Composable
@@ -49,8 +49,8 @@ class AppState(
 
     val currentTopDest: TopDest?
         @Composable get() = when (currentDest?.route) {
-            ME_ROUTE -> TopDest.ME
-            MORE_ROUTE -> TopDest.More
+            ROUTE_ME -> TopDest.ME
+            ROUTE_MORE -> TopDest.More
             else -> null
         }
 

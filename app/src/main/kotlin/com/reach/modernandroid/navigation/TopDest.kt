@@ -17,7 +17,7 @@
 package com.reach.modernandroid.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.reach.modernandroid.ui.core.design.AppIcons
+import com.reach.modernandroid.ui.core.resource.AppIcons
 
 enum class TopDest(
     val selectedIcon: ImageVector,
