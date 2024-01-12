@@ -14,12 +14,21 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.camerax
+package com.reach.modernandroid.ui.common.camerax
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 
 @Composable
 fun CameraxRoute() {
-    Text(text = "CameraxRoute")
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        Text(text = "CameraxRoute")
+    }
 }

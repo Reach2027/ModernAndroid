@@ -14,9 +14,15 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.core.common.navigation
+package com.reach.modernandroid.ui.common.camerax.navigation
 
-object CommonRoute {
-    const val ALBUM = "route_album"
-    const val CAMERAX = "route_camerax"
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import com.reach.modernandroid.ui.common.camerax.CameraxRoute
+import com.reach.modernandroid.ui.core.common.navigation.CommonRoute
+
+fun NavGraphBuilder.cameraxRoute() {
+    composable(route = CommonRoute.CAMERAX) {
+        CameraxRoute()
+    }
 }

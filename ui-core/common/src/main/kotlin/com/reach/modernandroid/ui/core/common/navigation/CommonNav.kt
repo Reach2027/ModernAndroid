@@ -14,23 +14,19 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.more
+package com.reach.modernandroid.ui.core.common.navigation
 
-import androidx.compose.foundation.clickable
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.reach.modernandroid.ui.core.common.LocalAppUiState
-import com.reach.modernandroid.ui.core.common.navigation.navToAlbum
+import androidx.navigation.NavController
 
-@Composable
-fun MoreRoute() {
-    val navController = LocalAppUiState.current.navController
+object CommonRoute {
+    const val ALBUM = "route_album"
+    const val CAMERAX = "route_camerax"
+}
 
-    Text(
-        text = "MoreRoute",
-        modifier = Modifier.clickable {
-            navController.navToAlbum()
-        },
-    )
+fun NavController.navToAlbum() {
+    navigate(CommonRoute.ALBUM)
+}
+
+fun NavController.navToCamerax() {
+    navigate(CommonRoute.CAMERAX)
 }

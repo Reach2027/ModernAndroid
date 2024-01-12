@@ -17,7 +17,12 @@
 package com.reach.modernandroid.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.navOptions
 import com.reach.modernandroid.ui.core.resource.AppIcons
+import com.reach.modernandroid.ui.feature.me.navigation.navToMe
+import com.reach.modernandroid.ui.feature.more.navigation.navToMore
 
 enum class TopDest(
     val selectedIcon: ImageVector,
@@ -31,4 +36,19 @@ enum class TopDest(
         selectedIcon = AppIcons.MeSelected,
         unselectedIcon = AppIcons.MeUnselected,
     ),
+}
+
+fun NavHostController.navToTopDest(topDest: TopDest) {
+    val topNavOptions = navOptions {
+        popUpTo(this@navToTopDest.graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
+    }
+
+    when (topDest) {
+        TopDest.ME -> this.navToMe(topNavOptions)
+        TopDest.More -> this.navToMore(topNavOptions)
+    }
 }

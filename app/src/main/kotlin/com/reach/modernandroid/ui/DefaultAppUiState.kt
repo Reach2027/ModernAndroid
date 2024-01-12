@@ -14,23 +14,9 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.more
+package com.reach.modernandroid.ui
 
-import androidx.compose.foundation.clickable
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import com.reach.modernandroid.ui.core.common.LocalAppUiState
-import com.reach.modernandroid.ui.core.common.navigation.navToAlbum
+import androidx.navigation.NavHostController
+import com.reach.modernandroid.ui.core.common.AppUiState
 
-@Composable
-fun MoreRoute() {
-    val navController = LocalAppUiState.current.navController
-
-    Text(
-        text = "MoreRoute",
-        modifier = Modifier.clickable {
-            navController.navToAlbum()
-        },
-    )
-}
+internal class DefaultAppUiState(override val navController: NavHostController) : AppUiState

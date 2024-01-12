@@ -16,4 +16,18 @@
 
 package com.reach.modernandroid.ui.core.common
 
-interface AppUiState
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.navigation.NavHostController
+
+val LocalAppUiState = staticCompositionLocalOf<AppUiState> {
+    EmptyAppUiState()
+}
+
+interface AppUiState {
+
+    val navController: NavHostController
+}
+
+private class EmptyAppUiState : AppUiState {
+    override lateinit var navController: NavHostController
+}

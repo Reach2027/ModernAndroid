@@ -19,6 +19,8 @@ package com.reach.modernandroid.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.reach.modernandroid.ui.common.album.navigation.albumRoute
+import com.reach.modernandroid.ui.common.camerax.navigation.cameraxRoute
 import com.reach.modernandroid.ui.feature.me.navigation.ROUTE_ME
 import com.reach.modernandroid.ui.feature.me.navigation.meRoute
 import com.reach.modernandroid.ui.feature.more.navigation.moreRoute
@@ -31,5 +33,9 @@ fun AppNavHost(
         meRoute()
 
         moreRoute()
+
+        albumRoute()
+
+        cameraxRoute()
     }
 }

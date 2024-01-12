@@ -70,6 +70,9 @@ dependencies {
     implementation(projects.uiFeature.more)
     implementation(projects.uiFeature.me)
 
+    implementation(projects.uiCommon.album)
+    implementation(projects.uiCommon.camerax)
+
     implementation(libs.androidx.core)
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.window.size)

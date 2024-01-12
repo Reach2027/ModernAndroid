@@ -26,25 +26,44 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.reach.modernandroid.navigation.AppNavHost
 import com.reach.modernandroid.navigation.TopDest
+import com.reach.modernandroid.navigation.navToTopDest
+import com.reach.modernandroid.ui.core.common.LocalAppUiState
 
 @Composable
 fun App(
-    appState: AppState = rememberAppState(),
+    navController: NavHostController = rememberNavController(),
+) {
+    CompositionLocalProvider(
+        LocalAppUiState provides DefaultAppUiState(navController),
+    ) {
+        AppScreen(navController = navController)
+    }
+}
+
+@Composable
+private fun AppScreen(
+    navController: NavHostController = LocalAppUiState.current.navController,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+
+    val currentDest = navController.currentBackStackEntryAsState().value?.destination
 
     Scaffold(
         bottomBar = {
             AppNavBar(
-                destList = appState.topDestList,
-                onNavToTopDest = appState::navToTopDest,
-                currentDest = appState.currentDest,
+                destList = TopDest.entries,
+                onNavToTopDest = { navController.navToTopDest(it) },
+                currentDest = currentDest,
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -54,7 +73,7 @@ fun App(
                 .fillMaxSize()
                 .padding(padding),
         ) {
-            AppNavHost(appState.navController)
+            AppNavHost(navController)
         }
     }
 }
