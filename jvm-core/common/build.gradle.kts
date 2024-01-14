@@ -16,3 +16,7 @@
 plugins {
     alias(libs.plugins.reach.jvm.library)
 }
+
+dependencies {
+    implementation(libs.okio)
+}

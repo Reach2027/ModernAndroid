@@ -9,14 +9,14 @@ import org.gradle.kotlin.dsl.getByType
 val Project.libs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-fun DependencyHandlerScope.implementation(libs: VersionCatalog, alias: String) {
+internal fun DependencyHandlerScope.implementation(libs: VersionCatalog, alias: String) {
     add("implementation", libs.findLibrary(alias).get())
 }
 
-fun DependencyHandlerScope.debugImplementation(libs: VersionCatalog, alias: String) {
+internal fun DependencyHandlerScope.debugImplementation(libs: VersionCatalog, alias: String) {
     add("debugImplementation", libs.findLibrary(alias).get())
 }
 
-fun DependencyHandlerScope.testImplementation(libs: VersionCatalog, alias: String) {
+internal fun DependencyHandlerScope.testImplementation(libs: VersionCatalog, alias: String) {
     add("testImplementation", libs.findLibrary(alias).get())
 }

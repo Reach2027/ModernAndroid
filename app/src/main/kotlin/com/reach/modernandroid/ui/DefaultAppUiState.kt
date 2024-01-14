@@ -19,4 +19,6 @@ package com.reach.modernandroid.ui
 import androidx.navigation.NavHostController
 import com.reach.modernandroid.ui.core.common.AppUiState
 
-internal class DefaultAppUiState(override val navController: NavHostController) : AppUiState
+internal class DefaultAppUiState(
+    override val navController: NavHostController,
+) : AppUiState
