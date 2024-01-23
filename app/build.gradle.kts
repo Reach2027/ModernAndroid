@@ -57,6 +57,8 @@ dependencies {
     implementation(projects.uiCommon.album)
     implementation(projects.uiCommon.camerax)
 
+    implementation(libs.androidx.startup)
+
     implementation(libs.androidx.core)
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.window.size)

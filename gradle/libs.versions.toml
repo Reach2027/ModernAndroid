@@ -13,6 +13,7 @@ composeCompiler = "1.5.7"
 
 # Jetpack
 androidDesugarJdk = "2.0.4"
+androidxStartup = "1.1.1"
 
 androidxCore = "1.12.0"
 androidxActivityCompose = "1.8.2"
@@ -69,6 +70,7 @@ compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
 
 # Jetpack
 android-desugar-jdk = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdk" }
+androidx-startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "androidxStartup" }
 
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivityCompose" }
