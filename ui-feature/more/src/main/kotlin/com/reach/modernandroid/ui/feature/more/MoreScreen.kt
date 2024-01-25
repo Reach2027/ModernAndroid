@@ -16,21 +16,48 @@
 
 package com.reach.modernandroid.ui.feature.more
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.reach.modernandroid.ui.core.common.LocalAppUiState
 import com.reach.modernandroid.ui.core.common.navigation.navToAlbum
+import com.reach.modernandroid.ui.core.common.navigation.navToCamerax
 
 @Composable
-fun MoreRoute() {
+internal fun MoreRoute() {
     val navController = LocalAppUiState.current.navController
 
-    Text(
-        text = "MoreRoute",
-        modifier = Modifier.clickable {
-            navController.navToAlbum()
-        },
+    MoreScreen(
+        navToAlbum = { navController.navToAlbum() },
+        navToCamerax = { navController.navToCamerax() },
     )
+}
+
+@Composable
+private fun MoreScreen(
+    navToAlbum: () -> Unit,
+    navToCamerax: () -> Unit,
+) {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Spacer(modifier = Modifier.height(32.dp))
+        Text(text = "MoreScreen")
+        Spacer(modifier = Modifier.height(32.dp))
+        Button(onClick = { navToAlbum() }) {
+            Text(text = "LocalAlbum")
+        }
+        Spacer(modifier = Modifier.height(32.dp))
+        Button(onClick = { navToCamerax() }) {
+            Text(text = "Camerax")
+        }
+    }
 }

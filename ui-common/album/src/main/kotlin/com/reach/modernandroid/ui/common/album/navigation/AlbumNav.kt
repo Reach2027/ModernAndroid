@@ -17,12 +17,14 @@
 package com.reach.modernandroid.ui.common.album.navigation
 
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import com.reach.modernandroid.ui.common.album.AlbumRoute
 import com.reach.modernandroid.ui.core.common.navigation.CommonRoute
+import com.reach.modernandroid.ui.core.common.navigation.screenComposable
 
 fun NavGraphBuilder.albumRoute() {
-    composable(route = CommonRoute.ALBUM) {
+    screenComposable(
+        route = CommonRoute.ALBUM,
+    ) {
         AlbumRoute()
     }
 }

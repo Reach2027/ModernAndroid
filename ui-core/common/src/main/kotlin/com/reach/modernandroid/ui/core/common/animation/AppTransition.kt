@@ -14,26 +14,21 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.more.navigation
+package com.reach.modernandroid.ui.core.common.animation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
-import com.reach.modernandroid.ui.feature.more.MoreRoute
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 
-const val ROUTE_MORE = "route_more"
+fun enterScreenTransition(): EnterTransition =
+    fadeIn() + slideInHorizontally(initialOffsetX = { it })
 
-fun NavController.navToMore(navOptions: NavOptions) = navigate(ROUTE_MORE, navOptions)
+fun exitScreenTransition(): ExitTransition = fadeOut()
 
-fun NavGraphBuilder.moreRoute() {
-    composable(
-        route = ROUTE_MORE,
-        enterTransition = { fadeIn() },
-        exitTransition = { fadeOut() },
-    ) {
-        MoreRoute()
-    }
-}
+fun popEnterScreenTransition(): EnterTransition = fadeIn()
+
+fun popExitScreenTransition(): ExitTransition =
+    fadeOut() + slideOutHorizontally(targetOffsetX = { it })

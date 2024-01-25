@@ -16,6 +16,8 @@
 
 package com.reach.modernandroid.ui.feature.me.navigation
 
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -27,7 +29,11 @@ const val ROUTE_ME = "route_me"
 fun NavController.navToMe(navOptions: NavOptions) = navigate(ROUTE_ME, navOptions)
 
 fun NavGraphBuilder.meRoute() {
-    composable(route = ROUTE_ME) {
+    composable(
+        route = ROUTE_ME,
+        enterTransition = { fadeIn() },
+        exitTransition = { fadeOut() },
+    ) {
         MeRoute()
     }
 }

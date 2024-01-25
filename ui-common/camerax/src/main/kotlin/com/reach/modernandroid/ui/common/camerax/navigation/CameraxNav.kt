@@ -17,12 +17,14 @@
 package com.reach.modernandroid.ui.common.camerax.navigation
 
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
 import com.reach.modernandroid.ui.common.camerax.CameraxRoute
 import com.reach.modernandroid.ui.core.common.navigation.CommonRoute
+import com.reach.modernandroid.ui.core.common.navigation.screenComposable
 
 fun NavGraphBuilder.cameraxRoute() {
-    composable(route = CommonRoute.CAMERAX) {
+    screenComposable(
+        route = CommonRoute.CAMERAX,
+    ) {
         CameraxRoute()
     }
 }

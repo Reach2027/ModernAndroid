@@ -17,22 +17,29 @@
 package com.reach.modernandroid.navigation
 
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.navOptions
 import com.reach.modernandroid.ui.core.resource.AppIcons
+import com.reach.modernandroid.ui.feature.me.navigation.ROUTE_ME
 import com.reach.modernandroid.ui.feature.me.navigation.navToMe
+import com.reach.modernandroid.ui.feature.more.navigation.ROUTE_MORE
 import com.reach.modernandroid.ui.feature.more.navigation.navToMore
 
 enum class TopDest(
+    val route: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
 ) {
     More(
+        route = ROUTE_MORE,
         selectedIcon = AppIcons.MoreSelected,
         unselectedIcon = AppIcons.MoreUnselected,
     ),
     ME(
+        route = ROUTE_ME,
         selectedIcon = AppIcons.MeSelected,
         unselectedIcon = AppIcons.MeUnselected,
     ),
@@ -52,3 +59,13 @@ fun NavHostController.navToTopDest(topDest: TopDest) {
         TopDest.More -> this.navToMore(topNavOptions)
     }
 }
+
+fun NavDestination?.isTopDestInHierarchy(topDest: TopDest) =
+    this?.hierarchy?.any {
+        it.route?.contains(topDest.route, true) ?: false
+    } ?: false
+
+fun NavDestination?.isTopDest() =
+    TopDest.entries.any { topDest ->
+        topDest.route.equals(this?.route, true)
+    }

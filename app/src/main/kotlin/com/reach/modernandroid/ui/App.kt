@@ -16,6 +16,11 @@
 
 package com.reach.modernandroid.ui
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -24,23 +29,23 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.reach.modernandroid.navigation.AppNavHost
 import com.reach.modernandroid.navigation.TopDest
+import com.reach.modernandroid.navigation.isTopDest
+import com.reach.modernandroid.navigation.isTopDestInHierarchy
 import com.reach.modernandroid.navigation.navToTopDest
 import com.reach.modernandroid.ui.core.common.LocalAppUiState
 
 @Composable
-fun App(
+internal fun App(
     navController: NavHostController = rememberNavController(),
 ) {
     CompositionLocalProvider(
@@ -59,22 +64,28 @@ private fun AppScreen(
     val currentDest = navController.currentBackStackEntryAsState().value?.destination
 
     Scaffold(
+        modifier = Modifier.fillMaxSize(),
         bottomBar = {
-            AppNavBar(
-                destList = TopDest.entries,
-                onNavToTopDest = { navController.navToTopDest(it) },
-                currentDest = currentDest,
-            )
+            AnimatedVisibility(
+                visible = currentDest.isTopDest(),
+                enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
+                exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
+            ) {
+                AppNavBar(
+                    destList = TopDest.entries,
+                    onNavToTopDest = { navController.navToTopDest(it) },
+                    currentDest = currentDest,
+                )
+            }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) { padding ->
-        Surface(
+        AppNavHost(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-        ) {
-            AppNavHost(navController)
-        }
+            navController = navController,
+        )
     }
 }
 
@@ -100,8 +111,3 @@ private fun AppNavBar(
         }
     }
 }
-
-private fun NavDestination?.isTopDestInHierarchy(topDest: TopDest) =
-    this?.hierarchy?.any {
-        it.route?.contains(topDest.name, true) ?: false
-    } ?: false

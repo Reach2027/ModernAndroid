@@ -17,6 +17,8 @@
 package com.reach.modernandroid.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.reach.modernandroid.ui.common.album.navigation.albumRoute
@@ -26,16 +28,25 @@ import com.reach.modernandroid.ui.feature.me.navigation.meRoute
 import com.reach.modernandroid.ui.feature.more.navigation.moreRoute
 
 @Composable
-fun AppNavHost(
+internal fun AppNavHost(
+    modifier: Modifier,
     navController: NavHostController,
 ) {
-    NavHost(navController = navController, startDestination = ROUTE_ME) {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = ROUTE_ME,
+    ) {
         meRoute()
 
         moreRoute()
 
-        albumRoute()
-
-        cameraxRoute()
+        addCommonRoute()
     }
+}
+
+private fun NavGraphBuilder.addCommonRoute() {
+    albumRoute()
+
+    cameraxRoute()
 }
