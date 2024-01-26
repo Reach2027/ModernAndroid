@@ -25,6 +25,8 @@ include(":app")
 // UI feature
 include(":ui-feature:me")
 include(":ui-feature:more")
+include(":ui-feature:lottie")
+include(":ui-feature:skeletonloader")
 
 // UI common
 include(":ui-common:album")
@@ -43,8 +45,8 @@ include(":data-common")
 // Data core
 include(":data-core")
 
-// Android core
-include(":android-core:common")
+// Core android
+include(":core-android:common")
 
-// Jvm core
-include(":jvm-core:common")
+// Core jvm
+include(":core-jvm:common")

@@ -45,6 +45,8 @@ retrofit = "2.9.0"
 
 okio = "3.7.0"
 
+lottie = "6.3.0"
+
 # Test
 junit = "4.13.2"
 
@@ -120,6 +122,8 @@ coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 
 okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
+
+lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 
 # Unit Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }

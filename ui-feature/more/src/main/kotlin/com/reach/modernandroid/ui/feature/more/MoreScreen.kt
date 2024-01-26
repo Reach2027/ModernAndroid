@@ -16,48 +16,76 @@
 
 package com.reach.modernandroid.ui.feature.more
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.reach.modernandroid.ui.core.common.LocalAppUiState
-import com.reach.modernandroid.ui.core.common.navigation.navToAlbum
-import com.reach.modernandroid.ui.core.common.navigation.navToCamerax
 
 @Composable
 internal fun MoreRoute() {
     val navController = LocalAppUiState.current.navController
 
+    val functions: List<Function> = Function.entries
+
     MoreScreen(
-        navToAlbum = { navController.navToAlbum() },
-        navToCamerax = { navController.navToCamerax() },
+        functions = functions,
+        navController = navController,
     )
 }
 
 @Composable
 private fun MoreScreen(
-    navToAlbum: () -> Unit,
-    navToCamerax: () -> Unit,
+    functions: List<Function>,
+    navController: NavController,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
+        Spacer(modifier = Modifier.height(16.dp))
         Text(text = "MoreScreen")
-        Spacer(modifier = Modifier.height(32.dp))
-        Button(onClick = { navToAlbum() }) {
-            Text(text = "LocalAlbum")
+        Spacer(modifier = Modifier.height(16.dp))
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(300.dp),
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            items(
+                items = functions,
+                key = { it.text },
+            ) {
+                MoreFunctionItem(
+                    function = it,
+                    navController = navController,
+                )
+            }
         }
-        Spacer(modifier = Modifier.height(32.dp))
-        Button(onClick = { navToCamerax() }) {
-            Text(text = "Camerax")
-        }
+    }
+}
+
+@Composable
+private fun MoreFunctionItem(
+    function: Function,
+    navController: NavController,
+) {
+    Button(
+        onClick = { function.navTo(navController) },
+        modifier = Modifier.wrapContentSize(),
+    ) {
+        Text(text = function.text)
     }
 }

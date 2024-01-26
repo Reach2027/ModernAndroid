@@ -14,20 +14,24 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.core.common.navigation
+package com.reach.core.android.common.devicestate
 
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
+import com.reach.core.android.common.devicestate.network.NetworkMonitor
+import com.reach.core.android.common.devicestate.network.NetworkType
+import kotlinx.coroutines.flow.StateFlow
 
-object CommonRoute {
-    const val ALBUM = "route_album"
-    const val CAMERAX = "route_camerax"
+interface DeviceState {
+
+    val isOnline: StateFlow<Boolean>
+
+    val networkType: StateFlow<NetworkType>
 }
 
-fun NavController.navToAlbum(navOptions: NavOptions? = null) {
-    navigate(CommonRoute.ALBUM, navOptions)
-}
+internal class DefaultDeviceState(
+    networkMonitor: NetworkMonitor,
+) : DeviceState {
 
-fun NavController.navToCamerax(navOptions: NavOptions? = null) {
-    navigate(CommonRoute.CAMERAX, navOptions)
+    override val isOnline: StateFlow<Boolean> = networkMonitor.isOnline
+
+    override val networkType: StateFlow<NetworkType> = networkMonitor.networkType
 }

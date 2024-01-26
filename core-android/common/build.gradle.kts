@@ -15,12 +15,10 @@
  */
 plugins {
     alias(libs.plugins.reach.android.library)
-    alias(libs.plugins.reach.android.library.compose)
-    alias(libs.plugins.reach.ui.feature)
 }
 
 android {
-    namespace = "com.reach.modernandroid.ui.feature.more"
+    namespace = "com.reach.core.android.common"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -32,14 +30,14 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
-
 }
 
 dependencies {
-    implementation(projects.uiFeature.lottie)
-    implementation(projects.uiFeature.skeletonloader)
+    implementation(projects.coreJvm.common)
+
+    implementation(libs.androidx.core)
 }

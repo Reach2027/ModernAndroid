@@ -25,7 +25,7 @@ import com.reach.modernandroid.ui.common.album.navigation.albumRoute
 import com.reach.modernandroid.ui.common.camerax.navigation.cameraxRoute
 import com.reach.modernandroid.ui.feature.me.navigation.ROUTE_ME
 import com.reach.modernandroid.ui.feature.me.navigation.meRoute
-import com.reach.modernandroid.ui.feature.more.navigation.moreRoute
+import com.reach.modernandroid.ui.feature.more.navigation.moreGraph
 
 @Composable
 internal fun AppNavHost(
@@ -39,7 +39,7 @@ internal fun AppNavHost(
     ) {
         meRoute()
 
-        moreRoute()
+        moreGraph()
 
         addCommonRoute()
     }

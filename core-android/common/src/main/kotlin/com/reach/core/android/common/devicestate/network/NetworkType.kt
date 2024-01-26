@@ -14,20 +14,12 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.core.common.navigation
+package com.reach.core.android.common.devicestate.network
 
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-
-object CommonRoute {
-    const val ALBUM = "route_album"
-    const val CAMERAX = "route_camerax"
-}
-
-fun NavController.navToAlbum(navOptions: NavOptions? = null) {
-    navigate(CommonRoute.ALBUM, navOptions)
-}
-
-fun NavController.navToCamerax(navOptions: NavOptions? = null) {
-    navigate(CommonRoute.CAMERAX, navOptions)
+enum class NetworkType {
+    None,
+    Mobile,
+    WiFi,
+    Eth,
+    Unknown,
 }

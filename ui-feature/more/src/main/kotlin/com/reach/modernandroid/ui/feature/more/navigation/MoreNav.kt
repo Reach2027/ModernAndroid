@@ -22,13 +22,27 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
+import com.reach.modernandroid.ui.feature.lottie.navigation.lottieRoute
 import com.reach.modernandroid.ui.feature.more.MoreRoute
+import com.reach.modernandroid.ui.feature.skeletonloader.navigation.skeletonLoaderRoute
 
+private const val GRAPH_MORE = "graph_more"
 const val ROUTE_MORE = "route_more"
 
 fun NavController.navToMore(navOptions: NavOptions) = navigate(ROUTE_MORE, navOptions)
 
-fun NavGraphBuilder.moreRoute() {
+fun NavGraphBuilder.moreGraph() {
+    navigation(startDestination = ROUTE_MORE, route = GRAPH_MORE) {
+        moreRoute()
+
+        lottieRoute()
+
+        skeletonLoaderRoute()
+    }
+}
+
+private fun NavGraphBuilder.moreRoute() {
     composable(
         route = ROUTE_MORE,
         enterTransition = { fadeIn() },

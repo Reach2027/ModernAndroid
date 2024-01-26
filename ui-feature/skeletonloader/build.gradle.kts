@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    namespace = "com.reach.modernandroid.ui.feature.more"
+    namespace = "com.reach.modernandroid.ui.feature.skeletonloader"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -36,10 +36,8 @@ android {
             )
         }
     }
-
 }
 
 dependencies {
-    implementation(projects.uiFeature.lottie)
-    implementation(projects.uiFeature.skeletonloader)
+
 }

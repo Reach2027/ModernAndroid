@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.core.common.navigation
+package com.reach.core.jvm.common
 
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 
-object CommonRoute {
-    const val ALBUM = "route_album"
-    const val CAMERAX = "route_camerax"
+sealed interface Result<out T> {
+    data class Success<T>(val data: T) : Result<T>
+
+    data class Error(val exception: Throwable) : Result<Nothing>
+
+    data object Loading : Result<Nothing>
 }
 
-fun NavController.navToAlbum(navOptions: NavOptions? = null) {
-    navigate(CommonRoute.ALBUM, navOptions)
-}
-
-fun NavController.navToCamerax(navOptions: NavOptions? = null) {
-    navigate(CommonRoute.CAMERAX, navOptions)
-}
+fun <T> Flow<T>.asResult(): Flow<Result<T>> =
+    map<T, Result<T>> { Result.Success(it) }
+        .onStart { emit(Result.Loading) }
+        .catch { emit(Result.Error(it)) }

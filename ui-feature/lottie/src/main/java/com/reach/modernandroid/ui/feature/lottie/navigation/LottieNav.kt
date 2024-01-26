@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.core.common.navigation
+package com.reach.modernandroid.ui.feature.lottie.navigation
 
 import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import com.reach.modernandroid.ui.core.common.navigation.screenComposable
+import com.reach.modernandroid.ui.feature.lottie.LottieRoute
 
-object CommonRoute {
-    const val ALBUM = "route_album"
-    const val CAMERAX = "route_camerax"
-}
+const val ROUTE_LOTTIE = "route_lottie"
 
-fun NavController.navToAlbum(navOptions: NavOptions? = null) {
-    navigate(CommonRoute.ALBUM, navOptions)
-}
+fun NavController.navToLottie(navOptions: NavOptions? = null) =
+    navigate(ROUTE_LOTTIE, navOptions)
 
-fun NavController.navToCamerax(navOptions: NavOptions? = null) {
-    navigate(CommonRoute.CAMERAX, navOptions)
+fun NavGraphBuilder.lottieRoute() {
+    screenComposable(ROUTE_LOTTIE) {
+        LottieRoute()
+    }
 }

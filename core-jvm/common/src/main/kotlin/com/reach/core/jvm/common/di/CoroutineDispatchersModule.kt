@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.core.common.navigation
+package com.reach.core.jvm.common.di
 
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import org.koin.core.qualifier.qualifier
+import org.koin.dsl.module
 
-object CommonRoute {
-    const val ALBUM = "route_album"
-    const val CAMERAX = "route_camerax"
+enum class QualifierCoroutineDispatcher {
+    IO,
+    Default,
 }
 
-fun NavController.navToAlbum(navOptions: NavOptions? = null) {
-    navigate(CommonRoute.ALBUM, navOptions)
-}
+val coroutineDispatchersModule = module {
+    single<CoroutineDispatcher>(qualifier(QualifierCoroutineDispatcher.IO)) { Dispatchers.IO }
 
-fun NavController.navToCamerax(navOptions: NavOptions? = null) {
-    navigate(CommonRoute.CAMERAX, navOptions)
+    single<CoroutineDispatcher>(qualifier(QualifierCoroutineDispatcher.Default)) { Dispatchers.Default }
 }
