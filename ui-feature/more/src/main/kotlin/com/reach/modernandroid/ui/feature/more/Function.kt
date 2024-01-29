@@ -26,14 +26,6 @@ internal enum class Function(
     val text: String,
     val navTo: (NavController) -> Unit,
 ) {
-    LocalAlbum(
-        text = "LocalAlbum",
-        { it.navToAlbum() },
-    ),
-    Camerax(
-        text = "Camerax",
-        { it.navToCamerax() },
-    ),
     Lottie(
         text = "Lottie",
         { it.navToLottie() },
@@ -41,5 +33,13 @@ internal enum class Function(
     SkeletonLoader(
         text = "SkeletonLoader",
         { it.navToSkeletonLoader() },
+    ),
+    LocalAlbum(
+        text = "LocalAlbum",
+        { it.navToAlbum() },
+    ),
+    Camerax(
+        text = "Camerax",
+        { it.navToCamerax() },
     ),
 }

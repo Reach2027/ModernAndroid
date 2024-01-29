@@ -31,9 +31,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.reach.modernandroid.ui.core.common.LocalAppUiState
+import com.reach.modernandroid.ui.core.resource.theme.AppTheme
 
 @Composable
 internal fun MoreRoute() {
@@ -56,9 +59,7 @@ private fun MoreScreen(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(text = "MoreScreen")
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(32.dp))
         LazyVerticalGrid(
             columns = GridCells.Adaptive(300.dp),
             modifier = Modifier.fillMaxWidth(),
@@ -87,5 +88,16 @@ private fun MoreFunctionItem(
         modifier = Modifier.wrapContentSize(),
     ) {
         Text(text = function.text)
+    }
+}
+
+@Preview(widthDp = 390)
+@Composable
+private fun MoreScreenPreview() {
+    AppTheme {
+        MoreScreen(
+            functions = Function.entries,
+            navController = NavController(LocalContext.current),
+        )
     }
 }

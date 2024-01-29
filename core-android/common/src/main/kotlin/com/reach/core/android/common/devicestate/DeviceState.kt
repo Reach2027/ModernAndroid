@@ -22,7 +22,7 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface DeviceState {
 
-    val isOnline: StateFlow<Boolean>
+    val isNetworkAvailable: StateFlow<Boolean>
 
     val networkType: StateFlow<NetworkType>
 }
@@ -31,7 +31,7 @@ internal class DefaultDeviceState(
     networkMonitor: NetworkMonitor,
 ) : DeviceState {
 
-    override val isOnline: StateFlow<Boolean> = networkMonitor.isOnline
+    override val isNetworkAvailable: StateFlow<Boolean> = networkMonitor.isAvailable
 
     override val networkType: StateFlow<NetworkType> = networkMonitor.networkType
 }

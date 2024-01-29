@@ -14,27 +14,15 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid
+package com.reach.modernandroid.ui.feature.me.di
 
-import android.app.Application
-import com.reach.modernandroid.ui.feature.me.di.meModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.GlobalContext.startKoin
+import com.reach.core.android.common.di.deviceStateModule
+import com.reach.modernandroid.ui.feature.me.MeViewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.dsl.module
 
-class AppApplication : Application() {
+val meModule = module {
+    includes(deviceStateModule)
 
-    override fun onCreate() {
-        super.onCreate()
-
-        setupKoin()
-    }
-
-    private fun setupKoin() {
-        startKoin {
-            androidLogger()
-            androidContext(this@AppApplication)
-            modules(meModule)
-        }
-    }
+    viewModelOf(::MeViewModel)
 }

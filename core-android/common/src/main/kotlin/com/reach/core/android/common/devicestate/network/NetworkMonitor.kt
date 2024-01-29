@@ -34,8 +34,8 @@ internal class NetworkMonitor(
     private val appIoScope: CoroutineScope,
 ) {
 
-    private val _isOnline = MutableStateFlow(false)
-    val isOnline = _isOnline.asStateFlow()
+    private val _isAvailable = MutableStateFlow(false)
+    val isAvailable = _isAvailable.asStateFlow()
 
     private val _networkType = MutableStateFlow(NetworkType.None)
     val networkType = _networkType.asStateFlow()
@@ -48,7 +48,7 @@ internal class NetworkMonitor(
 
         override fun onAvailable(network: Network) {
             networks += network
-            _isOnline.tryEmit(true)
+            _isAvailable.tryEmit(true)
         }
 
         override fun onCapabilitiesChanged(
@@ -60,15 +60,15 @@ internal class NetworkMonitor(
 
         override fun onLost(network: Network) {
             networks -= network
-            _isOnline.tryEmit(networks.isNotEmpty())
+            _isAvailable.tryEmit(networks.isNotEmpty())
         }
     }
 
     init {
-        registerNetworkCallback()
+        initListener()
     }
 
-    private fun registerNetworkCallback() {
+    private fun initListener() {
         if (connectivityManager == null) {
             return
         }
@@ -81,6 +81,14 @@ internal class NetworkMonitor(
                 .build()
             connectivityManager.registerNetworkCallback(request, callback)
         }
+
+        appIoScope.launch {
+            isAvailable.collect {
+                if (it.not()) {
+                    connectivityManager.currentNetwork()
+                }
+            }
+        }
     }
 
     @Suppress("DEPRECATION")
@@ -88,25 +96,25 @@ internal class NetworkMonitor(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val capabilities = activeNetwork?.let(::getNetworkCapabilities)
             capabilities?.apply {
-                _isOnline.tryEmit(hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))
+                _isAvailable.tryEmit(hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET))
                 _networkType.tryEmit(getNetworkType())
             } ?: apply {
-                _isOnline.tryEmit(false)
+                _isAvailable.tryEmit(false)
                 _networkType.tryEmit(NetworkType.None)
             }
         } else {
             activeNetworkInfo?.apply {
-                _isOnline.tryEmit(isConnected)
+                _isAvailable.tryEmit(isConnected)
                 _networkType.tryEmit(getNetworkType())
             } ?: apply {
-                _isOnline.tryEmit(false)
+                _isAvailable.tryEmit(false)
                 _networkType.tryEmit(NetworkType.None)
             }
         }
     }
 
     private fun NetworkCapabilities.getNetworkType() = when {
-        _isOnline.value.not() -> NetworkType.None
+        _isAvailable.value.not() -> NetworkType.None
         this.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> NetworkType.Eth
         this.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> NetworkType.WiFi
         this.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> NetworkType.Mobile
@@ -115,7 +123,7 @@ internal class NetworkMonitor(
 
     @Suppress("DEPRECATION")
     private fun NetworkInfo.getNetworkType() = when {
-        _isOnline.value.not() -> NetworkType.None
+        _isAvailable.value.not() -> NetworkType.None
         type == ConnectivityManager.TYPE_ETHERNET -> NetworkType.Eth
         type == ConnectivityManager.TYPE_WIFI -> NetworkType.WiFi
         type == ConnectivityManager.TYPE_MOBILE -> NetworkType.Mobile

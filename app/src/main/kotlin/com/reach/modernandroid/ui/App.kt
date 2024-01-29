@@ -17,8 +17,9 @@
 package com.reach.modernandroid.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.fillMaxSize
@@ -33,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -68,8 +70,20 @@ private fun AppScreen(
         bottomBar = {
             AnimatedVisibility(
                 visible = currentDest.isTopDest(),
-                enter = slideInVertically(initialOffsetY = { it }) + fadeIn(),
-                exit = slideOutVertically(targetOffsetY = { it }) + fadeOut(),
+                enter = slideInVertically(
+                    animationSpec = spring(
+                        stiffness = Spring.StiffnessMedium,
+                        visibilityThreshold = IntOffset.VisibilityThreshold,
+                    ),
+                    initialOffsetY = { it },
+                ),
+                exit = slideOutVertically(
+                    animationSpec = spring(
+                        stiffness = Spring.StiffnessMedium,
+                        visibilityThreshold = IntOffset.VisibilityThreshold,
+                    ),
+                    targetOffsetY = { it },
+                ),
             ) {
                 AppNavBar(
                     destList = TopDest.entries,

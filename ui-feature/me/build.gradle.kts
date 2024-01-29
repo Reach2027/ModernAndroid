@@ -39,5 +39,5 @@ android {
 }
 
 dependencies {
-
+    implementation(projects.coreAndroid.common)
 }
