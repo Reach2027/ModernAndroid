@@ -22,7 +22,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.navOptions
-import com.reach.modernandroid.ui.core.resource.AppIcons
+import com.reach.modernandroid.ui.base.resource.AppIcons
 import com.reach.modernandroid.ui.feature.me.navigation.ROUTE_ME
 import com.reach.modernandroid.ui.feature.me.navigation.navToMe
 import com.reach.modernandroid.ui.feature.more.navigation.ROUTE_MORE

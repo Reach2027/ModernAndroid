@@ -75,8 +75,8 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
 
 internal fun Project.configureComposeLibraries() {
     dependencies {
-        add("implementation", project(":ui-core:resource"))
-        add("implementation", project(":ui-core:common"))
+        add("implementation", project(":ui-base:resource"))
+        add("implementation", project(":ui-base:common"))
 
         implementation(libs, "androidx.lifecycle.runtime.compose")
         implementation(libs, "androidx.lifecycle.viewmodel.compose")

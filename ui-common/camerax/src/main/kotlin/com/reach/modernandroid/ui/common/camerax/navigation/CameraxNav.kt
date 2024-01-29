@@ -17,9 +17,9 @@
 package com.reach.modernandroid.ui.common.camerax.navigation
 
 import androidx.navigation.NavGraphBuilder
+import com.reach.modernandroid.ui.base.common.navigation.CommonRoute
+import com.reach.modernandroid.ui.base.common.navigation.screenComposable
 import com.reach.modernandroid.ui.common.camerax.CameraxRoute
-import com.reach.modernandroid.ui.core.common.navigation.CommonRoute
-import com.reach.modernandroid.ui.core.common.navigation.screenComposable
 
 fun NavGraphBuilder.cameraxRoute() {
     screenComposable(

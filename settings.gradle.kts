@@ -32,9 +32,9 @@ include(":ui-feature:skeletonloader")
 include(":ui-common:album")
 include(":ui-common:camerax")
 
-// UI core
-include(":ui-core:resource")
-include(":ui-core:common")
+// UI base
+include(":ui-base:resource")
+include(":ui-base:common")
 
 // Data feature
 include(":data-feature:album")
@@ -42,11 +42,9 @@ include(":data-feature:album")
 // Data common
 include(":data-common")
 
-// Data core
-include(":data-core")
-
 // Core android
 include(":core-android:common")
 
 // Core jvm
 include(":core-jvm:common")
+include(":core-android:database")

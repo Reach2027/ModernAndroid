@@ -19,7 +19,7 @@ package com.reach.modernandroid.ui.feature.lottie.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import com.reach.modernandroid.ui.core.common.navigation.screenComposable
+import com.reach.modernandroid.ui.base.common.navigation.screenComposable
 import com.reach.modernandroid.ui.feature.lottie.LottieRoute
 
 const val ROUTE_LOTTIE = "route_lottie"

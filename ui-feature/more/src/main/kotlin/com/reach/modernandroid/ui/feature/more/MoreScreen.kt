@@ -35,8 +35,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.reach.modernandroid.ui.core.common.LocalAppUiState
-import com.reach.modernandroid.ui.core.resource.theme.AppTheme
+import com.reach.modernandroid.ui.base.common.LocalAppUiState
+import com.reach.modernandroid.ui.base.resource.theme.AppTheme
 
 @Composable
 internal fun MoreRoute() {

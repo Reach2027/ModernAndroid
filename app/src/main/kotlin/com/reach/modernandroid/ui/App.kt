@@ -44,7 +44,7 @@ import com.reach.modernandroid.navigation.TopDest
 import com.reach.modernandroid.navigation.isTopDest
 import com.reach.modernandroid.navigation.isTopDestInHierarchy
 import com.reach.modernandroid.navigation.navToTopDest
-import com.reach.modernandroid.ui.core.common.LocalAppUiState
+import com.reach.modernandroid.ui.base.common.LocalAppUiState
 
 @Composable
 internal fun App(

@@ -29,6 +29,8 @@ androidxNavigation = "2.7.6"
 
 androidxPaging = "3.2.1"
 
+androidxRoom = "2.6.1"
+
 androidxDataStore = "1.1.0-beta01"
 
 # KotlinX
@@ -40,8 +42,6 @@ kotlinxDatetime = "0.5.0"
 koin = "3.5.3"
 
 coil = "2.5.0"
-
-retrofit = "2.9.0"
 
 okio = "3.7.0"
 
@@ -98,6 +98,10 @@ androidx-paging = { group = "androidx.paging", name = "paging-runtime", version.
 androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "androidxPaging" }
 androidx-paging-test = { group = "androidx.paging", name = "paging-common", version.ref = "androidxPaging" }
 
+androidx-room = { group = "androidx.room", name = "room-runtime", version.ref = "androidxRoom" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "androidxRoom" }
+androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "androidxRoom" }
+
 androidx-datastore = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDataStore" }
 
 # KotlinX
@@ -118,8 +122,6 @@ koin-androidx-compose-navigation = { group = "io.insert-koin", name = "koin-andr
 koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
 
 coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
-
-retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 
 okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
 

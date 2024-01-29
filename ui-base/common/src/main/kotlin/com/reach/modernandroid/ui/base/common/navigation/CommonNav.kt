@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.skeletonloader.navigation
+package com.reach.modernandroid.ui.base.common.navigation
 
 import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import com.reach.modernandroid.ui.base.common.navigation.screenComposable
-import com.reach.modernandroid.ui.feature.skeletonloader.SkeletonLoaderRoute
 
-const val ROUTE_SKELETON_LOADER = "route_skeleton_loader"
+object CommonRoute {
+    const val ALBUM = "route_album"
+    const val CAMERAX = "route_camerax"
+}
 
-fun NavController.navToSkeletonLoader(navOptions: NavOptions? = null) =
-    navigate(ROUTE_SKELETON_LOADER, navOptions)
+fun NavController.navToAlbum(navOptions: NavOptions? = null) {
+    navigate(CommonRoute.ALBUM, navOptions)
+}
 
-fun NavGraphBuilder.skeletonLoaderRoute() {
-    screenComposable(ROUTE_SKELETON_LOADER) {
-        SkeletonLoaderRoute()
-    }
+fun NavController.navToCamerax(navOptions: NavOptions? = null) {
+    navigate(CommonRoute.CAMERAX, navOptions)
 }

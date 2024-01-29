@@ -29,7 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.reach.modernandroid.ui.core.resource.theme.AppTheme
+import com.reach.modernandroid.ui.base.resource.theme.AppTheme
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

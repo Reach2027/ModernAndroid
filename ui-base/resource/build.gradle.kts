@@ -13,18 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+plugins {
+    alias(libs.plugins.reach.android.library)
+    alias(libs.plugins.reach.android.library.compose)
+}
 
-package com.reach.modernandroid.ui.common.album.navigation
+android {
+    namespace = "com.reach.modernandroid.ui.base.resource"
 
-import androidx.navigation.NavGraphBuilder
-import com.reach.modernandroid.ui.base.common.navigation.CommonRoute
-import com.reach.modernandroid.ui.base.common.navigation.screenComposable
-import com.reach.modernandroid.ui.common.album.AlbumRoute
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
 
-fun NavGraphBuilder.albumRoute() {
-    screenComposable(
-        route = CommonRoute.ALBUM,
-    ) {
-        AlbumRoute()
+    buildTypes {
+        release {
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
     }
 }

@@ -26,8 +26,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.reach.modernandroid.ui.core.common.LocalAppUiState
-import com.reach.modernandroid.ui.core.common.navigation.navToAlbum
+import com.reach.modernandroid.ui.base.common.LocalAppUiState
+import com.reach.modernandroid.ui.base.common.navigation.navToAlbum
 
 @Composable
 internal fun CameraxRoute() {

@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.common.album.navigation
+package com.reach.modernandroid.ui.base.common
 
-import androidx.navigation.NavGraphBuilder
-import com.reach.modernandroid.ui.base.common.navigation.CommonRoute
-import com.reach.modernandroid.ui.base.common.navigation.screenComposable
-import com.reach.modernandroid.ui.common.album.AlbumRoute
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.navigation.NavHostController
 
-fun NavGraphBuilder.albumRoute() {
-    screenComposable(
-        route = CommonRoute.ALBUM,
-    ) {
-        AlbumRoute()
-    }
+val LocalAppUiState = staticCompositionLocalOf<AppUiState> {
+    EmptyAppUiState()
+}
+
+interface AppUiState {
+
+    val navController: NavHostController
+}
+
+private class EmptyAppUiState : AppUiState {
+    override lateinit var navController: NavHostController
 }

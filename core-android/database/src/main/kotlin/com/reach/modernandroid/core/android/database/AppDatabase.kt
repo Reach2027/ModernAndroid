@@ -14,17 +14,6 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.common.album.navigation
+package com.reach.modernandroid.core.android.database
 
-import androidx.navigation.NavGraphBuilder
-import com.reach.modernandroid.ui.base.common.navigation.CommonRoute
-import com.reach.modernandroid.ui.base.common.navigation.screenComposable
-import com.reach.modernandroid.ui.common.album.AlbumRoute
-
-fun NavGraphBuilder.albumRoute() {
-    screenComposable(
-        route = CommonRoute.ALBUM,
-    ) {
-        AlbumRoute()
-    }
-}
+class AppDatabase

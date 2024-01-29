@@ -17,8 +17,8 @@
 package com.reach.modernandroid.ui.feature.more
 
 import androidx.navigation.NavController
-import com.reach.modernandroid.ui.core.common.navigation.navToAlbum
-import com.reach.modernandroid.ui.core.common.navigation.navToCamerax
+import com.reach.modernandroid.ui.base.common.navigation.navToAlbum
+import com.reach.modernandroid.ui.base.common.navigation.navToCamerax
 import com.reach.modernandroid.ui.feature.lottie.navigation.navToLottie
 import com.reach.modernandroid.ui.feature.skeletonloader.navigation.navToSkeletonLoader
 
