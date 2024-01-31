@@ -54,8 +54,8 @@ dependencies {
     implementation(projects.uiFeature.more)
     implementation(projects.uiFeature.me)
 
-    implementation(projects.uiCommon.album)
-    implementation(projects.uiCommon.camerax)
+    implementation(projects.uiFeature.album)
+    implementation(projects.uiFeature.camerax)
 
     implementation(libs.androidx.startup)
 

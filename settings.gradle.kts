@@ -27,24 +27,26 @@ include(":ui-feature:me")
 include(":ui-feature:more")
 include(":ui-feature:lottie")
 include(":ui-feature:skeletonloader")
-
-// UI common
-include(":ui-common:album")
-include(":ui-common:camerax")
+include(":ui-feature:album")
+include(":ui-feature:camerax")
 
 // UI base
 include(":ui-base:resource")
 include(":ui-base:common")
 
+// Core ui
+include(":core-ui:common")
+
 // Data feature
 include(":data-feature:album")
+include(":data-feature:bingwallpaper")
 
-// Data common
-include(":data-common")
+// Data base
+include(":data-base:database")
+include(":data-base:network")
 
 // Core android
 include(":core-android:common")
 
 // Core jvm
 include(":core-jvm:common")
-include(":core-android:database")

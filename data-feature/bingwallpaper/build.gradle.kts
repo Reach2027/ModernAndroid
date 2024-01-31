@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+plugins {
+    alias(libs.plugins.reach.jvm.library)
+    alias(libs.plugins.kotlinxSerialization)
+}
 
-package com.reach.modernandroid.ui.feature.me.di
+dependencies {
+    implementation(projects.coreJvm.common)
+    implementation(projects.dataBase.network)
 
-import com.reach.core.android.common.di.deviceStateModule
-import com.reach.modernandroid.data.feature.bingwallpaper.di.bingWallpaperRepoModule
-import com.reach.modernandroid.ui.feature.me.MeViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
-import org.koin.dsl.module
-
-val meModule = module {
-    includes(deviceStateModule, bingWallpaperRepoModule)
-
-    viewModelOf(::MeViewModel)
+    implementation(libs.ktor.core)
+    implementation(libs.kotlinx.serialization.json)
 }

@@ -15,12 +15,11 @@
  */
 plugins {
     alias(libs.plugins.reach.android.library)
-    alias(libs.plugins.reach.android.library.compose)
-    alias(libs.plugins.reach.ui.feature)
+    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.reach.modernandroid.ui.feature.me"
+    namespace = "com.reach.modernandroid.data.base.database"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -39,7 +38,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.coreJvm.common)
-    implementation(projects.coreAndroid.common)
-    implementation(projects.dataFeature.bingwallpaper)
+    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.paging)
+    ksp(libs.androidx.room.compiler)
 }

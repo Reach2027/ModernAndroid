@@ -16,11 +16,10 @@
 plugins {
     alias(libs.plugins.reach.android.library)
     alias(libs.plugins.reach.android.library.compose)
-    alias(libs.plugins.reach.ui.feature)
 }
 
 android {
-    namespace = "com.reach.modernandroid.ui.feature.me"
+    namespace = "com.reach.core.ui.common"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -39,7 +38,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.coreJvm.common)
-    implementation(projects.coreAndroid.common)
-    implementation(projects.dataFeature.bingwallpaper)
+
 }

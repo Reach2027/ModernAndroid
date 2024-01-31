@@ -14,16 +14,6 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.me.di
+package com.reach.modernandroid.data.base.database
 
-import com.reach.core.android.common.di.deviceStateModule
-import com.reach.modernandroid.data.feature.bingwallpaper.di.bingWallpaperRepoModule
-import com.reach.modernandroid.ui.feature.me.MeViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
-import org.koin.dsl.module
-
-val meModule = module {
-    includes(deviceStateModule, bingWallpaperRepoModule)
-
-    viewModelOf(::MeViewModel)
-}
+class AppDatabase

@@ -21,8 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.reach.modernandroid.ui.common.album.navigation.albumRoute
-import com.reach.modernandroid.ui.common.camerax.navigation.cameraxRoute
+import com.reach.modernandroid.ui.feature.album.navigation.albumRoute
+import com.reach.modernandroid.ui.feature.camerax.navigation.cameraxRoute
 import com.reach.modernandroid.ui.feature.me.navigation.ROUTE_ME
 import com.reach.modernandroid.ui.feature.me.navigation.meRoute
 import com.reach.modernandroid.ui.feature.more.navigation.moreGraph

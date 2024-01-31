@@ -20,7 +20,7 @@ plugins {
 }
 
 android {
-    namespace = "com.reach.modernandroid.ui.feature.me"
+    namespace = "com.reach.modernandroid.ui.feature.album"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -39,7 +39,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.coreJvm.common)
-    implementation(projects.coreAndroid.common)
-    implementation(projects.dataFeature.bingwallpaper)
+
 }

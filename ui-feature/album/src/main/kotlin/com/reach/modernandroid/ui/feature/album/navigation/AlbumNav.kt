@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.me.di
+package com.reach.modernandroid.ui.feature.album.navigation
 
-import com.reach.core.android.common.di.deviceStateModule
-import com.reach.modernandroid.data.feature.bingwallpaper.di.bingWallpaperRepoModule
-import com.reach.modernandroid.ui.feature.me.MeViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
-import org.koin.dsl.module
+import androidx.navigation.NavGraphBuilder
+import com.reach.modernandroid.ui.base.common.navigation.CommonRoute
+import com.reach.modernandroid.ui.base.common.navigation.screenComposable
+import com.reach.modernandroid.ui.feature.album.AlbumRoute
 
-val meModule = module {
-    includes(deviceStateModule, bingWallpaperRepoModule)
-
-    viewModelOf(::MeViewModel)
+fun NavGraphBuilder.albumRoute() {
+    screenComposable(
+        route = CommonRoute.ALBUM,
+    ) {
+        AlbumRoute()
+    }
 }

@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.me.di
+package com.reach.modernandroid.ui.feature.album
 
-import com.reach.core.android.common.di.deviceStateModule
-import com.reach.modernandroid.data.feature.bingwallpaper.di.bingWallpaperRepoModule
-import com.reach.modernandroid.ui.feature.me.MeViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
-import org.koin.dsl.module
+import androidx.lifecycle.ViewModel
 
-val meModule = module {
-    includes(deviceStateModule, bingWallpaperRepoModule)
+internal sealed interface UiState
 
-    viewModelOf(::MeViewModel)
-}
+class AlbumViewModel() : ViewModel()
