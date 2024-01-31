@@ -40,6 +40,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.uiFeature.lottie)
-    implementation(projects.uiFeature.skeletonloader)
+
 }

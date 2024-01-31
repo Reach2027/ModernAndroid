@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.skeletonloader
+package com.reach.modernandroid.ui.feature.lottie
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,19 +25,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraphBuilder
+import com.reach.modernandroid.ui.base.common.navigation.AppRoute
+import com.reach.modernandroid.ui.base.common.navigation.screenComposable
 
-@Composable
-internal fun SkeletonLoaderRoute() {
-    SkeletonLoaderScreen()
+fun NavGraphBuilder.lottieRoute() {
+    screenComposable(AppRoute.LOTTIE) {
+        LottieRoute()
+    }
 }
 
 @Composable
-private fun SkeletonLoaderScreen() {
+internal fun LottieRoute() {
+    LottieScreen()
+}
+
+@Composable
+private fun LottieScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Spacer(modifier = Modifier.height(32.dp))
-        Text(text = "SkeletonLoaderScreen")
+        Text(text = "LottieScreen")
     }
 }

@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.camerax.navigation
+package com.reach.modernandroid.ui.base.common.di
 
-import androidx.navigation.NavGraphBuilder
-import com.reach.modernandroid.ui.base.common.navigation.CommonRoute
-import com.reach.modernandroid.ui.base.common.navigation.screenComposable
-import com.reach.modernandroid.ui.feature.camerax.CameraxRoute
+import com.reach.core.jvm.common.di.QualifierCoroutineScope
+import com.reach.core.jvm.common.di.coroutineScopeModule
+import com.reach.modernandroid.ui.base.common.AppUiState
+import com.reach.modernandroid.ui.base.common.DefaultAppUiState
+import org.koin.core.qualifier.qualifier
+import org.koin.dsl.module
 
-fun NavGraphBuilder.cameraxRoute() {
-    screenComposable(
-        route = CommonRoute.CAMERAX,
-    ) {
-        CameraxRoute()
+val appUiStateStateModule = module {
+    includes(coroutineScopeModule)
+
+    single<AppUiState> {
+        DefaultAppUiState(get(qualifier(QualifierCoroutineScope.AppIo)))
     }
 }

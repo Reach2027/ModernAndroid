@@ -21,5 +21,5 @@ import io.ktor.client.HttpClient
 import org.koin.dsl.module
 
 val httpClientModule = module {
-    single<HttpClient> { ktorClient }
+    single<HttpClient> { ktorClient() }
 }

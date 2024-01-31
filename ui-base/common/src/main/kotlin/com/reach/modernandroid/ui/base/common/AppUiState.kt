@@ -16,18 +16,49 @@
 
 package com.reach.modernandroid.ui.base.common
 
-import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.navigation.NavHostController
-
-val LocalAppUiState = staticCompositionLocalOf<AppUiState> {
-    EmptyAppUiState()
-}
+import com.reach.modernandroid.ui.base.common.navigation.AppRoute
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 interface AppUiState {
 
-    val navController: NavHostController
+    var navController: NavHostController
+
+    val isFullScreen: StateFlow<Boolean>
+
+    fun setup(navController: NavHostController)
 }
 
-private class EmptyAppUiState : AppUiState {
+internal class DefaultAppUiState(
+    private val coroutineScope: CoroutineScope,
+) : AppUiState {
+
     override lateinit var navController: NavHostController
+
+    private val _isFullScreen = MutableStateFlow(false)
+    override val isFullScreen = _isFullScreen.asStateFlow()
+
+    private var navJob: Job? = null
+
+    override fun setup(navController: NavHostController) {
+        this.navController = navController
+
+        navJob?.apply {
+            if (isActive) {
+                cancel()
+            }
+        }
+
+        navJob = coroutineScope.launch {
+            navController.currentBackStackEntryFlow.collect {
+                val needFullScreen = AppRoute.fullScreenRoute.contains(it.destination.route)
+                _isFullScreen.emit(needFullScreen)
+            }
+        }
+    }
 }

@@ -25,6 +25,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavGraphBuilder
+import com.reach.modernandroid.ui.base.common.navigation.AppRoute
+import com.reach.modernandroid.ui.base.common.navigation.screenComposable
+
+fun NavGraphBuilder.albumRoute() {
+    screenComposable(
+        route = AppRoute.ALBUM,
+    ) {
+        AlbumRoute()
+    }
+}
 
 @Composable
 internal fun AlbumRoute() {

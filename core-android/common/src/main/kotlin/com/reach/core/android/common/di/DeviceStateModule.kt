@@ -19,6 +19,8 @@ package com.reach.core.android.common.di
 import com.reach.core.android.common.devicestate.DefaultDeviceState
 import com.reach.core.android.common.devicestate.DeviceState
 import com.reach.core.android.common.devicestate.network.NetworkMonitor
+import com.reach.core.jvm.common.di.QualifierCoroutineScope
+import com.reach.core.jvm.common.di.coroutineScopeModule
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf

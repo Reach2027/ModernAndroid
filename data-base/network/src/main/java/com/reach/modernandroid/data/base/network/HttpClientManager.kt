@@ -16,7 +16,6 @@
 
 package com.reach.modernandroid.data.base.network
 
-import androidx.annotation.VisibleForTesting
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.HttpTimeout
@@ -28,8 +27,7 @@ import kotlinx.serialization.json.Json
 private const val CONNECT_TIMEOUT = 5_000L
 private const val SOCKET_TIMEOUT = 2_000L
 
-@VisibleForTesting
-val ktorClient = HttpClient(CIO) {
+internal fun ktorClient(): HttpClient = HttpClient(CIO) {
     install(Logging)
 
     install(HttpTimeout) {

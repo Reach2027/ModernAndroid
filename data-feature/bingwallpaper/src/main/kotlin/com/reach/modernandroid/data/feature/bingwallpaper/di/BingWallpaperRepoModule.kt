@@ -16,17 +16,21 @@
 
 package com.reach.modernandroid.data.feature.bingwallpaper.di
 
+import com.reach.core.jvm.common.di.QualifierDispatchers
+import com.reach.core.jvm.common.di.dispatcherModule
 import com.reach.modernandroid.data.base.network.di.httpClientModule
 import com.reach.modernandroid.data.feature.bingwallpaper.BingWallpaperRepository
 import com.reach.modernandroid.data.feature.bingwallpaper.DefaultBingWallpaperRepo
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.factoryOf
+import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 
 val bingWallpaperRepoModule = module {
-    includes(httpClientModule)
+    includes(httpClientModule, dispatcherModule)
 
-    factoryOf(::DefaultBingWallpaperRepo) {
-        bind<BingWallpaperRepository>()
+    factory<BingWallpaperRepository> {
+        DefaultBingWallpaperRepo(
+            get(),
+            get(qualifier(QualifierDispatchers.IO)),
+        )
     }
 }

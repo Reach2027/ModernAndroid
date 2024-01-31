@@ -16,7 +16,7 @@
 
 package com.reach.core.jvm.common
 
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
@@ -37,8 +37,11 @@ fun <T> Flow<T>.asResult(): Flow<Result<T>> =
         .onStart { emit(Result.Loading) }
         .catch { emit(Result.Error(it)) }
 
-inline fun <T> httpResult(crossinline block: suspend () -> T): Flow<Result<T>> =
+inline fun <T> flowResult(
+    dispatcher: CoroutineDispatcher,
+    crossinline block: suspend () -> T,
+): Flow<Result<T>> =
     flow {
         emit(block())
     }.asResult()
-        .flowOn(Dispatchers.IO)
+        .flowOn(dispatcher)

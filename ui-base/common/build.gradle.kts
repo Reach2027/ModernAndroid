@@ -38,5 +38,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.coreJvm.common)
+
     implementation(libs.androidx.navigation)
 }

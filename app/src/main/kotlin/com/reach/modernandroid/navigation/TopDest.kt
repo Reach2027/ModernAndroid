@@ -22,11 +22,8 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.navOptions
+import com.reach.modernandroid.ui.base.common.navigation.AppRoute
 import com.reach.modernandroid.ui.base.resource.AppIcons
-import com.reach.modernandroid.ui.feature.me.navigation.ROUTE_ME
-import com.reach.modernandroid.ui.feature.me.navigation.navToMe
-import com.reach.modernandroid.ui.feature.more.navigation.ROUTE_MORE
-import com.reach.modernandroid.ui.feature.more.navigation.navToMore
 
 enum class TopDest(
     val route: String,
@@ -34,12 +31,12 @@ enum class TopDest(
     val unselectedIcon: ImageVector,
 ) {
     More(
-        route = ROUTE_MORE,
+        route = AppRoute.MORE,
         selectedIcon = AppIcons.MoreSelected,
         unselectedIcon = AppIcons.MoreUnselected,
     ),
     ME(
-        route = ROUTE_ME,
+        route = AppRoute.ME,
         selectedIcon = AppIcons.MeSelected,
         unselectedIcon = AppIcons.MeUnselected,
     ),
@@ -55,8 +52,8 @@ fun NavHostController.navToTopDest(topDest: TopDest) {
     }
 
     when (topDest) {
-        TopDest.ME -> this.navToMe(topNavOptions)
-        TopDest.More -> this.navToMore(topNavOptions)
+        TopDest.ME -> this.navigate(AppRoute.ME, topNavOptions)
+        TopDest.More -> this.navigate(AppRoute.MORE, topNavOptions)
     }
 }
 

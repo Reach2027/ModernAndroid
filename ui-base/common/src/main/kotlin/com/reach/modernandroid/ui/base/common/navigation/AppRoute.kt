@@ -16,18 +16,19 @@
 
 package com.reach.modernandroid.ui.base.common.navigation
 
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
+object AppRoute {
+    // Top destination
+    const val ME = "route_me"
+    const val MORE = "route_more"
 
-object CommonRoute {
+    // UI feature
     const val ALBUM = "route_album"
+
     const val CAMERAX = "route_camerax"
-}
 
-fun NavController.navToAlbum(navOptions: NavOptions? = null) {
-    navigate(CommonRoute.ALBUM, navOptions)
-}
+    const val LOTTIE = "route_lottie"
 
-fun NavController.navToCamerax(navOptions: NavOptions? = null) {
-    navigate(CommonRoute.CAMERAX, navOptions)
+    const val SKELETON_LOADER = "route_skeleton_loader"
+
+    internal val fullScreenRoute = arrayOf(ME)
 }

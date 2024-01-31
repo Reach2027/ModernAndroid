@@ -17,12 +17,13 @@
 package com.reach.modernandroid.data.feature.bingwallpaper
 
 import com.reach.core.jvm.common.Result
-import com.reach.core.jvm.common.httpResult
+import com.reach.core.jvm.common.flowResult
 import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpaperModel
 import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpapersModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import java.util.Locale
 
@@ -36,11 +37,13 @@ interface BingWallpaperRepository {
 
 internal class DefaultBingWallpaperRepo(
     private val httpClient: HttpClient,
+    private val dispatcher: CoroutineDispatcher,
 ) : BingWallpaperRepository {
 
-    override fun getTodayWallpaper(): Flow<Result<BingWallpaperModel>> = httpResult {
-        getBingWallpaper(1).images[0]
-    }
+    override fun getTodayWallpaper(): Flow<Result<BingWallpaperModel>> =
+        flowResult(dispatcher) {
+            getBingWallpaper(1).images[0]
+        }
 
     private suspend fun getBingWallpaper(count: Int): BingWallpapersModel {
         check(count > 0) { "Image count must be > 0" }

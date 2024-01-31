@@ -18,14 +18,15 @@ package com.reach.modernandroid.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.reach.modernandroid.ui.feature.album.navigation.albumRoute
-import com.reach.modernandroid.ui.feature.camerax.navigation.cameraxRoute
-import com.reach.modernandroid.ui.feature.me.navigation.ROUTE_ME
-import com.reach.modernandroid.ui.feature.me.navigation.meRoute
-import com.reach.modernandroid.ui.feature.more.navigation.moreGraph
+import com.reach.modernandroid.ui.base.common.navigation.AppRoute
+import com.reach.modernandroid.ui.feature.album.albumRoute
+import com.reach.modernandroid.ui.feature.camerax.cameraxRoute
+import com.reach.modernandroid.ui.feature.lottie.lottieRoute
+import com.reach.modernandroid.ui.feature.me.meRoute
+import com.reach.modernandroid.ui.feature.more.moreRoute
+import com.reach.modernandroid.ui.feature.skeletonloader.skeletonLoaderRoute
 
 @Composable
 internal fun AppNavHost(
@@ -35,18 +36,18 @@ internal fun AppNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = ROUTE_ME,
+        startDestination = AppRoute.ME,
     ) {
         meRoute()
 
-        moreGraph()
+        moreRoute()
 
-        addCommonRoute()
+        lottieRoute()
+
+        skeletonLoaderRoute()
+
+        albumRoute()
+
+        cameraxRoute()
     }
-}
-
-private fun NavGraphBuilder.addCommonRoute() {
-    albumRoute()
-
-    cameraxRoute()
 }

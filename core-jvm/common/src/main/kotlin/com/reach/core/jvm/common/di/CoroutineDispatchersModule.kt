@@ -21,13 +21,13 @@ import kotlinx.coroutines.Dispatchers
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 
-enum class QualifierCoroutineDispatcher {
+enum class QualifierDispatchers {
     IO,
     Default,
 }
 
-val coroutineDispatchersModule = module {
-    single<CoroutineDispatcher>(qualifier(QualifierCoroutineDispatcher.IO)) { Dispatchers.IO }
+val dispatcherModule = module {
+    single<CoroutineDispatcher>(qualifier(QualifierDispatchers.IO)) { Dispatchers.IO }
 
-    single<CoroutineDispatcher>(qualifier(QualifierCoroutineDispatcher.Default)) { Dispatchers.Default }
+    single<CoroutineDispatcher>(qualifier(QualifierDispatchers.Default)) { Dispatchers.Default }
 }

@@ -29,13 +29,15 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -45,26 +47,30 @@ import com.reach.modernandroid.navigation.TopDest
 import com.reach.modernandroid.navigation.isTopDest
 import com.reach.modernandroid.navigation.isTopDestInHierarchy
 import com.reach.modernandroid.navigation.navToTopDest
-import com.reach.modernandroid.ui.base.common.LocalAppUiState
+import com.reach.modernandroid.ui.base.common.AppUiState
+import org.koin.compose.koinInject
 
 @Composable
 internal fun App(
     navController: NavHostController = rememberNavController(),
 ) {
-    CompositionLocalProvider(
-        LocalAppUiState provides DefaultAppUiState(navController),
-    ) {
-        AppScreen(navController = navController)
-    }
+    val appUiState = koinInject<AppUiState>()
+    appUiState.setup(navController)
+
+    AppScreen(
+        appUiState = appUiState,
+    )
 }
 
 @Composable
 private fun AppScreen(
-    navController: NavHostController = LocalAppUiState.current.navController,
+    appUiState: AppUiState,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val currentDest = navController.currentBackStackEntryAsState().value?.destination
+    val currentDest = appUiState.navController.currentBackStackEntryAsState().value?.destination
+
+    val fullScreen by appUiState.isFullScreen.collectAsStateWithLifecycle()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -73,7 +79,8 @@ private fun AppScreen(
                 visible = currentDest.isTopDest(),
                 enter = slideInVertically(
                     animationSpec = spring(
-                        stiffness = Spring.StiffnessMedium,
+                        dampingRatio = Spring.DampingRatioLowBouncy,
+                        stiffness = Spring.StiffnessMediumLow,
                         visibilityThreshold = IntOffset.VisibilityThreshold,
                     ),
                     initialOffsetY = { it },
@@ -88,19 +95,23 @@ private fun AppScreen(
             ) {
                 AppNavBar(
                     destList = TopDest.entries,
-                    onNavToTopDest = { navController.navToTopDest(it) },
+                    onNavToTopDest = { appUiState.navController.navToTopDest(it) },
                     currentDest = currentDest,
                 )
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        contentWindowInsets = if (fullScreen) {
+            WindowInsets(0, 0, 0, 0)
+        } else {
+            ScaffoldDefaults.contentWindowInsets
+        },
     ) { padding ->
         AppNavHost(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding),
-            navController = navController,
+            navController = appUiState.navController,
         )
     }
 }

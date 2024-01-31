@@ -26,15 +26,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.reach.modernandroid.ui.base.common.LocalAppUiState
-import com.reach.modernandroid.ui.base.common.navigation.navToAlbum
+import androidx.navigation.NavGraphBuilder
+import com.reach.modernandroid.ui.base.common.AppUiState
+import com.reach.modernandroid.ui.base.common.navigation.AppRoute
+import com.reach.modernandroid.ui.base.common.navigation.screenComposable
+import org.koin.compose.koinInject
+
+fun NavGraphBuilder.cameraxRoute() {
+    screenComposable(
+        route = AppRoute.CAMERAX,
+    ) {
+        CameraxRoute()
+    }
+}
 
 @Composable
 internal fun CameraxRoute() {
-    val navController = LocalAppUiState.current.navController
+    val appUiState = koinInject<AppUiState>()
 
     CameraxScreen(
-        navToAlbum = { navController.navToAlbum() },
+        navToAlbum = { appUiState.navController.navigate(AppRoute.ALBUM) },
     )
 }
 

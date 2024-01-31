@@ -17,10 +17,7 @@
 package com.reach.modernandroid.ui.feature.more
 
 import androidx.navigation.NavController
-import com.reach.modernandroid.ui.base.common.navigation.navToAlbum
-import com.reach.modernandroid.ui.base.common.navigation.navToCamerax
-import com.reach.modernandroid.ui.feature.lottie.navigation.navToLottie
-import com.reach.modernandroid.ui.feature.skeletonloader.navigation.navToSkeletonLoader
+import com.reach.modernandroid.ui.base.common.navigation.AppRoute
 
 internal enum class Function(
     val text: String,
@@ -28,18 +25,18 @@ internal enum class Function(
 ) {
     Lottie(
         text = "Lottie",
-        { it.navToLottie() },
+        { it.navigate(AppRoute.LOTTIE) },
     ),
     SkeletonLoader(
         text = "SkeletonLoader",
-        { it.navToSkeletonLoader() },
+        { it.navigate(AppRoute.SKELETON_LOADER) },
     ),
     LocalAlbum(
         text = "LocalAlbum",
-        { it.navToAlbum() },
+        { it.navigate(AppRoute.ALBUM) },
     ),
     Camerax(
         text = "Camerax",
-        { it.navToCamerax() },
+        { it.navigate(AppRoute.CAMERAX) },
     ),
 }

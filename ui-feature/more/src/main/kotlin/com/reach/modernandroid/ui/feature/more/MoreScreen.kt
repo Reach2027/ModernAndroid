@@ -35,18 +35,34 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.reach.modernandroid.ui.base.common.LocalAppUiState
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import com.reach.modernandroid.ui.base.common.AppUiState
+import com.reach.modernandroid.ui.base.common.animation.topDestEnterTransition
+import com.reach.modernandroid.ui.base.common.animation.topDestExitTransition
+import com.reach.modernandroid.ui.base.common.navigation.AppRoute
 import com.reach.modernandroid.ui.base.resource.theme.AppTheme
+import org.koin.compose.koinInject
+
+fun NavGraphBuilder.moreRoute() {
+    composable(
+        route = AppRoute.MORE,
+        enterTransition = { topDestEnterTransition() },
+        exitTransition = { topDestExitTransition() },
+    ) {
+        MoreRoute()
+    }
+}
 
 @Composable
 internal fun MoreRoute() {
-    val navController = LocalAppUiState.current.navController
+    val appUiState = koinInject<AppUiState>()
 
     val functions: List<Function> = Function.entries
 
     MoreScreen(
         functions = functions,
-        navController = navController,
+        navController = appUiState.navController,
     )
 }
 

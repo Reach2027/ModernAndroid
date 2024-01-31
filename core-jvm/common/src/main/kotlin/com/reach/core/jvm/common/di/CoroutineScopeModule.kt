@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-package com.reach.core.android.common.di
+package com.reach.core.jvm.common.di
 
-import com.reach.core.jvm.common.di.QualifierCoroutineDispatcher
-import com.reach.core.jvm.common.di.coroutineDispatchersModule
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -30,15 +28,15 @@ enum class QualifierCoroutineScope {
 }
 
 val coroutineScopeModule = module {
-    includes(coroutineDispatchersModule)
+    includes(dispatcherModule)
 
     single<CoroutineScope>(qualifier(QualifierCoroutineScope.AppDefault)) {
-        val dispatcher: CoroutineDispatcher = get(qualifier(QualifierCoroutineDispatcher.Default))
+        val dispatcher: CoroutineDispatcher = get(qualifier(QualifierDispatchers.Default))
         CoroutineScope(SupervisorJob() + dispatcher)
     }
 
     single<CoroutineScope>(qualifier(QualifierCoroutineScope.AppIo)) {
-        val dispatcher: CoroutineDispatcher = get(qualifier(QualifierCoroutineDispatcher.IO))
+        val dispatcher: CoroutineDispatcher = get(qualifier(QualifierDispatchers.IO))
         CoroutineScope(SupervisorJob() + dispatcher)
     }
 }

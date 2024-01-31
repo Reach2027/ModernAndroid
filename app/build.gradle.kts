@@ -54,6 +54,8 @@ dependencies {
     implementation(projects.uiFeature.more)
     implementation(projects.uiFeature.me)
 
+    implementation(projects.uiFeature.lottie)
+    implementation(projects.uiFeature.skeletonloader)
     implementation(projects.uiFeature.album)
     implementation(projects.uiFeature.camerax)
 
