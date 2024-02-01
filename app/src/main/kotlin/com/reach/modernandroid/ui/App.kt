@@ -17,12 +17,14 @@
 package com.reach.modernandroid.ui
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -73,21 +75,28 @@ private fun AppScreen(
     val fullScreen by appUiState.isFullScreen.collectAsStateWithLifecycle()
 
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioLowBouncy,
+                    stiffness = Spring.StiffnessHigh,
+                ),
+            ),
         bottomBar = {
             AnimatedVisibility(
                 visible = currentDest.isTopDest(),
                 enter = slideInVertically(
                     animationSpec = spring(
                         dampingRatio = Spring.DampingRatioLowBouncy,
-                        stiffness = Spring.StiffnessMediumLow,
+                        stiffness = Spring.StiffnessMedium,
                         visibilityThreshold = IntOffset.VisibilityThreshold,
                     ),
                     initialOffsetY = { it },
                 ),
                 exit = slideOutVertically(
                     animationSpec = spring(
-                        stiffness = Spring.StiffnessMedium,
+                        stiffness = Spring.StiffnessHigh,
                         visibilityThreshold = IntOffset.VisibilityThreshold,
                     ),
                     targetOffsetY = { it },
@@ -110,7 +119,8 @@ private fun AppScreen(
         AppNavHost(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding),
+                .padding(padding)
+                .consumeWindowInsets(padding),
             navController = appUiState.navController,
         )
     }

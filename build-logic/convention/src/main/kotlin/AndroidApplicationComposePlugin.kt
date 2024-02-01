@@ -1,6 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.reach.modernandroid.configureCompose
-import com.reach.modernandroid.configureComposeLibraries
+import com.reach.modernandroid.configureComposeFeature
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.getByType
@@ -12,7 +12,7 @@ class AndroidApplicationComposePlugin : Plugin<Project> {
 
             val extension = extensions.getByType<ApplicationExtension>()
             configureCompose(extension)
-            configureComposeLibraries()
+            configureComposeFeature()
         }
     }
 }

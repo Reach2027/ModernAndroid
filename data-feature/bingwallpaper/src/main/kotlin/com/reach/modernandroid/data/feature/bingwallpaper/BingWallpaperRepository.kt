@@ -52,10 +52,15 @@ internal class DefaultBingWallpaperRepo(
         return httpClient.get(BING_BASE_URL + BING_IMAGE_URL) {
             url {
                 parameters.apply {
+                    // response format json
                     append("format", "js")
+                    // 1: ultra high definition resolution, 0: normal
                     append("uhd", "1")
+                    // the number days previous to the present day, with 0 meaning the present day
                     append("idx", "0")
+                    // the number of images, range 1 .. 8
                     append("n", count.toString())
+                    // market code
                     append("mkt", Locale.getDefault().toLanguageTag())
                 }
             }

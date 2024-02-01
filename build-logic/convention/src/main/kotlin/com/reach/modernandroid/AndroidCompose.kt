@@ -37,6 +37,18 @@ internal fun Project.configureCompose(
             debugImplementation(libs, "compose.ui.tooling")
             debugImplementation(libs, "compose.ui.test.manifest")
             implementation(libs, "compose.runtime")
+
+            implementation(libs, "androidx.lifecycle.runtime.compose")
+            implementation(libs, "androidx.lifecycle.viewmodel.compose")
+            implementation(libs, "androidx.lifecycle.viewmodel.savedstate")
+            implementation(libs, "androidx.lifecycle.common")
+
+            implementation(libs, "androidx.navigation")
+
+            implementation(libs, "koin.androidx.compose")
+            implementation(libs, "koin.androidx.compose.navigation")
+
+            implementation(libs, "coil")
         }
     }
 
@@ -73,21 +85,9 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
     return metricParameters.toList()
 }
 
-internal fun Project.configureComposeLibraries() {
+internal fun Project.configureComposeFeature() {
     dependencies {
         add("implementation", project(":ui-base:resource"))
         add("implementation", project(":ui-base:common"))
-
-        implementation(libs, "androidx.lifecycle.runtime.compose")
-        implementation(libs, "androidx.lifecycle.viewmodel.compose")
-        implementation(libs, "androidx.lifecycle.viewmodel.savedstate")
-        implementation(libs, "androidx.lifecycle.common")
-
-        implementation(libs, "androidx.navigation")
-
-        implementation(libs, "koin.androidx.compose")
-        implementation(libs, "koin.androidx.compose.navigation")
-
-        implementation(libs, "coil")
     }
 }

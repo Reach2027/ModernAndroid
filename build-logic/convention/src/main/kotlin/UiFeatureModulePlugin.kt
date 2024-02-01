@@ -1,4 +1,4 @@
-import com.reach.modernandroid.configureComposeLibraries
+import com.reach.modernandroid.configureComposeFeature
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
@@ -9,7 +9,7 @@ class UiFeatureModulePlugin : Plugin<Project> {
                 apply("reach.android.library")
             }
 
-            configureComposeLibraries()
+            configureComposeFeature()
         }
     }
 }

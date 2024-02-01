@@ -32,6 +32,8 @@ interface AppUiState {
     val isFullScreen: StateFlow<Boolean>
 
     fun setup(navController: NavHostController)
+
+    fun setFullScreen(fullScreen: Boolean)
 }
 
 internal class DefaultAppUiState(
@@ -60,5 +62,9 @@ internal class DefaultAppUiState(
                 _isFullScreen.emit(needFullScreen)
             }
         }
+    }
+
+    override fun setFullScreen(fullScreen: Boolean) {
+        _isFullScreen.value = fullScreen
     }
 }
