@@ -16,54 +16,38 @@
 
 package com.reach.modernandroid.data.feature.bingwallpaper
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.reach.core.jvm.common.Result
 import com.reach.core.jvm.common.flowResult
 import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpaperModel
-import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpapersModel
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.request.get
+import com.reach.modernandroid.data.feature.bingwallpaper.source.BingWallpaperApi
+import com.reach.modernandroid.data.feature.bingwallpaper.source.BingWallpaperPagingSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import java.util.Locale
-
-const val BING_BASE_URL = "https://www.bing.com"
-private const val BING_IMAGE_URL = "/HPImageArchive.aspx"
 
 interface BingWallpaperRepository {
 
     fun getTodayWallpaper(): Flow<Result<BingWallpaperModel>>
+
+    fun bingWallpaperFlow(): Flow<PagingData<BingWallpaperModel>>
 }
 
 internal class DefaultBingWallpaperRepo(
-    private val httpClient: HttpClient,
+    private val bingWallpaperApi: BingWallpaperApi,
+    private val bingWallpaperPagingSource: BingWallpaperPagingSource,
     private val dispatcher: CoroutineDispatcher,
 ) : BingWallpaperRepository {
 
     override fun getTodayWallpaper(): Flow<Result<BingWallpaperModel>> =
         flowResult(dispatcher) {
-            getBingWallpaper(1).images[0]
+            bingWallpaperApi.getBingWallpaper(0, 1)
+                .images[0]
         }
 
-    private suspend fun getBingWallpaper(count: Int): BingWallpapersModel {
-        check(count > 0) { "Image count must be > 0" }
-        check(count < 9) { "Image count must be < 9" }
-
-        return httpClient.get(BING_BASE_URL + BING_IMAGE_URL) {
-            url {
-                parameters.apply {
-                    // response format json
-                    append("format", "js")
-                    // 1: ultra high definition resolution, 0: normal
-                    append("uhd", "1")
-                    // the number days previous to the present day, with 0 meaning the present day
-                    append("idx", "0")
-                    // the number of images, range 1 .. 8
-                    append("n", count.toString())
-                    // market code
-                    append("mkt", Locale.getDefault().toLanguageTag())
-                }
-            }
-        }.body()
-    }
+    override fun bingWallpaperFlow(): Flow<PagingData<BingWallpaperModel>> =
+        Pager(config = PagingConfig(pageSize = 8)) {
+            bingWallpaperPagingSource
+        }.flow
 }

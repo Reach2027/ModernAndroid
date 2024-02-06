@@ -27,11 +27,11 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -113,7 +113,7 @@ private fun AppScreen(
         contentWindowInsets = if (fullScreen) {
             WindowInsets(0, 0, 0, 0)
         } else {
-            ScaffoldDefaults.contentWindowInsets
+            WindowInsets.statusBars
         },
     ) { padding ->
         AppNavHost(

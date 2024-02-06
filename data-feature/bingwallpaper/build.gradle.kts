@@ -24,4 +24,6 @@ dependencies {
 
     implementation(libs.ktor.core)
     implementation(libs.kotlinx.serialization.json)
+
+    implementation(libs.androidx.paging.common)
 }

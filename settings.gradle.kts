@@ -29,6 +29,7 @@ include(":ui-feature:lottie")
 include(":ui-feature:skeletonloader")
 include(":ui-feature:album")
 include(":ui-feature:camerax")
+include(":ui-feature:bingwallpaper")
 
 // UI base
 include(":ui-base:resource")

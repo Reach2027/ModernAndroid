@@ -21,7 +21,6 @@ import androidx.lifecycle.viewModelScope
 import com.reach.core.android.common.devicestate.DeviceState
 import com.reach.core.android.common.devicestate.network.NetworkType
 import com.reach.core.jvm.common.Result
-import com.reach.modernandroid.data.feature.bingwallpaper.BING_BASE_URL
 import com.reach.modernandroid.data.feature.bingwallpaper.BingWallpaperRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,7 +31,7 @@ internal data class MeUiState(
     val isLoading: Boolean = true,
     val isNetworkAvailable: Boolean = false,
     val networkType: NetworkType = NetworkType.None,
-    val imageUrl: String = "",
+    val imageUrl: String = "https://www.bing.com/th?id=OHR.HalbinselJasmund_ZH-CN2110869056_UHD.jpg&rf=LaDigue_UHD.jpg&pid=hp&w=1920&h=1080&rs=1&c=4",
 )
 
 internal class MeViewModel(
@@ -65,7 +64,7 @@ internal class MeViewModel(
             bingWallpaperRepo.getTodayWallpaper().collect {
                 when (it) {
                     is Result.Success -> {
-                        _uiState.emit(_uiState.value.copy(imageUrl = BING_BASE_URL + it.data.imageUrl))
+                        _uiState.emit(_uiState.value.copy(imageUrl = it.data.imageUrl))
                     }
 
                     is Result.Error -> {}

@@ -16,6 +16,7 @@
 
 package com.reach.modernandroid.ui.feature.me
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -35,11 +36,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import coil.compose.AsyncImage
+import com.reach.modernandroid.ui.base.common.AppUiState
 import com.reach.modernandroid.ui.base.common.animation.topDestEnterTransition
 import com.reach.modernandroid.ui.base.common.animation.topDestExitTransition
 import com.reach.modernandroid.ui.base.common.navigation.AppRoute
 import com.reach.modernandroid.ui.base.resource.theme.AppTheme
-import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.compose.navigation.koinNavViewModel
+import org.koin.compose.koinInject
 
 fun NavGraphBuilder.meRoute() {
     composable(
@@ -52,23 +55,31 @@ fun NavGraphBuilder.meRoute() {
 }
 
 @Composable
-internal fun MeRoute(
-    viewModel: MeViewModel = koinViewModel(),
+private fun MeRoute(
+    appUiState: AppUiState = koinInject(),
+    viewModel: MeViewModel = koinNavViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    MeScreen(uiState = uiState)
+    MeScreen(
+        uiState = uiState,
+        onWallpaperClick = { appUiState.navController.navigate(AppRoute.BING_WALLPAPER) },
+    )
 }
 
 @Composable
 private fun MeScreen(
     uiState: MeUiState,
+    onWallpaperClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth(),
     ) {
-        PersonInfo(uiState = uiState)
+        PersonInfo(
+            uiState = uiState,
+            onWallpaperClick = onWallpaperClick,
+        )
         Spacer(modifier = Modifier.height(16.dp))
         DeviceInfo(uiState = uiState)
     }
@@ -77,6 +88,7 @@ private fun MeScreen(
 @Composable
 private fun PersonInfo(
     uiState: MeUiState,
+    onWallpaperClick: () -> Unit,
 ) {
     Box {
         AsyncImage(
@@ -84,7 +96,8 @@ private fun PersonInfo(
             contentDescription = "",
             modifier = Modifier
                 .widthIn(max = 480.dp)
-                .aspectRatio(16f / 9f),
+                .aspectRatio(16f / 9f)
+                .clickable(onClick = onWallpaperClick),
         )
     }
 }
@@ -111,6 +124,9 @@ private fun DeviceInfo(uiState: MeUiState) {
 @Composable
 private fun MeScreenPreview() {
     AppTheme {
-        MeScreen(MeUiState())
+        MeScreen(
+            uiState = MeUiState(),
+            onWallpaperClick = {},
+        )
     }
 }

@@ -17,17 +17,21 @@
 package com.reach.modernandroid.ui.feature.album
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraphBuilder
+import com.reach.modernandroid.ui.base.common.AppUiState
 import com.reach.modernandroid.ui.base.common.navigation.AppRoute
 import com.reach.modernandroid.ui.base.common.navigation.screenComposable
+import com.reach.modernandroid.ui.base.common.widget.AppTopBarWithBack
+import com.reach.modernandroid.ui.base.resource.theme.AppTheme
+import org.koin.compose.koinInject
 
 fun NavGraphBuilder.albumRoute() {
     screenComposable(
@@ -38,17 +42,34 @@ fun NavGraphBuilder.albumRoute() {
 }
 
 @Composable
-internal fun AlbumRoute() {
-    AlbumScreen()
+private fun AlbumRoute(
+    appUiState: AppUiState = koinInject(),
+) {
+    AlbumScreen(
+        onBackClick = { appUiState.navController.navigateUp() },
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun AlbumScreen() {
+private fun AlbumScreen(onBackClick: () -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
-        Text(text = "AlbumRoute")
+        AppTopBarWithBack(
+            title = { Text(text = stringResource(id = R.string.photos)) },
+            onBackClick = onBackClick,
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AlbumScreenPreview() {
+    AppTheme {
+        AlbumScreen(
+            onBackClick = {},
+        )
     }
 }

@@ -30,5 +30,7 @@ object AppRoute {
 
     const val SKELETON_LOADER = "route_skeleton_loader"
 
+    const val BING_WALLPAPER = "route_bing_wallpaper"
+
     internal val fullScreenRoute = arrayOf(ME)
 }

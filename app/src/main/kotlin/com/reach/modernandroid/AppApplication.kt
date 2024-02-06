@@ -18,6 +18,7 @@ package com.reach.modernandroid
 
 import android.app.Application
 import com.reach.modernandroid.ui.base.common.di.appUiStateStateModule
+import com.reach.modernandroid.ui.feature.bingwallpaper.di.bingWallpaperModule
 import com.reach.modernandroid.ui.feature.me.di.meModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -35,7 +36,11 @@ class AppApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@AppApplication)
-            modules(appUiStateStateModule, meModule)
+            modules(
+                appUiStateStateModule,
+                meModule,
+                bingWallpaperModule,
+            )
         }
     }
 }

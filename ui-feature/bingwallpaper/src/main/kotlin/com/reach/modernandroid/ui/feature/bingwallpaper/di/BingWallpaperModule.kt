@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.data.feature.bingwallpaper.model
+package com.reach.modernandroid.ui.feature.bingwallpaper.di
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.reach.modernandroid.data.feature.bingwallpaper.di.bingWallpaperRepoModule
+import com.reach.modernandroid.ui.feature.bingwallpaper.BingWallpaperViewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.dsl.module
 
-@Serializable
-data class BingWallpapersModel(
-    val images: MutableList<BingWallpaperModel>,
-)
+val bingWallpaperModule = module {
+    includes(bingWallpaperRepoModule)
 
-@Serializable
-data class BingWallpaperModel(
-    @SerialName("url")
-    var imageUrl: String,
-    val copyright: String,
-    val title: String,
-    @SerialName("startdate")
-    var startDate: String,
-)
+    viewModelOf(::BingWallpaperViewModel)
+}
