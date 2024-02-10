@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import coil.compose.AsyncImage
+import com.reach.core.ui.common.SkeletonAsyncImage
 import com.reach.modernandroid.ui.base.common.AppUiState
 import com.reach.modernandroid.ui.base.common.animation.topDestEnterTransition
 import com.reach.modernandroid.ui.base.common.animation.topDestExitTransition
@@ -91,7 +91,7 @@ private fun PersonInfo(
     onWallpaperClick: () -> Unit,
 ) {
     Box {
-        AsyncImage(
+        SkeletonAsyncImage(
             model = uiState.imageUrl,
             contentDescription = "",
             modifier = Modifier

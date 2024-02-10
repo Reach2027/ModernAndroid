@@ -8,8 +8,8 @@ ksp = "1.9.22-1.0.17"
 
 # Library
 # Compose
-composeBom = "2024.01.00"
-composeCompiler = "1.5.8"
+composeBom = "2024.02.00"
+composeCompiler = "1.5.9"
 material3 = "1.2.0-rc01"
 material3Adaptive = "1.0.0-alpha05"
 material3AdaptiveNavigation = "1.0.0-alpha02"
@@ -49,6 +49,8 @@ okio = "3.7.0"
 
 lottie = "6.3.0"
 
+shimmer = "1.2.0"
+
 # Test
 junit = "4.13.2"
 
@@ -63,8 +65,8 @@ compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = 
 
 compose-animation = { group = "androidx.compose.animation", name = "animation" }
 
-compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
-compose-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3" }
+compose-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 compose-material3-adaptive = { group = "androidx.compose.material3", name = "material3-adaptive", version.ref = "material3Adaptive" }
 compose-material3-adaptive-navigation = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite", version.ref = "material3AdaptiveNavigation" }
 
@@ -139,6 +141,8 @@ coil = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 okio = { group = "com.squareup.okio", name = "okio", version.ref = "okio" }
 
 lottie = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+
+shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version.ref = "shimmer" }
 
 # Unit Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }

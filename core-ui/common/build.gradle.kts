@@ -38,5 +38,5 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.shimmer)
 }

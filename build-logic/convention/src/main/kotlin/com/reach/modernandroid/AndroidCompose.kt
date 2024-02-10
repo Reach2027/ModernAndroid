@@ -87,6 +87,7 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
 
 internal fun Project.configureComposeFeature() {
     dependencies {
+        add("implementation", project(":core-ui:common"))
         add("implementation", project(":ui-base:resource"))
         add("implementation", project(":ui-base:common"))
     }

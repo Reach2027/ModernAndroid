@@ -41,7 +41,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import coil.compose.AsyncImage
+import com.reach.core.ui.common.SkeletonAsyncImage
 import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpaperModel
 import com.reach.modernandroid.ui.base.common.AppUiState
 import com.reach.modernandroid.ui.base.common.navigation.AppRoute
@@ -108,20 +108,20 @@ private fun BingWallpaperItem(bingWallpaperModel: BingWallpaperModel?) {
     if (bingWallpaperModel == null) return
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        SkeletonAsyncImage(
+            model = bingWallpaperModel.imageUrl,
+            contentDescription = "",
+            modifier = Modifier
+                .aspectRatio(16f / 9f)
+                .clip(RoundedCornerShape(size = 32.dp)),
+        )
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = """${bingWallpaperModel.startDate}  ${bingWallpaperModel.title}""",
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .padding(horizontal = 32.dp),
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        AsyncImage(
-            model = bingWallpaperModel.imageUrl,
-            contentDescription = "",
-            modifier = Modifier
-                .aspectRatio(16f / 9f)
-                .clip(RoundedCornerShape(size = 32.dp)),
         )
     }
 }
