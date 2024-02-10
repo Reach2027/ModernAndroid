@@ -26,8 +26,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -113,7 +113,7 @@ private fun BingWallpaperItem(bingWallpaperModel: BingWallpaperModel?) {
             contentDescription = "",
             modifier = Modifier
                 .aspectRatio(16f / 9f)
-                .clip(RoundedCornerShape(size = 32.dp)),
+                .clip(MaterialTheme.shapes.large),
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(

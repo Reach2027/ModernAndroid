@@ -18,7 +18,7 @@ package com.reach.modernandroid.ui.base.resource.theme
 
 import androidx.compose.ui.graphics.Color
 
-object LightColor {
+internal object LightColor {
     val Primary = Color(0xFF0056D0)
     val OnPrimary = Color(0xFFFFFFFF)
     val PrimaryContainer = Color(0xFFDAE2FF)
@@ -51,7 +51,7 @@ object LightColor {
     val Scrim = Color(0x00000000)
 }
 
-object DarkColor {
+internal object DarkColor {
     val Primary = Color(0xFFB1C5FF)
     val OnPrimary = Color(0xFF002C71)
     val PrimaryContainer = Color(0xFF00409F)

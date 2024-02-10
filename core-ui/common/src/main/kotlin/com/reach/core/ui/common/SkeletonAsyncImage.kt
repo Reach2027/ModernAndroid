@@ -28,7 +28,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -43,7 +45,6 @@ import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
 
-// TODO: Add error state
 @Composable
 fun SkeletonAsyncImage(
     model: Any?,
@@ -54,7 +55,7 @@ fun SkeletonAsyncImage(
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null,
 ) {
-    var isLoading by remember { mutableStateOf(true) }
+    var isLoading by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
 
     val imageLoader = rememberAsyncImagePainter(
@@ -71,35 +72,65 @@ fun SkeletonAsyncImage(
             contentDescription = contentDescription,
             alignment = alignment,
             contentScale = contentScale,
-            modifier = Modifier.matchParentSize(),
+            modifier = Modifier.fillMaxSize(),
             alpha = alpha,
             colorFilter = colorFilter,
         )
 
-        AnimatedVisibility(
-            visible = isLoading,
-            enter = fadeIn(),
-            exit = fadeOut(),
+        LoadingState(isLoading = isLoading)
+
+        ErrorState(isError = isError)
+    }
+}
+
+@Composable
+private fun ErrorState(isError: Boolean) {
+    AnimatedVisibility(
+        visible = isError,
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surfaceVariant),
+            contentAlignment = Alignment.Center,
         ) {
-            val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
-            val alphaAni by infiniteTransition.animateFloat(
-                initialValue = 0.3f,
-                targetValue = 1f,
-                animationSpec = infiniteRepeatable(
-                    animation = tween(
-                        durationMillis = 1000,
-                        easing = LinearEasing,
-                    ),
-                    repeatMode = RepeatMode.Reverse,
-                ),
-                label = "",
-            )
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .alpha(alphaAni)
-                    .background(MaterialTheme.colorScheme.surfaceVariant),
+            Text(
+                text = "The image failed to load",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodyLarge,
             )
         }
+    }
+}
+
+@Composable
+private fun LoadingState(isLoading: Boolean) {
+    AnimatedVisibility(
+        visible = isLoading,
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
+        val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
+        val alphaAni by infiniteTransition.animateFloat(
+            initialValue = 0.3f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = 1000,
+                    easing = LinearEasing,
+                ),
+                repeatMode = RepeatMode.Reverse,
+            ),
+            label = "",
+        )
+
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(alphaAni)
+                .background(MaterialTheme.colorScheme.surfaceVariant),
+        )
     }
 }

@@ -25,7 +25,7 @@ android {
     defaultConfig {
         applicationId = "com.reach.modernandroid"
         versionCode = 1
-        versionName = "1.0"
+        versionName = "0.0.1-alpha"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
