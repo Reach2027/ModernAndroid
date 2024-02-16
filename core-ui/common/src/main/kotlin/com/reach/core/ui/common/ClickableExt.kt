@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.base.common
+package com.reach.core.ui.common
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable

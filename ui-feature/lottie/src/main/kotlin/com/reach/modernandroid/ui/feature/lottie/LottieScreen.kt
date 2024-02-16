@@ -48,8 +48,8 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.reach.core.ui.common.clickableNoVisualEffect
 import com.reach.modernandroid.ui.base.common.AppUiState
-import com.reach.modernandroid.ui.base.common.clickableNoVisualEffect
 import com.reach.modernandroid.ui.base.common.navigation.AppRoute
 import com.reach.modernandroid.ui.base.common.navigation.screenComposable
 import com.reach.modernandroid.ui.base.common.widget.AppTopBarWithBack

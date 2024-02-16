@@ -19,13 +19,11 @@ package com.reach.modernandroid.ui.base.common.widget
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -58,7 +56,9 @@ fun AppTopBarWithBack(
             Icon(
                 imageVector = AppIcons.Back,
                 contentDescription = "",
-                modifier = Modifier.clickable { onBackClick() },
+                modifier = Modifier
+                    .clickable { onBackClick() }
+                    .padding(16.dp),
             )
         },
         actions = actions,
@@ -80,13 +80,8 @@ fun AppTopBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
     TopAppBar(
-        title = {
-            Row {
-                Spacer(modifier = Modifier.width(16.dp))
-                title()
-            }
-        },
-        modifier = modifier.padding(horizontal = 16.dp),
+        title = title,
+        modifier = modifier,
         navigationIcon = navigationIcon,
         actions = actions,
         windowInsets = windowInsets,
