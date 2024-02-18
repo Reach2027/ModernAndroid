@@ -16,18 +16,36 @@
 
 package com.reach.modernandroid.ui.feature.skeletonloader
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
+import com.reach.core.ui.common.SkeletonLoader
+import com.reach.modernandroid.ui.base.common.AppUiState
 import com.reach.modernandroid.ui.base.common.navigation.AppRoute
 import com.reach.modernandroid.ui.base.common.navigation.screenComposable
+import com.reach.modernandroid.ui.base.common.widget.AppTopBarWithBack
+import com.reach.modernandroid.ui.base.resource.theme.AppTheme
+import org.koin.compose.koinInject
 
 fun NavGraphBuilder.skeletonLoaderRoute() {
     screenComposable(AppRoute.SKELETON_LOADER) {
@@ -36,17 +54,56 @@ fun NavGraphBuilder.skeletonLoaderRoute() {
 }
 
 @Composable
-internal fun SkeletonLoaderRoute() {
-    SkeletonLoaderScreen()
+internal fun SkeletonLoaderRoute(appUiState: AppUiState = koinInject()) {
+    SkeletonLoaderScreen(
+        onBackClick = { appUiState.navController.navigateUp() },
+    )
 }
 
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
-private fun SkeletonLoaderScreen() {
+private fun SkeletonLoaderScreen(
+    onBackClick: () -> Unit,
+) {
     Column(
         modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
-        Text(text = "SkeletonLoaderScreen")
+        AppTopBarWithBack(
+            title = { Text(text = stringResource(id = R.string.skeleton_loader)) },
+            onBackClick = onBackClick,
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                scrolledContainerColor = Color.Transparent,
+            ),
+        )
+
+        FlowRow(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+                .verticalScroll(state = rememberScrollState()),
+            horizontalArrangement = Arrangement.spacedBy(
+                space = 16.dp,
+                alignment = Alignment.CenterHorizontally,
+            ),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            SkeletonLoader(
+                modifier = Modifier
+                    .width(320.dp)
+                    .height(320.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun SkeletonLoaderScreenPreview() {
+    AppTheme {
+        SkeletonLoaderScreen(
+            onBackClick = {},
+        )
     }
 }

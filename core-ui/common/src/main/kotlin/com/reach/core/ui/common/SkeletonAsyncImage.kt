@@ -17,12 +17,6 @@
 package com.reach.core.ui.common
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
@@ -112,25 +106,6 @@ private fun LoadingState(isLoading: Boolean) {
         enter = fadeIn(),
         exit = fadeOut(),
     ) {
-        val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
-        val alphaAni by infiniteTransition.animateFloat(
-            initialValue = 0.3f,
-            targetValue = 1f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(
-                    durationMillis = 1000,
-                    easing = LinearEasing,
-                ),
-                repeatMode = RepeatMode.Reverse,
-            ),
-            label = "",
-        )
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .alpha(alphaAni)
-                .background(MaterialTheme.colorScheme.surfaceVariant),
-        )
+        SkeletonLoader(modifier = Modifier.fillMaxSize())
     }
 }

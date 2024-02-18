@@ -16,7 +16,6 @@
 
 package com.reach.modernandroid.ui.base.common.widget
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.RowScope
@@ -90,7 +89,6 @@ fun AppTopBar(
     )
 }
 
-@SuppressLint("UnusedBoxWithConstraintsScope")
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable

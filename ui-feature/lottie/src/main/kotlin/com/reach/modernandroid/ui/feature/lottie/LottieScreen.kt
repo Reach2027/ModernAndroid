@@ -183,39 +183,42 @@ private fun TiktokLike() {
         val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.heart))
         var isPlaying by remember { mutableStateOf(false) }
         var isLike by remember { mutableStateOf(false) }
-        val progress by animateLottieCompositionAsState(
-            composition = composition,
-            isPlaying = isPlaying,
-            iterations = LottieConstants.IterateForever,
-        )
 
-        LottieAnimation(
-            composition = composition,
-            progress = {
-                if (isPlaying && isLike) {
+        if (isLike) {
+            val progress by animateLottieCompositionAsState(
+                composition = composition,
+            )
+            LottieAnimation(
+                composition = composition,
+                progress = {
                     if (progress > 0.99f) {
                         isPlaying = false
                     }
                     progress
-                } else {
-                    if (isLike) 1f else 0f
-                }
-            },
-            modifier = Modifier
-                .width(80.dp)
-                .height(80.dp)
-                .clickableNoVisualEffect {
-                    if (isPlaying) {
-                        return@clickableNoVisualEffect
-                    }
-                    if (isLike) {
+                },
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(80.dp)
+                    .clickableNoVisualEffect {
+                        if (isPlaying) {
+                            return@clickableNoVisualEffect
+                        }
                         isLike = false
-                    } else {
+                    },
+            )
+        } else {
+            LottieAnimation(
+                composition = composition,
+                progress = { 0f },
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(80.dp)
+                    .clickableNoVisualEffect {
                         isPlaying = true
                         isLike = true
-                    }
-                },
-        )
+                    },
+            )
+        }
     }
 }
 
