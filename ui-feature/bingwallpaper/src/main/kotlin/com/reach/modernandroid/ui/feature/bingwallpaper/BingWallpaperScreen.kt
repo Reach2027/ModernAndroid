@@ -25,14 +25,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -78,10 +82,17 @@ private fun BingWallpaperScreen(
 ) {
     val items = sourceFlow.collectAsLazyPagingItems()
 
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
     Column(modifier = Modifier.fillMaxWidth()) {
         AppTopBarWithBack(
             title = { Text(text = stringResource(id = R.string.bing_wallpaper)) },
             onBackClick = onBackClick,
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                scrolledContainerColor = Color.Transparent,
+            ),
+            scrollBehavior = scrollBehavior,
         )
 
         LazyVerticalGrid(
@@ -89,6 +100,8 @@ private fun BingWallpaperScreen(
             contentPadding = PaddingValues(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
         ) {
             items(
                 count = items.itemCount,
@@ -96,7 +109,7 @@ private fun BingWallpaperScreen(
             ) { index ->
                 BingWallpaperItem(items[index])
             }
-            item {
+            item(span = { GridItemSpan(maxLineSpan) }) {
                 Spacer(modifier = Modifier.height(32.dp))
             }
         }

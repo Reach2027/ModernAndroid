@@ -17,7 +17,6 @@
 package com.reach.modernandroid.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.spring
@@ -76,13 +75,7 @@ private fun AppScreen(
 
     Scaffold(
         modifier = Modifier
-            .fillMaxSize()
-            .animateContentSize(
-                animationSpec = spring(
-                    dampingRatio = Spring.DampingRatioLowBouncy,
-                    stiffness = Spring.StiffnessHigh,
-                ),
-            ),
+            .fillMaxSize(),
         bottomBar = {
             AnimatedVisibility(
                 visible = currentDest.isTopDest(),
