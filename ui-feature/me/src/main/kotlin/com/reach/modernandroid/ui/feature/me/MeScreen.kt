@@ -30,22 +30,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.reach.core.ui.common.devicepreview.DevicePreviews
+import com.reach.core.ui.common.devicepreview.previewWindowSizeClass
 import com.reach.core.ui.common.toDp
 import com.reach.core.ui.common.widget.SkeletonAsyncImage
 import com.reach.core.ui.common.widget.SkeletonLoader
@@ -74,17 +72,11 @@ private fun MeRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    if (appUiState.getWindowSizeClass().widthSizeClass == WindowWidthSizeClass.Expanded) {
-        MeScreenExpanded(
-            uiState = uiState,
-            onWallpaperClick = { appUiState.getNavController().navigate(AppRoute.BING_WALLPAPER) },
-        )
-    } else {
-        MeScreenCompat(
-            uiState = uiState,
-            onWallpaperClick = { appUiState.getNavController().navigate(AppRoute.BING_WALLPAPER) },
-        )
-    }
+    MeScreen(
+        windowSizeClass = appUiState.getWindowSizeClass(),
+        uiState = uiState,
+        onWallpaperClick = { appUiState.getNavController().navigate(AppRoute.BING_WALLPAPER) },
+    )
 }
 
 @Composable
@@ -201,18 +193,12 @@ private fun DeviceInfo(uiState: MeUiState) {
     }
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @DevicePreviews
 @Composable
 private fun MeScreenPreview() {
     AppPreview {
         MeScreen(
-            windowSizeClass = WindowSizeClass.calculateFromSize(
-                DpSize(
-                    LocalConfiguration.current.screenWidthDp.dp,
-                    LocalConfiguration.current.screenHeightDp.dp,
-                ),
-            ),
+            windowSizeClass = previewWindowSizeClass(),
             uiState = MeUiState(),
             onWallpaperClick = {},
         )
