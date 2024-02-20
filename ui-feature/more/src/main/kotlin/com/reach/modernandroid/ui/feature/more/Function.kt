@@ -24,15 +24,19 @@ internal enum class Function(
     val navTo: (NavController) -> Unit,
 ) {
     Lottie(
-        text = "Lottie",
+        text = "Lottie Example",
         { it.navigate(AppRoute.LOTTIE) },
     ),
     SkeletonLoader(
-        text = "SkeletonLoader",
+        text = "Skeleton Loader",
         { it.navigate(AppRoute.SKELETON_LOADER) },
     ),
+    BingWallpaper(
+        text = "Bing Wallpaper",
+        { it.navigate(AppRoute.BING_WALLPAPER) },
+    ),
     LocalAlbum(
-        text = "LocalAlbum",
+        text = "Local Album",
         { it.navigate(AppRoute.ALBUM) },
     ),
     Camerax(

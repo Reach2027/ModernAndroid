@@ -48,10 +48,13 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
+import androidx.paging.LoadState
 import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.reach.core.ui.common.SkeletonAsyncImage
+import com.reach.core.ui.common.SkeletonLoader
 import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpaperModel
 import com.reach.modernandroid.ui.base.common.AppUiState
 import com.reach.modernandroid.ui.base.common.navigation.AppRoute
@@ -86,7 +89,7 @@ private fun BingWallpaperScreen(
     onBackClick: () -> Unit,
     sourceFlow: Flow<PagingData<BingWallpaperModel>>,
 ) {
-    val items = sourceFlow.collectAsLazyPagingItems()
+    val items: LazyPagingItems<BingWallpaperModel> = sourceFlow.collectAsLazyPagingItems()
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val collapsedFraction by remember {
@@ -119,16 +122,48 @@ private fun BingWallpaperScreen(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         ) {
-            items(
-                count = items.itemCount,
-                key = items.itemKey { it.imageUrl },
-            ) { index ->
-                BingWallpaperItem(items[index])
-            }
-            item(span = { GridItemSpan(maxLineSpan) }) {
-                Spacer(modifier = Modifier.height(32.dp))
+            when (items.loadState.refresh) {
+                is LoadState.Loading -> {
+                    item {
+                        BingWallPaperItemLoading()
+                    }
+                }
+
+                is LoadState.Error -> {}
+
+                is LoadState.NotLoading -> {
+                    items(
+                        count = items.itemCount,
+                        key = items.itemKey { it.imageUrl },
+                    ) { index ->
+                        BingWallpaperItem(items[index])
+                    }
+
+                    item(span = { GridItemSpan(maxLineSpan) }) {
+                        Spacer(modifier = Modifier.height(32.dp))
+                    }
+                }
             }
         }
+    }
+}
+
+@Composable
+private fun BingWallPaperItemLoading() {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        SkeletonLoader(
+            modifier = Modifier
+                .aspectRatio(16f / 9f)
+                .clip(MaterialTheme.shapes.large),
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        SkeletonLoader(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 32.dp)
+                .height(28.dp)
+                .clip(MaterialTheme.shapes.small),
+        )
     }
 }
 
@@ -151,6 +186,7 @@ private fun BingWallpaperItem(bingWallpaperModel: BingWallpaperModel?) {
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .padding(horizontal = 32.dp),
+            style = MaterialTheme.typography.bodyLarge,
         )
     }
 }

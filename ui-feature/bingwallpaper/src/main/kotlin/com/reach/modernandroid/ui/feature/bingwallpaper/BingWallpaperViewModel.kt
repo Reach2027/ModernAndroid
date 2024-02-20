@@ -18,13 +18,16 @@ package com.reach.modernandroid.ui.feature.bingwallpaper
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.reach.modernandroid.data.feature.bingwallpaper.BingWallpaperRepository
+import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpaperModel
+import kotlinx.coroutines.flow.Flow
 
 internal class BingWallpaperViewModel(
     bingWallpaperRepo: BingWallpaperRepository,
 ) : ViewModel() {
 
-    val sourceFlow = bingWallpaperRepo.bingWallpaperFlow()
+    val sourceFlow: Flow<PagingData<BingWallpaperModel>> = bingWallpaperRepo.bingWallpaperFlow()
         .cachedIn(viewModelScope)
 }

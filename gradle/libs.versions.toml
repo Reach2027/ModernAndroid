@@ -10,9 +10,9 @@ ksp = "1.9.22-1.0.17"
 # Compose
 composeBom = "2024.02.00"
 composeCompiler = "1.5.9"
-material3 = "1.2.0-rc01"
-material3Adaptive = "1.0.0-alpha05"
-material3AdaptiveNavigation = "1.0.0-alpha02"
+material3 = "1.2.0"
+material3Adaptive = "1.0.0-alpha06"
+material3AdaptiveNavigation = "1.0.0-alpha03"
 
 # Jetpack
 androidDesugarJdk = "2.0.4"
@@ -25,7 +25,7 @@ androidxCollection = "1.4.0"
 
 androidxlLifecycle = "2.7.0"
 
-androidxNavigation = "2.7.6"
+androidxNavigation = "2.7.7"
 
 androidxPaging = "3.2.1"
 
@@ -54,19 +54,14 @@ shimmer = "1.2.0"
 # Test
 junit = "4.13.2"
 
-junitVersion = "1.1.5"
-espressoCore = "3.5.1"
-appcompat = "1.6.1"
-material = "1.10.0"
-
 [libraries]
 # Compsoe
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 
 compose-animation = { group = "androidx.compose.animation", name = "animation" }
 
-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
-compose-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class" }
+compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+compose-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3" }
 compose-material3-adaptive = { group = "androidx.compose.material3", name = "material3-adaptive", version.ref = "material3Adaptive" }
 compose-material3-adaptive-navigation = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite", version.ref = "material3AdaptiveNavigation" }
 
@@ -152,11 +147,6 @@ android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", ve
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradle-plugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
-
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

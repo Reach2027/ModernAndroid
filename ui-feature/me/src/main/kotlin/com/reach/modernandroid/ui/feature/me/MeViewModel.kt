@@ -28,10 +28,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 internal data class MeUiState(
-    val isLoading: Boolean = true,
+    val isImageLoading: Boolean = true,
+    val imageUrl: String = "",
     val isNetworkAvailable: Boolean = false,
     val networkType: NetworkType = NetworkType.None,
-    val imageUrl: String = "https://www.bing.com/th?id=OHR.HalbinselJasmund_ZH-CN2110869056_UHD.jpg&rf=LaDigue_UHD.jpg&pid=hp&w=1920&h=1080&rs=1&c=4",
 )
 
 internal class MeViewModel(
@@ -64,11 +64,16 @@ internal class MeViewModel(
             bingWallpaperRepo.getTodayWallpaper().collect {
                 when (it) {
                     is Result.Success -> {
-                        _uiState.emit(_uiState.value.copy(imageUrl = it.data.imageUrl))
+                        _uiState.emit(
+                            _uiState.value.copy(
+                                isImageLoading = false,
+                                imageUrl = it.data.imageUrl,
+                            ),
+                        )
                     }
 
                     is Result.Error -> {}
-                    is Result.Loading -> _uiState.emit(_uiState.value.copy(isLoading = true))
+                    is Result.Loading -> _uiState.emit(_uiState.value.copy(isImageLoading = true))
                 }
             }
         }

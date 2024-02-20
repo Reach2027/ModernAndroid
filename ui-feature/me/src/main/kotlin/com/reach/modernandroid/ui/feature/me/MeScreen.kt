@@ -36,6 +36,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.reach.core.ui.common.SkeletonAsyncImage
+import com.reach.core.ui.common.SkeletonLoader
 import com.reach.modernandroid.ui.base.common.AppUiState
 import com.reach.modernandroid.ui.base.common.animation.topDestEnterTransition
 import com.reach.modernandroid.ui.base.common.animation.topDestExitTransition
@@ -91,14 +92,23 @@ private fun PersonInfo(
     onWallpaperClick: () -> Unit,
 ) {
     Box {
-        SkeletonAsyncImage(
-            model = uiState.imageUrl,
-            contentDescription = "",
-            modifier = Modifier
-                .widthIn(max = 480.dp)
-                .aspectRatio(16f / 9f)
-                .clickable(onClick = onWallpaperClick),
-        )
+        if (uiState.isImageLoading) {
+            SkeletonLoader(
+                modifier = Modifier
+                    .widthIn(max = 480.dp)
+                    .aspectRatio(16f / 9f)
+                    .clickable(onClick = onWallpaperClick),
+            )
+        } else {
+            SkeletonAsyncImage(
+                model = uiState.imageUrl,
+                contentDescription = "",
+                modifier = Modifier
+                    .widthIn(max = 480.dp)
+                    .aspectRatio(16f / 9f)
+                    .clickable(onClick = onWallpaperClick),
+            )
+        }
     }
 }
 

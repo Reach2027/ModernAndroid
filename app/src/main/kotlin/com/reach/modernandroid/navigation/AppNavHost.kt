@@ -24,10 +24,10 @@ import com.reach.modernandroid.ui.base.common.navigation.AppRoute
 import com.reach.modernandroid.ui.feature.album.albumRoute
 import com.reach.modernandroid.ui.feature.bingwallpaper.bingWallpaperRoute
 import com.reach.modernandroid.ui.feature.camerax.cameraxRoute
-import com.reach.modernandroid.ui.feature.lottie.lottieRoute
 import com.reach.modernandroid.ui.feature.me.meRoute
 import com.reach.modernandroid.ui.feature.more.moreRoute
-import com.reach.modernandroid.ui.feature.skeletonloader.skeletonLoaderRoute
+import com.reach.modernandroid.ui.feature.uilearn.lottieRoute
+import com.reach.modernandroid.ui.feature.uilearn.skeletonLoaderRoute
 
 @Composable
 internal fun AppNavHost(
