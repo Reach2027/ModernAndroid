@@ -26,6 +26,7 @@ internal fun Project.configureCompose(
             add("implementation", platform(bom))
             implementation(libs, "compose.animation")
             implementation(libs, "compose.material3")
+            implementation(libs, "compose.material3.window.size")
             implementation(libs, "compose.material.icon")
             implementation(libs, "compose.material.icon.extended")
             implementation(libs, "compose.foundation")

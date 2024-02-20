@@ -64,7 +64,7 @@ fun NavGraphBuilder.lottieRoute() {
 
 @Composable
 private fun LottieRoute(appUiState: AppUiState = koinInject()) {
-    LottieScreen(onBackClick = { appUiState.navController.navigateUp() })
+    LottieScreen(onBackClick = { appUiState.getNavController().navigateUp() })
 }
 
 @OptIn(ExperimentalLayoutApi::class, ExperimentalMaterial3Api::class)

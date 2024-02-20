@@ -40,7 +40,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
-import com.reach.core.ui.common.SkeletonLoader
+import com.reach.core.ui.common.widget.SkeletonLoader
 import com.reach.modernandroid.ui.base.common.AppUiState
 import com.reach.modernandroid.ui.base.common.navigation.AppRoute
 import com.reach.modernandroid.ui.base.common.navigation.screenComposable
@@ -57,7 +57,7 @@ fun NavGraphBuilder.skeletonLoaderRoute() {
 @Composable
 internal fun SkeletonLoaderRoute(appUiState: AppUiState = koinInject()) {
     SkeletonLoaderScreen(
-        onBackClick = { appUiState.navController.navigateUp() },
+        onBackClick = { appUiState.getNavController().navigateUp() },
     )
 }
 

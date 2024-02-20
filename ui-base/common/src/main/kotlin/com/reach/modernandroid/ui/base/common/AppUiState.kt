@@ -16,6 +16,7 @@
 
 package com.reach.modernandroid.ui.base.common
 
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.navigation.NavHostController
 import com.reach.modernandroid.ui.base.common.navigation.AppRoute
 import kotlinx.coroutines.CoroutineScope
@@ -27,11 +28,16 @@ import kotlinx.coroutines.launch
 
 interface AppUiState {
 
-    var navController: NavHostController
-
     val isFullScreen: StateFlow<Boolean>
 
-    fun setup(navController: NavHostController)
+    fun setup(
+        windowSizeClass: WindowSizeClass,
+        navController: NavHostController,
+    )
+
+    fun getWindowSizeClass(): WindowSizeClass
+
+    fun getNavController(): NavHostController
 
     fun setFullScreen(fullScreen: Boolean)
 }
@@ -40,14 +46,20 @@ internal class DefaultAppUiState(
     private val coroutineScope: CoroutineScope,
 ) : AppUiState {
 
-    override lateinit var navController: NavHostController
+    private var windowSizeClass: WindowSizeClass? = null
+
+    private var navController: NavHostController? = null
 
     private val _isFullScreen = MutableStateFlow(false)
     override val isFullScreen = _isFullScreen.asStateFlow()
 
     private var navJob: Job? = null
 
-    override fun setup(navController: NavHostController) {
+    override fun setup(
+        windowSizeClass: WindowSizeClass,
+        navController: NavHostController,
+    ) {
+        this.windowSizeClass = windowSizeClass
         this.navController = navController
 
         navJob?.apply {
@@ -62,6 +74,14 @@ internal class DefaultAppUiState(
                 _isFullScreen.emit(needFullScreen)
             }
         }
+    }
+
+    override fun getWindowSizeClass(): WindowSizeClass {
+        return requireNotNull(windowSizeClass)
+    }
+
+    override fun getNavController(): NavHostController {
+        return requireNotNull(navController)
     }
 
     override fun setFullScreen(fullScreen: Boolean) {

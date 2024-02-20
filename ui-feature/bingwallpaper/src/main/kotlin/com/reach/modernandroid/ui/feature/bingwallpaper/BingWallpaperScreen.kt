@@ -53,8 +53,8 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.reach.core.ui.common.SkeletonAsyncImage
-import com.reach.core.ui.common.SkeletonLoader
+import com.reach.core.ui.common.widget.SkeletonAsyncImage
+import com.reach.core.ui.common.widget.SkeletonLoader
 import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpaperModel
 import com.reach.modernandroid.ui.base.common.AppUiState
 import com.reach.modernandroid.ui.base.common.navigation.AppRoute
@@ -78,7 +78,7 @@ private fun BingWallpaperRoute(
     viewModel: BingWallpaperViewModel = koinNavViewModel(),
 ) {
     BingWallpaperScreen(
-        onBackClick = { appUiState.navController.navigateUp() },
+        onBackClick = { appUiState.getNavController().navigateUp() },
         sourceFlow = viewModel.sourceFlow,
     )
 }

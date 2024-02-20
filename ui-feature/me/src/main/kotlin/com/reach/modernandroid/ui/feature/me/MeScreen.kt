@@ -19,29 +19,41 @@ package com.reach.modernandroid.ui.feature.me
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.reach.core.ui.common.SkeletonAsyncImage
-import com.reach.core.ui.common.SkeletonLoader
+import com.reach.core.ui.common.devicepreview.DevicePreviews
+import com.reach.core.ui.common.toDp
+import com.reach.core.ui.common.widget.SkeletonAsyncImage
+import com.reach.core.ui.common.widget.SkeletonLoader
+import com.reach.modernandroid.ui.base.common.AppPreview
 import com.reach.modernandroid.ui.base.common.AppUiState
 import com.reach.modernandroid.ui.base.common.animation.topDestEnterTransition
 import com.reach.modernandroid.ui.base.common.animation.topDestExitTransition
 import com.reach.modernandroid.ui.base.common.navigation.AppRoute
-import com.reach.modernandroid.ui.base.resource.theme.AppTheme
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
@@ -62,20 +74,79 @@ private fun MeRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    MeScreen(
-        uiState = uiState,
-        onWallpaperClick = { appUiState.navController.navigate(AppRoute.BING_WALLPAPER) },
-    )
+    if (appUiState.getWindowSizeClass().widthSizeClass == WindowWidthSizeClass.Expanded) {
+        MeScreenExpanded(
+            uiState = uiState,
+            onWallpaperClick = { appUiState.getNavController().navigate(AppRoute.BING_WALLPAPER) },
+        )
+    } else {
+        MeScreenCompat(
+            uiState = uiState,
+            onWallpaperClick = { appUiState.getNavController().navigate(AppRoute.BING_WALLPAPER) },
+        )
+    }
 }
 
 @Composable
 private fun MeScreen(
+    windowSizeClass: WindowSizeClass,
+    uiState: MeUiState,
+    onWallpaperClick: () -> Unit,
+) {
+    if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded) {
+        MeScreenExpanded(
+            uiState = uiState,
+            onWallpaperClick = onWallpaperClick,
+        )
+    } else {
+        MeScreenCompat(
+            uiState = uiState,
+            onWallpaperClick = onWallpaperClick,
+        )
+    }
+}
+
+@Composable
+private fun MeScreenExpanded(
+    uiState: MeUiState,
+    onWallpaperClick: () -> Unit,
+) {
+    val systemBarH = WindowInsets.systemBars.getTop(LocalDensity.current).toDp()
+
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = systemBarH),
+    ) {
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 16.dp)
+                .clip(MaterialTheme.shapes.large),
+        ) {
+            PersonInfo(
+                uiState = uiState,
+                onWallpaperClick = onWallpaperClick,
+            )
+        }
+
+        Box(
+            modifier = Modifier
+                .weight(1f),
+        ) {
+            DeviceInfo(uiState = uiState)
+        }
+    }
+}
+
+@Composable
+private fun MeScreenCompat(
     uiState: MeUiState,
     onWallpaperClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxSize(),
     ) {
         PersonInfo(
             uiState = uiState,
@@ -95,7 +166,7 @@ private fun PersonInfo(
         if (uiState.isImageLoading) {
             SkeletonLoader(
                 modifier = Modifier
-                    .widthIn(max = 480.dp)
+                    .fillMaxWidth()
                     .aspectRatio(16f / 9f)
                     .clickable(onClick = onWallpaperClick),
             )
@@ -104,7 +175,7 @@ private fun PersonInfo(
                 model = uiState.imageUrl,
                 contentDescription = "",
                 modifier = Modifier
-                    .widthIn(max = 480.dp)
+                    .fillMaxWidth()
                     .aspectRatio(16f / 9f)
                     .clickable(onClick = onWallpaperClick),
             )
@@ -130,11 +201,18 @@ private fun DeviceInfo(uiState: MeUiState) {
     }
 }
 
-@Preview(widthDp = 390)
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@DevicePreviews
 @Composable
 private fun MeScreenPreview() {
-    AppTheme {
+    AppPreview {
         MeScreen(
+            windowSizeClass = WindowSizeClass.calculateFromSize(
+                DpSize(
+                    LocalConfiguration.current.screenWidthDp.dp,
+                    LocalConfiguration.current.screenHeightDp.dp,
+                ),
+            ),
             uiState = MeUiState(),
             onWallpaperClick = {},
         )

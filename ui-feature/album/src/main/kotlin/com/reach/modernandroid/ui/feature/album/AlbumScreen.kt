@@ -46,7 +46,7 @@ private fun AlbumRoute(
     appUiState: AppUiState = koinInject(),
 ) {
     AlbumScreen(
-        onBackClick = { appUiState.navController.navigateUp() },
+        onBackClick = { appUiState.getNavController().navigateUp() },
     )
 }
 

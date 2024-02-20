@@ -45,7 +45,7 @@ internal fun CameraxRoute() {
     val appUiState = koinInject<AppUiState>()
 
     CameraxScreen(
-        navToAlbum = { appUiState.navController.navigate(AppRoute.ALBUM) },
+        navToAlbum = { appUiState.getNavController().navigate(AppRoute.ALBUM) },
     )
 }
 

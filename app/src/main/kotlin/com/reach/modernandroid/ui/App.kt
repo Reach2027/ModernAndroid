@@ -33,6 +33,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -53,10 +54,14 @@ import org.koin.compose.koinInject
 
 @Composable
 internal fun App(
+    windowSizeClass: WindowSizeClass,
     navController: NavHostController = rememberNavController(),
 ) {
-    val appUiState = koinInject<AppUiState>()
-    appUiState.setup(navController)
+    val appUiState: AppUiState = koinInject()
+    appUiState.setup(
+        windowSizeClass = windowSizeClass,
+        navController = navController,
+    )
 
     AppScreen(
         appUiState = appUiState,
@@ -69,7 +74,10 @@ private fun AppScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val currentDest = appUiState.navController.currentBackStackEntryAsState().value?.destination
+    val currentDest = appUiState.getNavController()
+        .currentBackStackEntryAsState()
+        .value
+        ?.destination
 
     val fullScreen by appUiState.isFullScreen.collectAsStateWithLifecycle()
 
@@ -97,7 +105,7 @@ private fun AppScreen(
             ) {
                 AppNavBar(
                     destList = TopDest.entries,
-                    onNavToTopDest = { appUiState.navController.navToTopDest(it) },
+                    onNavToTopDest = { appUiState.getNavController().navToTopDest(it) },
                     currentDest = currentDest,
                 )
             }
@@ -114,7 +122,7 @@ private fun AppScreen(
                 .fillMaxSize()
                 .padding(padding)
                 .consumeWindowInsets(padding),
-            navController = appUiState.navController,
+            navController = appUiState.getNavController(),
         )
     }
 }

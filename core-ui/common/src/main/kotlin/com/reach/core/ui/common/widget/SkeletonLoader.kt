@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.core.ui.common
+package com.reach.core.ui.common.widget
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

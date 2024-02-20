@@ -62,7 +62,7 @@ internal fun MoreRoute() {
 
     MoreScreen(
         functions = functions,
-        navController = appUiState.navController,
+        navController = appUiState.getNavController(),
     )
 }
 
