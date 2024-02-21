@@ -20,6 +20,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridItemScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
@@ -43,6 +46,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -167,13 +171,14 @@ private fun BingWallPaperItemLoading() {
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun BingWallpaperItem(bingWallpaperModel: BingWallpaperModel?) {
+private fun LazyStaggeredGridItemScope.BingWallpaperItem(bingWallpaperModel: BingWallpaperModel?) {
     if (bingWallpaperModel == null) return
 
-    var showInfo by remember { mutableStateOf(false) }
+    var showInfo by rememberSaveable { mutableStateOf(false) }
 
-    Column {
+    Column(modifier = Modifier.animateItemPlacement()) {
         AnimatedVisibility(
             visible = showInfo,
             enter = expandVertically(
@@ -195,11 +200,14 @@ private fun BingWallpaperItem(bingWallpaperModel: BingWallpaperModel?) {
             model = bingWallpaperModel.imageUrl,
             contentDescription = "",
             modifier = Modifier
-                .aspectRatio(16f / 9f)
                 .clip(MaterialTheme.shapes.large)
-                .clickable {
-                    showInfo = showInfo.not()
-                },
+                .clickable { showInfo = showInfo.not() },
+            imageModifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            placeHolderModifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(16f / 9f),
         )
         AnimatedVisibility(
             visible = showInfo,

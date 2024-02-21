@@ -19,10 +19,10 @@ package com.reach.core.ui.common.widget
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,58 +34,76 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.ContentScale
+import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun SkeletonAsyncImage(
     model: Any?,
     contentDescription: String?,
     modifier: Modifier = Modifier,
+    imageModifier: Modifier = Modifier,
+    placeHolderModifier: Modifier = modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null,
+    filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
 ) {
-    var isLoading by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(true) }
     var isError by remember { mutableStateOf(false) }
 
-    val imageLoader = rememberAsyncImagePainter(
-        model = model,
-        onState = { state ->
-            isLoading = state is AsyncImagePainter.State.Loading
-            isError = state is AsyncImagePainter.State.Error
-        },
-    )
-
     Box(modifier = modifier) {
-        Image(
-            painter = imageLoader,
+        AsyncImage(
+            model = model,
             contentDescription = contentDescription,
+            modifier = imageModifier,
+            onState = { state ->
+                isLoading = state is AsyncImagePainter.State.Loading
+                isError = state is AsyncImagePainter.State.Error
+            },
             alignment = alignment,
             contentScale = contentScale,
-            modifier = Modifier.fillMaxSize(),
             alpha = alpha,
             colorFilter = colorFilter,
+            filterQuality = filterQuality,
         )
 
-        LoadingState(isLoading = isLoading)
+        LoadingState(isLoading = isLoading, modifier = placeHolderModifier)
 
-        ErrorState(isError = isError)
+        ErrorState(isError = isError, modifier = placeHolderModifier)
     }
 }
 
 @Composable
-private fun ErrorState(isError: Boolean) {
+private fun LoadingState(
+    isLoading: Boolean,
+    modifier: Modifier,
+) {
+    AnimatedVisibility(
+        visible = isLoading,
+        enter = fadeIn(),
+        exit = fadeOut(),
+    ) {
+        SkeletonLoader(modifier = modifier)
+    }
+}
+
+@Composable
+private fun ErrorState(
+    isError: Boolean,
+    modifier: Modifier,
+) {
     AnimatedVisibility(
         visible = isError,
         enter = fadeIn(),
         exit = fadeOut(),
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier = modifier
                 .background(MaterialTheme.colorScheme.surfaceVariant),
             contentAlignment = Alignment.Center,
         ) {
@@ -95,16 +113,5 @@ private fun ErrorState(isError: Boolean) {
                 style = MaterialTheme.typography.bodyLarge,
             )
         }
-    }
-}
-
-@Composable
-private fun LoadingState(isLoading: Boolean) {
-    AnimatedVisibility(
-        visible = isLoading,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
-        SkeletonLoader(modifier = Modifier.fillMaxSize())
     }
 }

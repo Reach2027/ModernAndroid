@@ -28,14 +28,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -108,20 +108,19 @@ private fun MeScreenExpanded(
     Row(
         modifier = Modifier
             .fillMaxSize()
-            .padding(top = systemBarH),
+            .padding(top = systemBarH)
+            .padding(horizontal = 16.dp),
     ) {
         Box(
             modifier = Modifier
-                .weight(1f)
-                .padding(horizontal = 16.dp)
-                .clip(MaterialTheme.shapes.large),
+                .weight(1f),
         ) {
             PersonInfo(
                 uiState = uiState,
                 onWallpaperClick = onWallpaperClick,
             )
         }
-
+        Spacer(modifier = Modifier.width(16.dp))
         Box(
             modifier = Modifier
                 .weight(1f),
@@ -167,9 +166,13 @@ private fun PersonInfo(
                 model = uiState.imageUrl,
                 contentDescription = "",
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(16f / 9f)
                     .clickable(onClick = onWallpaperClick),
+                imageModifier = Modifier
+                    .fillMaxWidth()
+                    .wrapContentHeight(),
+                placeHolderModifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(16f / 9f),
             )
         }
     }
