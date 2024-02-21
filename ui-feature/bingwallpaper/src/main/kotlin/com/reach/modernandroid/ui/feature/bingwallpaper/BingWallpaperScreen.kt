@@ -16,6 +16,11 @@
 
 package com.reach.modernandroid.ui.feature.bingwallpaper
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.VisibilityThreshold
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,9 +31,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,7 +41,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,23 +51,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.paging.LoadState
+import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.reach.core.ui.common.devicepreview.DevicePreviews
 import com.reach.core.ui.common.widget.SkeletonAsyncImage
 import com.reach.core.ui.common.widget.SkeletonLoader
 import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpaperModel
+import com.reach.modernandroid.ui.base.common.AppPreview
 import com.reach.modernandroid.ui.base.common.AppUiState
+import com.reach.modernandroid.ui.base.common.animation.widgetEnter
+import com.reach.modernandroid.ui.base.common.animation.widgetExit
 import com.reach.modernandroid.ui.base.common.navigation.AppRoute
 import com.reach.modernandroid.ui.base.common.navigation.screenComposable
 import com.reach.modernandroid.ui.base.common.widget.AppTopBarWithBack
-import com.reach.modernandroid.ui.base.resource.theme.AppTheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.koin.androidx.compose.navigation.koinNavViewModel
@@ -115,10 +125,10 @@ private fun BingWallpaperScreen(
             scrollBehavior = scrollBehavior,
         )
 
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 400.dp),
-            contentPadding = PaddingValues(horizontal = 4.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(minSize = 390.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            verticalItemSpacing = 16.dp,
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         ) {
@@ -139,7 +149,7 @@ private fun BingWallpaperScreen(
                         BingWallpaperItem(items[index])
                     }
 
-                    item(span = { GridItemSpan(maxLineSpan) }) {
+                    item(span = StaggeredGridItemSpan.FullLine) {
                         Spacer(modifier = Modifier.height(32.dp))
                     }
                 }
@@ -150,60 +160,91 @@ private fun BingWallpaperScreen(
 
 @Composable
 private fun BingWallPaperItemLoading() {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        SkeletonLoader(
-            modifier = Modifier
-                .aspectRatio(16f / 9f)
-                .clip(MaterialTheme.shapes.large),
-        )
-        Spacer(modifier = Modifier.height(4.dp))
-        SkeletonLoader(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 32.dp)
-                .height(28.dp)
-                .clip(MaterialTheme.shapes.small),
-        )
-    }
+    SkeletonLoader(
+        modifier = Modifier
+            .aspectRatio(16f / 9f)
+            .clip(MaterialTheme.shapes.large),
+    )
 }
 
 @Composable
 private fun BingWallpaperItem(bingWallpaperModel: BingWallpaperModel?) {
     if (bingWallpaperModel == null) return
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    var showInfo by remember { mutableStateOf(false) }
+
+    Column {
+        AnimatedVisibility(
+            visible = showInfo,
+            enter = expandVertically(
+                animationSpec = widgetEnter(visibilityThreshold = IntSize.VisibilityThreshold),
+                expandFrom = Alignment.Top,
+            ),
+            exit = shrinkVertically(
+                animationSpec = widgetExit(visibilityThreshold = IntSize.VisibilityThreshold),
+                shrinkTowards = Alignment.Top,
+            ),
+        ) {
+            Text(
+                text = bingWallpaperModel.title,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.padding(bottom = 8.dp),
+            )
+        }
         SkeletonAsyncImage(
             model = bingWallpaperModel.imageUrl,
             contentDescription = "",
             modifier = Modifier
                 .aspectRatio(16f / 9f)
-                .clip(MaterialTheme.shapes.large),
+                .clip(MaterialTheme.shapes.large)
+                .clickable {
+                    showInfo = showInfo.not()
+                },
         )
-        Spacer(modifier = Modifier.height(4.dp))
-        Text(
-            text = """${bingWallpaperModel.startDate}  ${bingWallpaperModel.title}""",
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier
-                .padding(horizontal = 32.dp),
-            style = MaterialTheme.typography.bodyLarge,
-        )
+        AnimatedVisibility(
+            visible = showInfo,
+            enter = expandVertically(
+                animationSpec = widgetEnter(visibilityThreshold = IntSize.VisibilityThreshold),
+            ),
+            exit = shrinkVertically(
+                animationSpec = widgetExit(visibilityThreshold = IntSize.VisibilityThreshold),
+            ),
+        ) {
+            Text(
+                text = bingWallpaperModel.copyright,
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.padding(vertical = 8.dp),
+            )
+        }
     }
 }
 
-@Preview
+@DevicePreviews
 @Composable
 private fun BingWallpaperScreenPreview() {
-    AppTheme {
+    AppPreview {
         val previewData = listOf(
             BingWallpaperModel(
-                imageUrl = "",
-                copyright = "",
-                title = "titletitletitletitletitletitletitletitletitletitletitletitle",
+                imageUrl = "1",
+                copyright = "copyrightcopyrightcopyrightcopyrightcopyrightcopyrightcopyrightcopyrightcopyright",
+                title = "titletitletitletitletitletitletitletitletitletitletitletitletitletitle",
+                startDate = "2024-01-02",
+            ),
+            BingWallpaperModel(
+                imageUrl = "2",
+                copyright = "copyrightcopyrightcopyrightcopyrightcopyrightcopyrightcopyrightcopyrightcopyright",
+                title = "titletitletitletitletitletitletitletitletitletitletitletitletitletitle",
                 startDate = "2024-01-01",
             ),
         )
-        val pagingData = PagingData.from(previewData)
+        val pagingData = PagingData.from(
+            data = previewData,
+            sourceLoadStates = LoadStates(
+                refresh = LoadState.NotLoading(false),
+                prepend = LoadState.NotLoading(false),
+                append = LoadState.NotLoading(false),
+            ),
+        )
 
         BingWallpaperScreen(
             onBackClick = {},

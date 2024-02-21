@@ -18,44 +18,38 @@ package com.reach.modernandroid.ui.base.common.animation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.unit.IntOffset
 
-private const val ENTER_STIFFNESS = Spring.StiffnessMediumLow
-private const val EXIT_STIFFNESS = Spring.StiffnessMedium
+@Stable
+fun topDestEnterTransition(): EnterTransition = fadeIn(animationSpec = groupEnter())
 
-fun topDestEnterTransition(): EnterTransition =
-    fadeIn(animationSpec = spring(stiffness = ENTER_STIFFNESS))
+@Stable
+fun topDestExitTransition(): ExitTransition = fadeOut(animationSpec = groupExit())
 
-fun topDestExitTransition(): ExitTransition =
-    fadeOut(animationSpec = spring(stiffness = EXIT_STIFFNESS))
-
+@Stable
 fun enterScreenTransition(): EnterTransition =
-    fadeIn(animationSpec = spring(stiffness = ENTER_STIFFNESS)) + slideInHorizontally(
-        animationSpec = spring(
-            stiffness = ENTER_STIFFNESS,
-            visibilityThreshold = IntOffset.VisibilityThreshold,
-        ),
-        initialOffsetX = { it },
-    )
+    fadeIn(animationSpec = groupEnter()) +
+        slideInHorizontally(
+            animationSpec = groupEnter(visibilityThreshold = IntOffset.VisibilityThreshold),
+            initialOffsetX = { it },
+        )
 
-fun exitScreenTransition(): ExitTransition =
-    fadeOut(animationSpec = spring(stiffness = EXIT_STIFFNESS))
+@Stable
+fun exitScreenTransition(): ExitTransition = fadeOut(animationSpec = groupExit())
 
-fun popEnterScreenTransition(): EnterTransition =
-    fadeIn(animationSpec = spring(stiffness = ENTER_STIFFNESS))
+@Stable
+fun popEnterScreenTransition(): EnterTransition = fadeIn(animationSpec = groupEnter())
 
+@Stable
 fun popExitScreenTransition(): ExitTransition =
-    fadeOut(animationSpec = spring(stiffness = EXIT_STIFFNESS)) + slideOutHorizontally(
-        animationSpec = spring(
-            stiffness = EXIT_STIFFNESS,
-            visibilityThreshold = IntOffset.VisibilityThreshold,
-        ),
-        targetOffsetX = { it },
-    )
+    fadeOut(animationSpec = groupExit()) +
+        slideOutHorizontally(
+            animationSpec = groupExit(visibilityThreshold = IntOffset.VisibilityThreshold),
+            targetOffsetX = { it },
+        )

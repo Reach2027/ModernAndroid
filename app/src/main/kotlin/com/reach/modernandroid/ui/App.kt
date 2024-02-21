@@ -17,9 +17,7 @@
 package com.reach.modernandroid.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.WindowInsets
@@ -50,6 +48,9 @@ import com.reach.modernandroid.navigation.isTopDest
 import com.reach.modernandroid.navigation.isTopDestInHierarchy
 import com.reach.modernandroid.navigation.navToTopDest
 import com.reach.modernandroid.ui.base.common.AppUiState
+import com.reach.modernandroid.ui.base.common.animation.AppAniSpec
+import com.reach.modernandroid.ui.base.common.animation.widgetEnter
+import com.reach.modernandroid.ui.base.common.animation.widgetExit
 import org.koin.compose.koinInject
 
 @Composable
@@ -88,16 +89,14 @@ private fun AppScreen(
             AnimatedVisibility(
                 visible = currentDest.isTopDest(),
                 enter = slideInVertically(
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioLowBouncy,
-                        stiffness = Spring.StiffnessMedium,
+                    animationSpec = widgetEnter(
+                        dampingRatio = AppAniSpec.DAMPING_RATIO,
                         visibilityThreshold = IntOffset.VisibilityThreshold,
                     ),
                     initialOffsetY = { it },
                 ),
                 exit = slideOutVertically(
-                    animationSpec = spring(
-                        stiffness = Spring.StiffnessHigh,
+                    animationSpec = widgetExit(
                         visibilityThreshold = IntOffset.VisibilityThreshold,
                     ),
                     targetOffsetY = { it },
