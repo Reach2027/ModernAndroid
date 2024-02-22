@@ -21,8 +21,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -45,24 +43,25 @@ fun SkeletonAsyncImage(
     model: Any?,
     contentDescription: String?,
     modifier: Modifier = Modifier,
-    imageModifier: Modifier = Modifier,
-    placeHolderModifier: Modifier = modifier,
+    placeHolderModifier: Modifier,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null,
     filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
 ) {
-    var isLoading by remember { mutableStateOf(true) }
+    var isLoading by remember { mutableStateOf(false) }
+    var isSuccess by remember { mutableStateOf(false) }
     var isError by remember { mutableStateOf(false) }
 
-    Box(modifier = modifier) {
+    Box {
         AsyncImage(
             model = model,
             contentDescription = contentDescription,
-            modifier = imageModifier,
+            modifier = if (isSuccess) modifier else placeHolderModifier,
             onState = { state ->
                 isLoading = state is AsyncImagePainter.State.Loading
+                isSuccess = state is AsyncImagePainter.State.Success
                 isError = state is AsyncImagePainter.State.Error
             },
             alignment = alignment,

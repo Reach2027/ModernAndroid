@@ -30,12 +30,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -113,7 +115,8 @@ private fun MeScreenExpanded(
     ) {
         Box(
             modifier = Modifier
-                .weight(1f),
+                .weight(1f)
+                .clip(MaterialTheme.shapes.large),
         ) {
             PersonInfo(
                 uiState = uiState,
@@ -158,18 +161,16 @@ private fun PersonInfo(
             SkeletonLoader(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(16f / 9f)
-                    .clickable(onClick = onWallpaperClick),
+                    .aspectRatio(16f / 9f),
             )
         } else {
             SkeletonAsyncImage(
                 model = uiState.imageUrl,
                 contentDescription = "",
                 modifier = Modifier
-                    .clickable(onClick = onWallpaperClick),
-                imageModifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight(),
+                    .wrapContentHeight()
+                    .clickable(onClick = onWallpaperClick),
                 placeHolderModifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(16f / 9f),

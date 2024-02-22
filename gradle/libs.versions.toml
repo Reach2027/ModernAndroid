@@ -8,8 +8,8 @@ ksp = "1.9.22-1.0.17"
 
 # Library
 # Compose
-composeBom = "2024.02.00"
-composeCompiler = "1.5.9"
+composeBom = "2024.02.01"
+composeCompiler = "1.5.10"
 material3 = "1.2.0"
 material3Adaptive = "1.0.0-alpha06"
 material3AdaptiveNavigation = "1.0.0-alpha03"

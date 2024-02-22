@@ -200,14 +200,14 @@ private fun LazyStaggeredGridItemScope.BingWallpaperItem(bingWallpaperModel: Bin
             model = bingWallpaperModel.imageUrl,
             contentDescription = "",
             modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight()
                 .clip(MaterialTheme.shapes.large)
                 .clickable { showInfo = showInfo.not() },
-            imageModifier = Modifier
-                .fillMaxWidth()
-                .wrapContentHeight(),
             placeHolderModifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(16f / 9f),
+                .aspectRatio(16f / 9f)
+                .clip(MaterialTheme.shapes.large),
         )
         AnimatedVisibility(
             visible = showInfo,
