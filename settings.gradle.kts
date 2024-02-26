@@ -20,6 +20,7 @@ dependencyResolutionManagement {
 rootProject.name = "ModernAndroid"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 include(":app")
 
 // UI feature
