@@ -59,6 +59,8 @@ dependencies {
     implementation(projects.uiFeature.album)
     implementation(projects.uiFeature.camerax)
 
+    implementation(projects.dataBase.datastore)
+
     implementation(libs.androidx.startup)
 
     implementation(libs.androidx.core)

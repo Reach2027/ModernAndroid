@@ -45,6 +45,7 @@ include(":data-feature:bingwallpaper")
 // Data base
 include(":data-base:database")
 include(":data-base:network")
+include(":data-base:datastore")
 
 // Core android
 include(":core-android:common")
