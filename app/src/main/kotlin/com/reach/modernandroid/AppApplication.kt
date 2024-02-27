@@ -17,6 +17,7 @@
 package com.reach.modernandroid
 
 import android.app.Application
+import com.reach.modernandroid.data.feature.setting.di.settingsModule
 import com.reach.modernandroid.ui.base.common.di.appUiStateStateModule
 import com.reach.modernandroid.ui.feature.bingwallpaper.di.bingWallpaperModule
 import com.reach.modernandroid.ui.feature.me.di.meModule
@@ -40,6 +41,7 @@ class AppApplication : Application() {
                 appUiStateStateModule,
                 meModule,
                 bingWallpaperModule,
+                settingsModule,
             )
         }
     }

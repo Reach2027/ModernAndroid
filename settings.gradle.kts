@@ -52,3 +52,4 @@ include(":core-android:common")
 
 // Core jvm
 include(":core-jvm:common")
+include(":data-feature:setting")

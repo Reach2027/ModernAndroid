@@ -25,6 +25,8 @@ import org.koin.dsl.module
 enum class QualifierCoroutineScope {
     AppDefault,
     AppIo,
+    OneParallelismDefault,
+    OneParallelismIo,
 }
 
 val coroutineScopeModule = module {
@@ -38,5 +40,15 @@ val coroutineScopeModule = module {
     single<CoroutineScope>(qualifier(QualifierCoroutineScope.AppIo)) {
         val dispatcher: CoroutineDispatcher = get(qualifier(QualifierDispatchers.IO))
         CoroutineScope(SupervisorJob() + dispatcher)
+    }
+
+    factory<CoroutineScope>(qualifier(QualifierCoroutineScope.OneParallelismDefault)) {
+        val dispatcher: CoroutineDispatcher = get(qualifier(QualifierDispatchers.Default))
+        CoroutineScope(SupervisorJob() + dispatcher.limitedParallelism(1))
+    }
+
+    factory<CoroutineScope>(qualifier(QualifierCoroutineScope.OneParallelismIo)) {
+        val dispatcher: CoroutineDispatcher = get(qualifier(QualifierDispatchers.IO))
+        CoroutineScope(SupervisorJob() + dispatcher.limitedParallelism(1))
     }
 }
