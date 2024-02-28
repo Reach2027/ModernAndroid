@@ -15,8 +15,7 @@
  */
 
 plugins {
-    alias(libs.plugins.reach.android.application)
-    alias(libs.plugins.reach.android.application.compose)
+    alias(libs.plugins.reach.application)
 }
 
 android {

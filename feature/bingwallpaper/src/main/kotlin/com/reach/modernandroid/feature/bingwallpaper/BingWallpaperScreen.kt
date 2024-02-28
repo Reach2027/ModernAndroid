@@ -69,11 +69,11 @@ import com.reach.base.ui.common.widget.SkeletonAsyncImage
 import com.reach.base.ui.common.widget.SkeletonLoader
 import com.reach.modernandroid.core.ui.common.AppPreview
 import com.reach.modernandroid.core.ui.common.AppUiState
-import com.reach.modernandroid.core.ui.common.animation.widgetEnter
-import com.reach.modernandroid.core.ui.common.animation.widgetExit
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
 import com.reach.modernandroid.core.ui.common.navigation.screenComposable
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
+import com.reach.modernandroid.core.ui.design.animation.widgetEnter
+import com.reach.modernandroid.core.ui.design.animation.widgetExit
 import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpaperModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

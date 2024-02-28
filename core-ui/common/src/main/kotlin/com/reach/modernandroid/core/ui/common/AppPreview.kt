@@ -22,7 +22,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.reach.modernandroid.core.ui.resource.theme.AppTheme
+import com.reach.modernandroid.core.ui.design.theme.AppTheme
 
 @Composable
 fun AppPreview(content: @Composable BoxScope.() -> Unit) {

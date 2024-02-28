@@ -32,7 +32,7 @@ include(":feature:camerax")
 include(":feature:bingwallpaper")
 
 // core ui
-include(":core-ui:resource")
+include(":core-ui:design")
 include(":core-ui:common")
 
 // base ui

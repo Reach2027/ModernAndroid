@@ -38,10 +38,10 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.reach.modernandroid.core.ui.common.AppUiState
-import com.reach.modernandroid.core.ui.common.animation.topDestEnterTransition
-import com.reach.modernandroid.core.ui.common.animation.topDestExitTransition
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
-import com.reach.modernandroid.core.ui.resource.theme.AppTheme
+import com.reach.modernandroid.core.ui.design.animation.topDestEnterTransition
+import com.reach.modernandroid.core.ui.design.animation.topDestExitTransition
+import com.reach.modernandroid.core.ui.design.theme.AppTheme
 import org.koin.compose.koinInject
 
 fun NavGraphBuilder.moreRoute() {

@@ -51,9 +51,9 @@ import com.reach.base.ui.common.widget.SkeletonAsyncImage
 import com.reach.base.ui.common.widget.SkeletonLoader
 import com.reach.modernandroid.core.ui.common.AppPreview
 import com.reach.modernandroid.core.ui.common.AppUiState
-import com.reach.modernandroid.core.ui.common.animation.topDestEnterTransition
-import com.reach.modernandroid.core.ui.common.animation.topDestExitTransition
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
+import com.reach.modernandroid.core.ui.design.animation.topDestEnterTransition
+import com.reach.modernandroid.core.ui.design.animation.topDestExitTransition
 import com.reach.modernandroid.feature.me.R
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject

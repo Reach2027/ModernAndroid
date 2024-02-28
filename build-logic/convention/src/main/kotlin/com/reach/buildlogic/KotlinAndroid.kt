@@ -1,5 +1,6 @@
-package com.reach.modernandroid
+package com.reach.buildlogic
 
+import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Project
@@ -15,6 +16,12 @@ internal fun Project.configureAndroid(
     commonExtension: CommonExtension<*, *, *, *, *>,
 ) {
     commonExtension.apply {
+        if (this is ApplicationExtension) {
+            defaultConfig.targetSdk = 34
+        } else {
+            lint.targetSdk = 34
+        }
+
         compileSdk = 34
 
         defaultConfig {

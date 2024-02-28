@@ -1,4 +1,4 @@
-package com.reach.modernandroid
+package com.reach.buildlogic
 
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import org.gradle.api.Project

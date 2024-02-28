@@ -1,4 +1,4 @@
-package com.reach.modernandroid
+package com.reach.buildlogic
 
 import com.android.build.api.dsl.CommonExtension
 import org.gradle.api.Project
@@ -89,7 +89,7 @@ private fun Project.buildComposeMetricsParameters(): List<String> {
 internal fun Project.configureComposeFeature() {
     dependencies {
         add("implementation", project(":base-ui:common"))
-        add("implementation", project(":core-ui:resource"))
+        add("implementation", project(":core-ui:design"))
         add("implementation", project(":core-ui:common"))
     }
 }

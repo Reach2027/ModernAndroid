@@ -1,10 +1,12 @@
 import com.android.build.api.dsl.ApplicationExtension
-import com.reach.modernandroid.configureAndroid
+import com.reach.buildlogic.configureAndroid
+import com.reach.buildlogic.configureCompose
+import com.reach.buildlogic.configureComposeFeature
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
-class AndroidApplicationPlugin : Plugin<Project> {
+class ApplicationPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
@@ -14,8 +16,9 @@ class AndroidApplicationPlugin : Plugin<Project> {
 
             extensions.configure<ApplicationExtension> {
                 configureAndroid(this)
-                defaultConfig.targetSdk = 34
+                configureCompose(this)
             }
+            configureComposeFeature()
         }
     }
 }

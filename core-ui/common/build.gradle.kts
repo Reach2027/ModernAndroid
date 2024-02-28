@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reach.android.library)
-    alias(libs.plugins.reach.android.library.compose)
+    alias(libs.plugins.reach.compose.library)
 }
 
 android {
@@ -29,5 +28,5 @@ android {
 
 dependencies {
     implementation(projects.baseJvm.common)
-    implementation(projects.coreUi.resource)
+    implementation(projects.coreUi.design)
 }

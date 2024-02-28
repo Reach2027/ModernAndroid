@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reach.android.library)
-    alias(libs.plugins.reach.android.library.compose)
-    alias(libs.plugins.reach.ui.feature)
+    alias(libs.plugins.reach.feature.module)
 }
 
 android {

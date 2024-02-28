@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.core.ui.resource
+package com.reach.modernandroid.core.ui.design
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBackIos
 import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
 import androidx.compose.material.icons.outlined.RocketLaunch
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.PersonOutline
@@ -47,6 +48,8 @@ object AppIcons {
 
     val Last = Icons.AutoMirrored.Rounded.ArrowBackIos
     val next = Icons.AutoMirrored.Rounded.ArrowForwardIos
+
+    val Settings = Icons.Outlined.Settings
 }
 
 @Preview
@@ -69,6 +72,8 @@ private fun AppIconsPreview() {
             Icon(imageVector = AppIcons.Back, contentDescription = "")
             Spacer(modifier = Modifier.width(16.dp))
             Icon(imageVector = AppIcons.MoreFunction, contentDescription = "")
+            Spacer(modifier = Modifier.width(16.dp))
+            Icon(imageVector = AppIcons.Settings, contentDescription = "")
         }
 
         Row(modifier = Modifier.padding(8.dp)) {

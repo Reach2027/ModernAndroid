@@ -34,8 +34,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.reach.modernandroid.core.ui.resource.AppIcons
-import com.reach.modernandroid.core.ui.resource.theme.AppTheme
+import com.reach.modernandroid.core.ui.design.AppIcons
+import com.reach.modernandroid.core.ui.design.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

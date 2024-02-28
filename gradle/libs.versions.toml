@@ -172,9 +172,10 @@ kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 
 # Plugins defined by this project
-reach-android-application = { id = "reach.android.application", version = "unspecified" }
-reach-android-application-compose = { id = "reach.android.application.compose", version = "unspecified" }
-reach-android-library = { id = "reach.android.library", version = "unspecified" }
-reach-android-library-compose = { id = "reach.android.library.compose", version = "unspecified" }
 reach-jvm-library = { id = "reach.jvm.library", version = "unspecified" }
-reach-ui-feature = { id = "reach.ui.feature.module", version = "unspecified" }
+reach-android-library = { id = "reach.android.library", version = "unspecified" }
+reach-compose-library = { id = "reach.compose.library", version = "unspecified" }
+
+reach-feature-module = { id = "reach.feature.module", version = "unspecified" }
+
+reach-application = { id = "reach.application", version = "unspecified" }

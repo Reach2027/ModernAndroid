@@ -43,9 +43,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.reach.modernandroid.core.ui.common.AppUiState
-import com.reach.modernandroid.core.ui.common.animation.AppAniSpec
-import com.reach.modernandroid.core.ui.common.animation.widgetEnter
-import com.reach.modernandroid.core.ui.common.animation.widgetExit
+import com.reach.modernandroid.core.ui.design.animation.AppAniSpec
+import com.reach.modernandroid.core.ui.design.animation.widgetEnter
+import com.reach.modernandroid.core.ui.design.animation.widgetExit
 import com.reach.modernandroid.navigation.AppNavHost
 import com.reach.modernandroid.navigation.TopDest
 import com.reach.modernandroid.navigation.isTopDest

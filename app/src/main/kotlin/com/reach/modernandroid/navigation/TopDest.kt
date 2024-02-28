@@ -23,7 +23,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.navOptions
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
-import com.reach.modernandroid.core.ui.resource.AppIcons
+import com.reach.modernandroid.core.ui.design.AppIcons
 
 enum class TopDest(
     val route: String,

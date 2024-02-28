@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.core.ui.resource.theme
+package com.reach.modernandroid.core.ui.design.theme
 
 import androidx.compose.ui.graphics.Color
 

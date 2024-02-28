@@ -1,4 +1,4 @@
-import com.reach.modernandroid.configureJvm
+import com.reach.buildlogic.configureJvm
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 

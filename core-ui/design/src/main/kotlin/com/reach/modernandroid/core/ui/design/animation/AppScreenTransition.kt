@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.core.ui.common.animation
+package com.reach.modernandroid.core.ui.design.animation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition

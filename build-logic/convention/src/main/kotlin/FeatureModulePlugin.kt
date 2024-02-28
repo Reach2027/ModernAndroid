@@ -1,12 +1,14 @@
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.android.build.gradle.LibraryExtension
 import com.reach.buildlogic.configureAndroid
+import com.reach.buildlogic.configureCompose
+import com.reach.buildlogic.configureComposeFeature
 import com.reach.buildlogic.disableUnnecessaryAndroidTests
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
-class AndroidLibraryPlugin : Plugin<Project> {
+class FeatureModulePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
@@ -16,7 +18,9 @@ class AndroidLibraryPlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureAndroid(this)
+                configureCompose(this)
             }
+            configureComposeFeature()
 
             extensions.configure<LibraryAndroidComponentsExtension> {
                 disableUnnecessaryAndroidTests(target)

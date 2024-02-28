@@ -1,4 +1,4 @@
-package com.reach.modernandroid
+package com.reach.buildlogic
 
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog

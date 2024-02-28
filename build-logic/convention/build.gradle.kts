@@ -28,29 +28,28 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("androidApplication") {
-            id = "reach.android.application"
-            implementationClass = "AndroidApplicationPlugin"
+        register("jvmLibrary") {
+            id = "reach.jvm.library"
+            implementationClass = "JvmLibraryPlugin"
         }
-        register("androidApplicationCompose") {
-            id = "reach.android.application.compose"
-            implementationClass = "AndroidApplicationComposePlugin"
-        }
+
         register("androidLibrary") {
             id = "reach.android.library"
             implementationClass = "AndroidLibraryPlugin"
         }
-        register("androidLibraryCompose") {
-            id = "reach.android.library.compose"
-            implementationClass = "AndroidLibraryComposePlugin"
+        register("composeLibrary") {
+            id = "reach.compose.library"
+            implementationClass = "ComposeLibraryPlugin"
         }
-        register("uiFeatureModule") {
-            id = "reach.ui.feature.module"
-            implementationClass = "UiFeatureModulePlugin"
+
+        register("featureModule") {
+            id = "reach.feature.module"
+            implementationClass = "FeatureModulePlugin"
         }
-        register("jvmLibrary") {
-            id = "reach.jvm.library"
-            implementationClass = "JvmLibraryPlugin"
+
+        register("application") {
+            id = "reach.application"
+            implementationClass = "ApplicationPlugin"
         }
 
     }

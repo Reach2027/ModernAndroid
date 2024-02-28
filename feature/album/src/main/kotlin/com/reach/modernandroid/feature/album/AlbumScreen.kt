@@ -30,7 +30,7 @@ import com.reach.modernandroid.core.ui.common.AppUiState
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
 import com.reach.modernandroid.core.ui.common.navigation.screenComposable
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
-import com.reach.modernandroid.core.ui.resource.theme.AppTheme
+import com.reach.modernandroid.core.ui.design.theme.AppTheme
 import org.koin.compose.koinInject
 
 fun NavGraphBuilder.albumRoute() {

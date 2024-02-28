@@ -26,10 +26,10 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.reach.modernandroid.core.ui.common.animation.enterScreenTransition
-import com.reach.modernandroid.core.ui.common.animation.exitScreenTransition
-import com.reach.modernandroid.core.ui.common.animation.popEnterScreenTransition
-import com.reach.modernandroid.core.ui.common.animation.popExitScreenTransition
+import com.reach.modernandroid.core.ui.design.animation.enterScreenTransition
+import com.reach.modernandroid.core.ui.design.animation.exitScreenTransition
+import com.reach.modernandroid.core.ui.design.animation.popEnterScreenTransition
+import com.reach.modernandroid.core.ui.design.animation.popExitScreenTransition
 
 fun NavGraphBuilder.screenComposable(
     route: String,
