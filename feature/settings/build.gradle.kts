@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+plugins {
+    alias(libs.plugins.reach.feature.module)
+}
 
-package com.reach.modernandroid.feature.bingwallpaper.di
+android {
+    namespace = "com.reach.modernandroid.feature.settings"
 
-import com.reach.modernandroid.data.feature.bingwallpaper.di.bingWallpaperRepoModule
-import com.reach.modernandroid.feature.bingwallpaper.BingWallpaperViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
-import org.koin.dsl.module
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
+}
 
-val bingWallpaperModule = module {
-    includes(bingWallpaperRepoModule)
-
-    viewModelOf(::BingWallpaperViewModel)
+dependencies {
+    implementation(projects.featureData.settings)
+    implementation(projects.coreData.datastore)
 }

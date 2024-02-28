@@ -14,16 +14,22 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.feature.me.di
+package com.reach.modernandroid.feature.data.settings.di
 
-import com.reach.base.android.common.di.deviceStateModule
-import com.reach.modernandroid.feature.data.bingwallpaper.di.bingWallpaperRepoModule
-import com.reach.modernandroid.feature.me.MeViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
+import com.reach.base.jvm.common.di.QualifierCoroutineScope
+import com.reach.modernandroid.core.data.datastore.di.dataStoreModule
+import com.reach.modernandroid.feature.data.settings.DefaultSettingsRepository
+import com.reach.modernandroid.feature.data.settings.SettingsRepository
+import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 
-val meModule = module {
-    includes(deviceStateModule, bingWallpaperRepoModule)
+val settingsRepoModule = module {
+    includes(dataStoreModule)
 
-    viewModelOf(::MeViewModel)
+    factory<SettingsRepository> {
+        DefaultSettingsRepository(
+            get(),
+            get(qualifier(QualifierCoroutineScope.AppIo)),
+        )
+    }
 }

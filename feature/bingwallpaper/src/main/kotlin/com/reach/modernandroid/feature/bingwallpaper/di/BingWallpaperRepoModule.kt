@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.data.feature.setting.di
+package com.reach.modernandroid.feature.bingwallpaper.di
 
-import com.reach.base.jvm.common.di.QualifierCoroutineScope
-import com.reach.modernandroid.core.data.datastore.di.dataStoreModule
-import com.reach.modernandroid.data.feature.setting.DefaultSettingsRepository
-import com.reach.modernandroid.data.feature.setting.SettingsRepository
-import org.koin.core.qualifier.qualifier
+import com.reach.modernandroid.feature.bingwallpaper.BingWallpaperViewModel
+import com.reach.modernandroid.feature.data.bingwallpaper.di.bingWallpaperRepoModule
+import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
-val settingsModule = module {
-    includes(dataStoreModule)
+val bingWallpaperModule = module {
+    includes(bingWallpaperRepoModule)
 
-    factory<SettingsRepository> {
-        DefaultSettingsRepository(
-            get(),
-            get(qualifier(QualifierCoroutineScope.AppIo)),
-        )
-    }
+    viewModelOf(::BingWallpaperViewModel)
 }

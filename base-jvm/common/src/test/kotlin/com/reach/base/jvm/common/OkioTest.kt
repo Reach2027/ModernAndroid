@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.jvm.core.common
+package com.reach.base.jvm.common
 
 import kotlin.test.Test
 

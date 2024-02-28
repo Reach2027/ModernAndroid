@@ -74,7 +74,7 @@ import com.reach.modernandroid.core.ui.common.navigation.screenComposable
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.core.ui.design.animation.widgetEnter
 import com.reach.modernandroid.core.ui.design.animation.widgetExit
-import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpaperModel
+import com.reach.modernandroid.feature.data.bingwallpaper.model.BingWallpaperModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.koin.androidx.compose.navigation.koinNavViewModel
@@ -138,7 +138,7 @@ private fun BingWallpaperScreen(
         ) {
             when (items.loadState.refresh) {
                 is LoadState.Loading -> {
-                    item {
+                    items(count = 8) {
                         BingWallPaperItemLoading()
                     }
                 }

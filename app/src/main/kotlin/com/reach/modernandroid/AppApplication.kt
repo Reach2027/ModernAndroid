@@ -18,9 +18,9 @@ package com.reach.modernandroid
 
 import android.app.Application
 import com.reach.modernandroid.core.ui.common.di.appUiStateStateModule
-import com.reach.modernandroid.data.feature.setting.di.settingsModule
 import com.reach.modernandroid.feature.bingwallpaper.di.bingWallpaperModule
-import com.reach.modernandroid.ui.feature.me.di.meModule
+import com.reach.modernandroid.feature.me.di.meModule
+import com.reach.modernandroid.feature.settings.di.settingsModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin

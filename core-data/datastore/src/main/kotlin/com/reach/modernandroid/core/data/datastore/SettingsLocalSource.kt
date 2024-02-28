@@ -41,7 +41,7 @@ internal class DefaultSettingsLocalSource(
 
     override val settings: StateFlow<UserSetting> = dataStore.data.map {
         UserSetting(
-            dynamicTheme = it.dynamicTheme,
+            dynamicColor = it.dynamicTheme,
             darkThemeConfig = when (it.darkThemeConfig) {
                 1 -> DarkThemeConfig.Light
                 2 -> DarkThemeConfig.Dark

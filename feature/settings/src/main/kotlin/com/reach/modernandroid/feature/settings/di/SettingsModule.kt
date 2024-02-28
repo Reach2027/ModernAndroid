@@ -14,25 +14,15 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.core.ui.common.navigation
+package com.reach.modernandroid.feature.settings.di
 
-object AppRoute {
-    // Top destination
-    const val ME = "route_me"
-    const val MORE = "route_more"
+import com.reach.modernandroid.feature.data.settings.di.settingsRepoModule
+import com.reach.modernandroid.feature.settings.SettingsViewModel
+import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.dsl.module
 
-    // Feature
-    const val SETTINGS = "route_settings"
+val settingsModule = module {
+    includes(settingsRepoModule)
 
-    const val ALBUM = "route_album"
-
-    const val CAMERAX = "route_camerax"
-
-    const val LOTTIE = "route_lottie"
-
-    const val SKELETON_LOADER = "route_skeleton_loader"
-
-    const val BING_WALLPAPER = "route_bing_wallpaper"
-
-    internal val fullScreenRoute = arrayOf(ME, BING_WALLPAPER)
+    viewModelOf(::SettingsViewModel)
 }

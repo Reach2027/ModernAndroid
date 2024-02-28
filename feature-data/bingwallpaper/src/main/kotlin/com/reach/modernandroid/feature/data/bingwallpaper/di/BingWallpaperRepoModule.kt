@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.data.feature.bingwallpaper.di
+package com.reach.modernandroid.feature.data.bingwallpaper.di
 
 import com.reach.base.jvm.common.di.QualifierDispatchers
 import com.reach.base.jvm.common.di.dispatcherModule
 import com.reach.modernandroid.core.data.network.di.httpClientModule
-import com.reach.modernandroid.data.feature.bingwallpaper.BingWallpaperRepository
-import com.reach.modernandroid.data.feature.bingwallpaper.DefaultBingWallpaperRepo
-import com.reach.modernandroid.data.feature.bingwallpaper.source.BingWallpaperApi
-import com.reach.modernandroid.data.feature.bingwallpaper.source.BingWallpaperPagingSource
-import com.reach.modernandroid.data.feature.bingwallpaper.source.DefaultBingWallpaperApi
+import com.reach.modernandroid.feature.data.bingwallpaper.BingWallpaperRepository
+import com.reach.modernandroid.feature.data.bingwallpaper.DefaultBingWallpaperRepo
+import com.reach.modernandroid.feature.data.bingwallpaper.source.BingWallpaperApi
+import com.reach.modernandroid.feature.data.bingwallpaper.source.BingWallpaperPagingSource
+import com.reach.modernandroid.feature.data.bingwallpaper.source.DefaultBingWallpaperApi
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
 import org.koin.core.qualifier.qualifier

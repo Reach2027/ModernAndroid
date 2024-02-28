@@ -57,8 +57,10 @@ dependencies {
     implementation(projects.feature.bingwallpaper)
     implementation(projects.feature.album)
     implementation(projects.feature.camerax)
+    implementation(projects.feature.settings)
 
-    implementation(projects.featureData.setting)
+    implementation(projects.featureData.settings)
+    implementation(projects.coreData.datastore)
 
     implementation(libs.androidx.startup)
 

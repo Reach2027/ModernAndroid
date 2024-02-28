@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.more
+package com.reach.modernandroid.feature.more
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

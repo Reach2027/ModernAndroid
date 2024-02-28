@@ -41,7 +41,7 @@ include(":base-ui:common")
 // feature data
 include(":feature-data:album")
 include(":feature-data:bingwallpaper")
-include(":feature-data:setting")
+include(":feature-data:settings")
 
 // core data
 include(":core-data:database")
@@ -53,3 +53,4 @@ include(":base-android:common")
 
 // base jvm
 include(":base-jvm:common")
+include(":feature:settings")

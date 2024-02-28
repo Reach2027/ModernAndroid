@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.data.feature.bingwallpaper
+package com.reach.modernandroid.feature.data.bingwallpaper
 
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.reach.base.jvm.common.Result
 import com.reach.base.jvm.common.flowResult
-import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpaperModel
-import com.reach.modernandroid.data.feature.bingwallpaper.source.BingWallpaperApi
-import com.reach.modernandroid.data.feature.bingwallpaper.source.BingWallpaperPagingSource
+import com.reach.modernandroid.feature.data.bingwallpaper.model.BingWallpaperModel
+import com.reach.modernandroid.feature.data.bingwallpaper.source.BingWallpaperApi
+import com.reach.modernandroid.feature.data.bingwallpaper.source.BingWallpaperPagingSource
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 

@@ -14,21 +14,22 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.data.feature.setting
+package com.reach.modernandroid.feature.data.settings
 
 import com.reach.modernandroid.core.data.datastore.SettingsLocalSource
 import com.reach.modernandroid.core.data.datastore.model.DarkThemeConfig
 import com.reach.modernandroid.core.data.datastore.model.UserSetting
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 interface SettingsRepository {
 
     val userSetting: StateFlow<UserSetting>
 
-    suspend fun setDynamicTheme(dynamicTheme: Boolean)
+    fun setDynamicTheme(dynamicTheme: Boolean)
 
-    suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig)
+    fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig)
 }
 
 internal class DefaultSettingsRepository(
@@ -37,11 +38,15 @@ internal class DefaultSettingsRepository(
 ) : SettingsRepository {
 
     override val userSetting: StateFlow<UserSetting> = settingsLocalSource.settings
-    override suspend fun setDynamicTheme(dynamicTheme: Boolean) {
-        settingsLocalSource.setDynamicTheme(dynamicTheme)
+    override fun setDynamicTheme(dynamicTheme: Boolean) {
+        coroutineScope.launch {
+            settingsLocalSource.setDynamicTheme(dynamicTheme)
+        }
     }
 
-    override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
-        settingsLocalSource.setDarkThemeConfig(darkThemeConfig)
+    override fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig) {
+        coroutineScope.launch {
+            settingsLocalSource.setDarkThemeConfig(darkThemeConfig)
+        }
     }
 }

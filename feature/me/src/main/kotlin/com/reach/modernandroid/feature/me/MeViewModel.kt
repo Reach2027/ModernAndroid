@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.me
+package com.reach.modernandroid.feature.me
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.reach.base.android.common.devicestate.DeviceState
 import com.reach.base.android.common.devicestate.network.NetworkType
 import com.reach.base.jvm.common.Result
-import com.reach.modernandroid.data.feature.bingwallpaper.BingWallpaperRepository
+import com.reach.modernandroid.feature.data.bingwallpaper.BingWallpaperRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

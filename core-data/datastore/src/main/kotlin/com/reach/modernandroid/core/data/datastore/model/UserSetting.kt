@@ -17,7 +17,7 @@
 package com.reach.modernandroid.core.data.datastore.model
 
 data class UserSetting(
-    val dynamicTheme: Boolean = false,
+    val dynamicColor: Boolean = false,
     val darkThemeConfig: DarkThemeConfig = DarkThemeConfig.FollowSystem,
 )
 

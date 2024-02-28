@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.data.feature.bingwallpaper.source
+package com.reach.modernandroid.feature.data.bingwallpaper.source
 
-import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpapersModel
+import com.reach.modernandroid.feature.data.bingwallpaper.model.BingWallpapersModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

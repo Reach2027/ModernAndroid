@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.data.feature.album.model
+package com.reach.modernandroid.feature.data.album.model
 
 import android.net.Uri
 

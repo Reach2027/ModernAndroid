@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.more
+package com.reach.modernandroid.feature.more
 
 import androidx.navigation.NavController
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute

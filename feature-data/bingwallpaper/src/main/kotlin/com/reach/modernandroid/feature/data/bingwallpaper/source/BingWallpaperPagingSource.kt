@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.data.feature.bingwallpaper.source
+package com.reach.modernandroid.feature.data.bingwallpaper.source
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.reach.modernandroid.data.feature.bingwallpaper.model.BingWallpaperModel
+import com.reach.modernandroid.feature.data.bingwallpaper.model.BingWallpaperModel
 
 internal class BingWallpaperPagingSource(
     private val bingWallpaperApi: BingWallpaperApi,

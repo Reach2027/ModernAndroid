@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.data.feature.bingwallpaper.model
+package com.reach.modernandroid.feature.data.bingwallpaper.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

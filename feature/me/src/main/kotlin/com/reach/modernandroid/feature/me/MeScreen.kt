@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.ui.feature.me
+package com.reach.modernandroid.feature.me
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -30,12 +30,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalDensity
@@ -52,9 +54,10 @@ import com.reach.base.ui.common.widget.SkeletonLoader
 import com.reach.modernandroid.core.ui.common.AppPreview
 import com.reach.modernandroid.core.ui.common.AppUiState
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
+import com.reach.modernandroid.core.ui.design.AppIcons
 import com.reach.modernandroid.core.ui.design.animation.topDestEnterTransition
 import com.reach.modernandroid.core.ui.design.animation.topDestExitTransition
-import com.reach.modernandroid.feature.me.R
+import com.reach.modernandroid.core.ui.design.theme.AppColor
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
@@ -79,6 +82,7 @@ private fun MeRoute(
         windowSizeClass = appUiState.getWindowSizeClass(),
         uiState = uiState,
         onWallpaperClick = { appUiState.getNavController().navigate(AppRoute.BING_WALLPAPER) },
+        onSettingsClick = { appUiState.getNavController().navigate(AppRoute.SETTINGS) },
     )
 }
 
@@ -87,16 +91,19 @@ private fun MeScreen(
     windowSizeClass: WindowSizeClass,
     uiState: MeUiState,
     onWallpaperClick: () -> Unit,
+    onSettingsClick: () -> Unit,
 ) {
     if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded) {
         MeScreenExpanded(
             uiState = uiState,
             onWallpaperClick = onWallpaperClick,
+            onSettingsClick = onSettingsClick,
         )
     } else {
         MeScreenCompat(
             uiState = uiState,
             onWallpaperClick = onWallpaperClick,
+            onSettingsClick = onSettingsClick,
         )
     }
 }
@@ -105,6 +112,7 @@ private fun MeScreen(
 private fun MeScreenExpanded(
     uiState: MeUiState,
     onWallpaperClick: () -> Unit,
+    onSettingsClick: () -> Unit,
 ) {
     val systemBarH = WindowInsets.systemBars.getTop(LocalDensity.current).toDp()
 
@@ -122,6 +130,7 @@ private fun MeScreenExpanded(
             PersonInfo(
                 uiState = uiState,
                 onWallpaperClick = onWallpaperClick,
+                onSettingsClick = onSettingsClick,
             )
         }
         Spacer(modifier = Modifier.width(16.dp))
@@ -138,6 +147,7 @@ private fun MeScreenExpanded(
 private fun MeScreenCompat(
     uiState: MeUiState,
     onWallpaperClick: () -> Unit,
+    onSettingsClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -146,6 +156,7 @@ private fun MeScreenCompat(
         PersonInfo(
             uiState = uiState,
             onWallpaperClick = onWallpaperClick,
+            onSettingsClick = onSettingsClick,
         )
         Spacer(modifier = Modifier.height(16.dp))
         DeviceInfo(uiState = uiState)
@@ -156,6 +167,7 @@ private fun MeScreenCompat(
 private fun PersonInfo(
     uiState: MeUiState,
     onWallpaperClick: () -> Unit,
+    onSettingsClick: () -> Unit,
 ) {
     Box {
         if (uiState.isImageLoading) {
@@ -177,6 +189,15 @@ private fun PersonInfo(
                     .aspectRatio(16f / 9f),
             )
         }
+        Icon(
+            imageVector = AppIcons.Settings,
+            contentDescription = "",
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+                .clickable { onSettingsClick() },
+            tint = AppColor.White,
+        )
     }
 }
 
@@ -206,6 +227,7 @@ private fun MeScreenPreview() {
             windowSizeClass = previewWindowSizeClass(),
             uiState = MeUiState(),
             onWallpaperClick = {},
+            onSettingsClick = {},
         )
     }
 }
