@@ -19,24 +19,15 @@ plugins {
 }
 
 android {
-    namespace = "com.reach.core.ui.common"
+    namespace = "com.reach.modernandroid.core.ui.common"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
 }
 
 dependencies {
-    implementation(libs.shimmer)
+    implementation(projects.baseJvm.common)
+    implementation(projects.coreUi.resource)
 }

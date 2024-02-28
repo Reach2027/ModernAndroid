@@ -23,33 +23,33 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(":app")
 
-// UI feature
-include(":ui-feature:me")
-include(":ui-feature:more")
-include(":ui-feature:uilearn")
-include(":ui-feature:album")
-include(":ui-feature:camerax")
-include(":ui-feature:bingwallpaper")
+// feature
+include(":feature:me")
+include(":feature:more")
+include(":feature:uilearn")
+include(":feature:album")
+include(":feature:camerax")
+include(":feature:bingwallpaper")
 
-// UI base
-include(":ui-base:resource")
-include(":ui-base:common")
-
-// Core ui
+// core ui
+include(":core-ui:resource")
 include(":core-ui:common")
 
-// Data feature
-include(":data-feature:album")
-include(":data-feature:bingwallpaper")
+// base ui
+include(":base-ui:common")
 
-// Data base
-include(":data-base:database")
-include(":data-base:network")
-include(":data-base:datastore")
+// feature data
+include(":feature-data:album")
+include(":feature-data:bingwallpaper")
+include(":feature-data:setting")
 
-// Core android
-include(":core-android:common")
+// core data
+include(":core-data:database")
+include(":core-data:network")
+include(":core-data:datastore")
 
-// Core jvm
-include(":core-jvm:common")
-include(":data-feature:setting")
+// base android
+include(":base-android:common")
+
+// base jvm
+include(":base-jvm:common")

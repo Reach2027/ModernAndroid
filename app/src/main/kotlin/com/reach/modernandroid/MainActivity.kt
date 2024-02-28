@@ -23,8 +23,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.core.view.WindowCompat
+import com.reach.modernandroid.core.ui.resource.theme.AppTheme
 import com.reach.modernandroid.ui.App
-import com.reach.modernandroid.ui.base.resource.theme.AppTheme
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)

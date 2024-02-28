@@ -44,7 +44,7 @@ ktor = "2.3.7"
 # Other
 koin = "3.5.3"
 
-coil = "2.5.0"
+coil = "2.6.0"
 
 okio = "3.7.0"
 

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package = "com.reach.modernandroid.core.data.datastore";
+option java_multiple_files = true;
+
+message SettingsPb {
+  int32 dark_theme_config = 1;
+
+  bool dynamic_theme = 2;
+}

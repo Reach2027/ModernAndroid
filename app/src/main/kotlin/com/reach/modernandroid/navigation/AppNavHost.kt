@@ -20,10 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.reach.modernandroid.ui.base.common.navigation.AppRoute
-import com.reach.modernandroid.ui.feature.album.albumRoute
-import com.reach.modernandroid.ui.feature.bingwallpaper.bingWallpaperRoute
-import com.reach.modernandroid.ui.feature.camerax.cameraxRoute
+import com.reach.modernandroid.core.ui.common.navigation.AppRoute
+import com.reach.modernandroid.feature.album.albumRoute
+import com.reach.modernandroid.feature.bingwallpaper.bingWallpaperRoute
+import com.reach.modernandroid.feature.camerax.cameraxRoute
 import com.reach.modernandroid.ui.feature.me.meRoute
 import com.reach.modernandroid.ui.feature.more.moreRoute
 import com.reach.modernandroid.ui.feature.uilearn.lottieRoute

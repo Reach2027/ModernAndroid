@@ -51,15 +51,15 @@ android {
 }
 
 dependencies {
-    implementation(projects.uiFeature.more)
-    implementation(projects.uiFeature.me)
+    implementation(projects.feature.more)
+    implementation(projects.feature.me)
 
-    implementation(projects.uiFeature.uilearn)
-    implementation(projects.uiFeature.bingwallpaper)
-    implementation(projects.uiFeature.album)
-    implementation(projects.uiFeature.camerax)
+    implementation(projects.feature.uilearn)
+    implementation(projects.feature.bingwallpaper)
+    implementation(projects.feature.album)
+    implementation(projects.feature.camerax)
 
-    implementation(projects.dataFeature.setting)
+    implementation(projects.featureData.setting)
 
     implementation(libs.androidx.startup)
 
