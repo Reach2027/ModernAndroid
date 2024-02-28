@@ -57,7 +57,7 @@ fun AppTopBarWithBack(
                 contentDescription = "",
                 modifier = Modifier
                     .clickable { onBackClick() }
-                    .padding(16.dp),
+                    .padding(12.dp),
             )
         },
         actions = actions,

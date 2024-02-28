@@ -16,13 +16,16 @@
 
 package com.reach.modernandroid
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -34,7 +37,7 @@ import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
 
-    val settingsRepo: SettingsRepository by inject()
+    private val settingsRepo: SettingsRepository by inject()
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,16 +48,36 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val settings by settingsRepo.userSetting.collectAsStateWithLifecycle()
+
+            val darkTheme = when (settings.darkThemeConfig) {
+                DarkThemeConfig.Light -> false
+                DarkThemeConfig.Dark -> true
+                DarkThemeConfig.FollowSystem -> isSystemInDarkTheme()
+            }
+
+            DisposableEffect(darkTheme) {
+                enableEdgeToEdge(
+                    statusBarStyle = SystemBarStyle.auto(
+                        Color.TRANSPARENT,
+                        Color.TRANSPARENT,
+                    ) { darkTheme },
+                    navigationBarStyle = SystemBarStyle.auto(
+                        LightScrim,
+                        DarkScrim,
+                    ) { darkTheme },
+                )
+                onDispose {}
+            }
+
             AppTheme(
                 dynamicTheme = settings.dynamicColor,
-                darkTheme = when (settings.darkThemeConfig) {
-                    DarkThemeConfig.Light -> false
-                    DarkThemeConfig.Dark -> true
-                    DarkThemeConfig.FollowSystem -> isSystemInDarkTheme()
-                },
+                darkTheme = darkTheme,
             ) {
                 App(windowSizeClass = calculateWindowSizeClass(activity = this))
             }
         }
     }
 }
+
+private val LightScrim = Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
+private val DarkScrim = Color.argb(0x80, 0x1b, 0x1b, 0x1b)

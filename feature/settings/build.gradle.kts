@@ -28,5 +28,4 @@ android {
 
 dependencies {
     implementation(projects.featureData.settings)
-    implementation(projects.coreData.datastore)
 }

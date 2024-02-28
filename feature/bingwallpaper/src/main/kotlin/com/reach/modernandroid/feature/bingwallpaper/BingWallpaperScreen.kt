@@ -121,10 +121,7 @@ private fun BingWallpaperScreen(
         AppTopBarWithBack(
             title = { Text(text = stringResource(id = R.string.bing_wallpaper)) },
             onBackClick = onBackClick,
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                scrolledContainerColor = Color.Transparent,
-            ),
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
             windowInsets = WindowInsets(0, (systemBarH * (1f - collapsedFraction)).toInt(), 0, 0),
             scrollBehavior = scrollBehavior,
         )

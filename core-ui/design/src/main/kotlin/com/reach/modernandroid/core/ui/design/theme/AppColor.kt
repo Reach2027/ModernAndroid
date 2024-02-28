@@ -86,5 +86,4 @@ internal object DarkColor {
 
 object AppColor {
     val Seed = Color(0xFF126EFF)
-    val White = Color(0xFFFFFFFF)
 }

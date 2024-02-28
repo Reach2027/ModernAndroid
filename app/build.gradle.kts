@@ -60,7 +60,6 @@ dependencies {
     implementation(projects.feature.settings)
 
     implementation(projects.featureData.settings)
-    implementation(projects.coreData.datastore)
 
     implementation(libs.androidx.startup)
 

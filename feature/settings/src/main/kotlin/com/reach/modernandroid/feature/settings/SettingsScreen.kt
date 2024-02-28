@@ -16,8 +16,8 @@
 
 package com.reach.modernandroid.feature.settings
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
@@ -25,28 +25,25 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import com.reach.base.ui.common.devicepreview.DevicePreviews
-import com.reach.base.ui.common.devicepreview.previewWindowSizeClass
 import com.reach.modernandroid.core.data.datastore.model.DarkThemeConfig
 import com.reach.modernandroid.core.data.datastore.model.UserSetting
 import com.reach.modernandroid.core.ui.common.AppPreview
@@ -72,22 +69,20 @@ private fun SettingsRoute(
     val settings by viewModel.settings.collectAsStateWithLifecycle()
 
     SettingsScreen(
-        windowSizeClass = appUiState.getWindowSizeClass(),
         onBackClick = { appUiState.getNavController().navigateUp() },
         settings = settings,
         onDynamicColorChange = { viewModel.setDynamicTheme(it) },
-        onOptionClick = { viewModel.setDarkThemeConfig(it) },
+        onDarkModeClick = { viewModel.setDarkThemeConfig(it) },
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SettingsScreen(
-    windowSizeClass: WindowSizeClass,
     onBackClick: () -> Unit,
     settings: UserSetting,
     onDynamicColorChange: (Boolean) -> Unit,
-    onOptionClick: (Int) -> Unit,
+    onDarkModeClick: (Int) -> Unit,
 ) {
     Column {
         AppTopBarWithBack(
@@ -97,7 +92,7 @@ private fun SettingsScreen(
         ThemeSetting(
             settings = settings,
             onDynamicColorChange = onDynamicColorChange,
-            onOptionClick = onOptionClick,
+            onDarkModeClick = onDarkModeClick,
         )
     }
 }
@@ -106,9 +101,9 @@ private fun SettingsScreen(
 private fun ThemeSetting(
     settings: UserSetting,
     onDynamicColorChange: (Boolean) -> Unit,
-    onOptionClick: (Int) -> Unit,
+    onDarkModeClick: (Int) -> Unit,
 ) {
-    var showDialog by remember { mutableStateOf(false) }
+    var showDarkModeDialog by rememberSaveable { mutableStateOf(false) }
 
     SettingItem {
         Text(text = stringResource(id = R.string.dynamic_color))
@@ -118,24 +113,31 @@ private fun ThemeSetting(
             onCheckedChange = onDynamicColorChange,
         )
     }
+
     SettingItem {
         Text(text = stringResource(id = R.string.dark_mode))
         Spacer(modifier = Modifier.weight(1f))
-        Text(text = settings.darkThemeConfig.name)
-        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = settings.darkThemeConfig.name,
+            modifier = Modifier
+                .clickable { showDarkModeDialog = true }
+                .padding(4.dp),
+        )
         Icon(
             imageVector = AppIcons.next,
             contentDescription = "",
-            modifier = Modifier.clickable { showDialog = true },
+            modifier = Modifier
+                .clickable { showDarkModeDialog = true }
+                .padding(8.dp),
         )
     }
 
-    AnimatedVisibility(visible = showDialog) {
+    if (showDarkModeDialog) {
         DarkModeDialog(
             selectedOption = settings.darkThemeConfig.ordinal,
-            onDismissRequest = { showDialog = false },
+            onDismissRequest = { showDarkModeDialog = false },
             options = DarkThemeConfig.entries.map { it.name },
-            onOptionClick = onOptionClick,
+            onDarkModeClick = onDarkModeClick,
         )
     }
 }
@@ -145,25 +147,39 @@ private fun SettingItem(content: @Composable RowScope.() -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(80.dp)
+            .height(96.dp)
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         content = content,
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DarkModeDialog(
     selectedOption: Int,
     onDismissRequest: () -> Unit,
     options: List<String>,
-    onOptionClick: (Int) -> Unit,
+    onDarkModeClick: (Int) -> Unit,
 ) {
-    Dialog(onDismissRequest = onDismissRequest) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth(),
-        ) {
+    BasicAlertDialog(onDismissRequest = onDismissRequest) {
+        Card(modifier = Modifier.fillMaxWidth()) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(text = stringResource(id = R.string.dark_mode))
+
+                Icon(
+                    imageVector = AppIcons.Close,
+                    contentDescription = "",
+                    modifier = Modifier
+                        .clickable { onDismissRequest() }
+                        .align(Alignment.CenterEnd)
+                        .padding(16.dp),
+                )
+            }
+
             options.forEachIndexed { index, str ->
                 Row(
                     modifier = Modifier
@@ -171,7 +187,7 @@ fun DarkModeDialog(
                         .height(64.dp)
                         .clickable {
                             onDismissRequest()
-                            onOptionClick(index)
+                            onDarkModeClick(index)
                         }
                         .padding(horizontal = 16.dp),
                     verticalAlignment = Alignment.CenterVertically,
@@ -180,7 +196,7 @@ fun DarkModeDialog(
                         selected = index == selectedOption,
                         onClick = {
                             onDismissRequest()
-                            onOptionClick(index)
+                            onDarkModeClick(index)
                         },
                     )
                     Text(text = str)
@@ -195,11 +211,10 @@ fun DarkModeDialog(
 private fun SettingsScreenPreview() {
     AppPreview {
         SettingsScreen(
-            windowSizeClass = previewWindowSizeClass(),
             onBackClick = { },
             settings = UserSetting(),
             onDynamicColorChange = {},
-            onOptionClick = {},
+            onDarkModeClick = {},
         )
     }
 }

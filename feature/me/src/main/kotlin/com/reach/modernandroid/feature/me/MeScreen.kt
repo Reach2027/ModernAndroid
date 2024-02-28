@@ -40,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -57,7 +58,6 @@ import com.reach.modernandroid.core.ui.common.navigation.AppRoute
 import com.reach.modernandroid.core.ui.design.AppIcons
 import com.reach.modernandroid.core.ui.design.animation.topDestEnterTransition
 import com.reach.modernandroid.core.ui.design.animation.topDestExitTransition
-import com.reach.modernandroid.core.ui.design.theme.AppColor
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
@@ -194,9 +194,9 @@ private fun PersonInfo(
             contentDescription = "",
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .padding(16.dp)
-                .clickable { onSettingsClick() },
-            tint = AppColor.White,
+                .clickable { onSettingsClick() }
+                .padding(16.dp),
+            tint = Color.White,
         )
     }
 }
