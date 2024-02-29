@@ -31,15 +31,15 @@ internal class BingWallpaperPagingSource(
         }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BingWallpaperModel> = try {
-        val nextPageNum = params.key ?: 0
-        val bingWallpapersModel = bingWallpaperApi.getBingWallpaper(
-            beforeDays = nextPageNum * 7,
+        val currentPage = params.key ?: 0
+        val bingWallpaperModels = bingWallpaperApi.getBingWallpapers(
+            beforeDays = currentPage * 7,
             count = 8,
         )
         LoadResult.Page(
-            data = bingWallpapersModel.images,
-            prevKey = null,
-            nextKey = nextPageNum + 1,
+            data = bingWallpaperModels.images,
+            prevKey = if (currentPage < 1) null else currentPage - 1,
+            nextKey = if (currentPage > 0) null else currentPage + 1,
         )
     } catch (e: Exception) {
         LoadResult.Error(e)

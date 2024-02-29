@@ -17,7 +17,18 @@
 package com.reach.modernandroid.feature.album
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.reach.modernandroid.feature.data.album.LocalImageRepo
+import com.reach.modernandroid.feature.data.album.model.LocalImageModel
+import kotlinx.coroutines.flow.Flow
 
-internal sealed interface UiState
+internal class AlbumViewModel(
+    localImageRepo: LocalImageRepo,
+) : ViewModel() {
 
-class AlbumViewModel() : ViewModel()
+    val localImages: Flow<PagingData<LocalImageModel>> =
+        localImageRepo.getLocalImages()
+            .cachedIn(viewModelScope)
+}

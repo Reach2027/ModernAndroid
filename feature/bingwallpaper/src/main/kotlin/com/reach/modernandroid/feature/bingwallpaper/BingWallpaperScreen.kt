@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -94,7 +95,7 @@ private fun BingWallpaperRoute(
 ) {
     BingWallpaperScreen(
         onBackClick = { appUiState.getNavController().navigateUp() },
-        sourceFlow = viewModel.sourceFlow,
+        bingWallPapers = viewModel.bingWallpapers,
     )
 }
 
@@ -102,9 +103,9 @@ private fun BingWallpaperRoute(
 @Composable
 private fun BingWallpaperScreen(
     onBackClick: () -> Unit,
-    sourceFlow: Flow<PagingData<BingWallpaperModel>>,
+    bingWallPapers: Flow<PagingData<BingWallpaperModel>>,
 ) {
-    val items: LazyPagingItems<BingWallpaperModel> = sourceFlow.collectAsLazyPagingItems()
+    val items: LazyPagingItems<BingWallpaperModel> = bingWallPapers.collectAsLazyPagingItems()
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val collapsedFraction by remember {
@@ -115,10 +116,7 @@ private fun BingWallpaperScreen(
 
     val systemBarH = WindowInsets.systemBars.getTop(LocalDensity.current)
 
-    Column(
-        modifier = Modifier
-            .fillMaxWidth(),
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         AppTopBarWithBack(
             title = { Text(text = stringResource(id = R.string.bing_wallpaper)) },
             onBackClick = onBackClick,
@@ -267,7 +265,7 @@ private fun BingWallpaperScreenPreview() {
 
         BingWallpaperScreen(
             onBackClick = {},
-            sourceFlow = flow { emit(pagingData) },
+            bingWallPapers = flow { emit(pagingData) },
         )
     }
 }

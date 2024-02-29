@@ -27,7 +27,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 
-private const val LIMIT = 50
+internal const val LIMIT = 600
 
 internal class LocalImagePagingSource(
     private val application: Application,
@@ -40,11 +40,12 @@ internal class LocalImagePagingSource(
         }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LocalImageModel> = try {
-        val nextPageNum = params.key ?: 0
+        val currentPage = params.key ?: 0
+        val localImages = queryLocalImage(currentPage * LIMIT)
         LoadResult.Page(
-            data = queryLocalImage(nextPageNum * LIMIT),
-            prevKey = null,
-            nextKey = nextPageNum + 1,
+            data = localImages,
+            prevKey = if (currentPage < 1) null else currentPage - 1,
+            nextKey = if (localImages.size < LIMIT) null else currentPage + 1,
         )
     } catch (e: Exception) {
         LoadResult.Error(e)
@@ -87,7 +88,7 @@ internal class LocalImagePagingSource(
                 projection,
                 null,
                 null,
-                MediaStore.Images.ImageColumns.DATE_MODIFIED + " DESC LIMIT $LIMIT OFFSET $offset",
+                "${MediaStore.Images.ImageColumns.DATE_MODIFIED} DESC LIMIT $LIMIT OFFSET $offset",
             )
         }?.use {
             val idIndex = it.getColumnIndexOrThrow(MediaStore.Images.ImageColumns._ID)

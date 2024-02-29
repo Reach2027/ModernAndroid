@@ -29,7 +29,7 @@ private const val BING_IMAGE_URL = "/HPImageArchive.aspx"
 
 internal interface BingWallpaperApi {
 
-    suspend fun getBingWallpaper(
+    suspend fun getBingWallpapers(
         beforeDays: Int,
         count: Int,
     ): BingWallpapersModel
@@ -39,7 +39,7 @@ internal class DefaultBingWallpaperApi(
     private val httpClient: HttpClient,
 ) : BingWallpaperApi {
 
-    override suspend fun getBingWallpaper(
+    override suspend fun getBingWallpapers(
         beforeDays: Int,
         count: Int,
     ): BingWallpapersModel {

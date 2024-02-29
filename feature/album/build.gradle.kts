@@ -28,4 +28,6 @@ android {
 
 dependencies {
     implementation(projects.featureData.album)
+
+    implementation(libs.androidx.paging.compose)
 }

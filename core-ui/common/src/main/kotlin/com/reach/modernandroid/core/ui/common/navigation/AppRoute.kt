@@ -34,5 +34,5 @@ object AppRoute {
 
     const val BING_WALLPAPER = "route_bing_wallpaper"
 
-    internal val fullScreenRoute = arrayOf(ME, BING_WALLPAPER)
+    internal val fullScreenRoute = arrayOf(ME, BING_WALLPAPER, ALBUM)
 }

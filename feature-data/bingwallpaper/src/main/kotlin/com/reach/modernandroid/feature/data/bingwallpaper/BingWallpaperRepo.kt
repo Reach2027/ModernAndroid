@@ -31,7 +31,7 @@ interface BingWallpaperRepo {
 
     fun getTodayWallpaper(): Flow<Result<BingWallpaperModel>>
 
-    fun bingWallpaperFlow(): Flow<PagingData<BingWallpaperModel>>
+    fun getBingWallpapers(): Flow<PagingData<BingWallpaperModel>>
 }
 
 internal class DefaultBingWallpaperRepo(
@@ -42,11 +42,11 @@ internal class DefaultBingWallpaperRepo(
 
     override fun getTodayWallpaper(): Flow<Result<BingWallpaperModel>> =
         flowResult(dispatcher) {
-            bingWallpaperApi.getBingWallpaper(0, 1)
+            bingWallpaperApi.getBingWallpapers(0, 1)
                 .images[0]
         }
 
-    override fun bingWallpaperFlow(): Flow<PagingData<BingWallpaperModel>> =
+    override fun getBingWallpapers(): Flow<PagingData<BingWallpaperModel>> =
         Pager(config = PagingConfig(pageSize = 8)) {
             bingWallpaperPagingSource
         }.flow

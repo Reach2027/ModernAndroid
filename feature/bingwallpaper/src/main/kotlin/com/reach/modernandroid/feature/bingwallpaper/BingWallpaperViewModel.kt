@@ -28,6 +28,7 @@ internal class BingWallpaperViewModel(
     bingWallpaperRepo: BingWallpaperRepo,
 ) : ViewModel() {
 
-    val sourceFlow: Flow<PagingData<BingWallpaperModel>> = bingWallpaperRepo.bingWallpaperFlow()
-        .cachedIn(viewModelScope)
+    val bingWallpapers: Flow<PagingData<BingWallpaperModel>> =
+        bingWallpaperRepo.getBingWallpapers()
+            .cachedIn(viewModelScope)
 }

@@ -16,12 +16,25 @@
 
 package com.reach.modernandroid.feature.data.album
 
-import android.app.Application
-import kotlinx.coroutines.CoroutineScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import com.reach.modernandroid.feature.data.album.model.LocalImageModel
+import com.reach.modernandroid.feature.data.album.source.LIMIT
+import com.reach.modernandroid.feature.data.album.source.LocalImagePagingSource
+import kotlinx.coroutines.flow.Flow
 
-interface LocalImageRepo
+interface LocalImageRepo {
 
-class DefaultLocalImageRepo(
-    private val application: Application,
-    private val coroutineScope: CoroutineScope,
-) : LocalImageRepo
+    fun getLocalImages(): Flow<PagingData<LocalImageModel>>
+}
+
+internal class DefaultLocalImageRepo(
+    private val localImagePagingSource: LocalImagePagingSource,
+) : LocalImageRepo {
+
+    override fun getLocalImages(): Flow<PagingData<LocalImageModel>> =
+        Pager(config = PagingConfig(pageSize = LIMIT)) {
+            localImagePagingSource
+        }.flow
+}
