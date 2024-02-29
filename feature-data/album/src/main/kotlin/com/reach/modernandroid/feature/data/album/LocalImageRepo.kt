@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.core.data.datastore.model
+package com.reach.modernandroid.feature.data.album
 
-data class UserSetting(
-    val dynamicColor: Boolean = false,
-    val darkThemeConfig: DarkThemeConfig = DarkThemeConfig.FollowSystem,
-)
+import android.app.Application
+import kotlinx.coroutines.CoroutineScope
 
-enum class DarkThemeConfig {
-    FollowSystem,
-    Light,
-    Dark,
-}
+interface LocalImageRepo
+
+class DefaultLocalImageRepo(
+    private val application: Application,
+    private val coroutineScope: CoroutineScope,
+) : LocalImageRepo

@@ -18,15 +18,15 @@ package com.reach.modernandroid.feature.settings
 
 import androidx.lifecycle.ViewModel
 import com.reach.modernandroid.core.data.datastore.model.DarkThemeConfig
-import com.reach.modernandroid.core.data.datastore.model.UserSetting
-import com.reach.modernandroid.feature.data.settings.SettingsRepository
+import com.reach.modernandroid.core.data.datastore.model.UserSettings
+import com.reach.modernandroid.feature.data.settings.SettingsRepo
 import kotlinx.coroutines.flow.StateFlow
 
 internal class SettingsViewModel(
-    private val settingsRepo: SettingsRepository,
+    private val settingsRepo: SettingsRepo,
 ) : ViewModel() {
 
-    val settings: StateFlow<UserSetting> = settingsRepo.userSetting
+    val settings: StateFlow<UserSettings> = settingsRepo.userSettings
 
     fun setDynamicTheme(dynamicTheme: Boolean) {
         settingsRepo.setDynamicTheme(dynamicTheme)

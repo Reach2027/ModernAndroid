@@ -18,26 +18,27 @@ package com.reach.modernandroid.feature.data.settings
 
 import com.reach.modernandroid.core.data.datastore.SettingsLocalSource
 import com.reach.modernandroid.core.data.datastore.model.DarkThemeConfig
-import com.reach.modernandroid.core.data.datastore.model.UserSetting
+import com.reach.modernandroid.core.data.datastore.model.UserSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-interface SettingsRepository {
+interface SettingsRepo {
 
-    val userSetting: StateFlow<UserSetting>
+    val userSettings: StateFlow<UserSettings>
 
     fun setDynamicTheme(dynamicTheme: Boolean)
 
     fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig)
 }
 
-internal class DefaultSettingsRepository(
+internal class DefaultSettingsRepo(
     private val settingsLocalSource: SettingsLocalSource,
     private val coroutineScope: CoroutineScope,
-) : SettingsRepository {
+) : SettingsRepo {
 
-    override val userSetting: StateFlow<UserSetting> = settingsLocalSource.settings
+    override val userSettings: StateFlow<UserSettings> = settingsLocalSource.settings
+
     override fun setDynamicTheme(dynamicTheme: Boolean) {
         coroutineScope.launch {
             settingsLocalSource.setDynamicTheme(dynamicTheme)

@@ -19,7 +19,7 @@ package com.reach.modernandroid.feature.data.bingwallpaper.di
 import com.reach.base.jvm.common.di.QualifierDispatchers
 import com.reach.base.jvm.common.di.dispatcherModule
 import com.reach.modernandroid.core.data.network.di.httpClientModule
-import com.reach.modernandroid.feature.data.bingwallpaper.BingWallpaperRepository
+import com.reach.modernandroid.feature.data.bingwallpaper.BingWallpaperRepo
 import com.reach.modernandroid.feature.data.bingwallpaper.DefaultBingWallpaperRepo
 import com.reach.modernandroid.feature.data.bingwallpaper.source.BingWallpaperApi
 import com.reach.modernandroid.feature.data.bingwallpaper.source.BingWallpaperPagingSource
@@ -38,7 +38,7 @@ val bingWallpaperRepoModule = module {
 
     factoryOf(::BingWallpaperPagingSource)
 
-    factory<BingWallpaperRepository> {
+    factory<BingWallpaperRepo> {
         DefaultBingWallpaperRepo(
             get(),
             get(),

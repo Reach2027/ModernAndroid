@@ -14,27 +14,16 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid
+package com.reach.modernandroid.core.data.datastore.model
 
-import android.app.Application
-import com.reach.modernandroid.di.appModule
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.GlobalContext.startKoin
+data class UserSettings(
+    val isLoading: Boolean = true,
+    val dynamicColor: Boolean = false,
+    val darkThemeConfig: DarkThemeConfig = DarkThemeConfig.FollowSystem,
+)
 
-class AppApplication : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-
-        setupKoin()
-    }
-
-    private fun setupKoin() {
-        startKoin {
-            androidLogger()
-            androidContext(this@AppApplication)
-            modules(appModule)
-        }
-    }
+enum class DarkThemeConfig {
+    FollowSystem,
+    Light,
+    Dark,
 }

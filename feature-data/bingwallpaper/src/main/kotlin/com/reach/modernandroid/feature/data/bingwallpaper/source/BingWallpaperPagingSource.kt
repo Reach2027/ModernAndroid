@@ -23,6 +23,7 @@ import com.reach.modernandroid.feature.data.bingwallpaper.model.BingWallpaperMod
 internal class BingWallpaperPagingSource(
     private val bingWallpaperApi: BingWallpaperApi,
 ) : PagingSource<Int, BingWallpaperModel>() {
+
     override fun getRefreshKey(state: PagingState<Int, BingWallpaperModel>): Int? =
         state.anchorPosition?.let { position ->
             val anchorPage = state.closestPageToPosition(position)
@@ -30,15 +31,15 @@ internal class BingWallpaperPagingSource(
         }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BingWallpaperModel> = try {
-        val nextBeforeDays = params.key ?: 0
+        val nextPageNum = params.key ?: 0
         val bingWallpapersModel = bingWallpaperApi.getBingWallpaper(
-            beforeDays = nextBeforeDays,
+            beforeDays = nextPageNum * 7,
             count = 8,
         )
         LoadResult.Page(
             data = bingWallpapersModel.images,
             prevKey = null,
-            nextKey = nextBeforeDays + 7,
+            nextKey = nextPageNum + 1,
         )
     } catch (e: Exception) {
         LoadResult.Error(e)

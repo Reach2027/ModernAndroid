@@ -14,7 +14,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@color/ic_launcher_background"/>
-    <foreground android:drawable="@drawable/ic_launcher_foreground"/>
-</adaptive-icon>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="Theme.ModernAndroid" parent="android:Theme.Material.NoActionBar" />
+
+    <style name="Adjusted.ModernAndroid.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+    </style>
+
+</resources>

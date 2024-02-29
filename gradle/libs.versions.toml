@@ -20,6 +20,7 @@ androidDesugarJdk = "2.0.4"
 androidxStartup = "1.1.1"
 
 androidxCore = "1.12.0"
+androidxCoreSplashscreen = "1.0.1"
 androidxActivityCompose = "1.8.2"
 
 androidxCollection = "1.4.0"
@@ -89,6 +90,7 @@ android-desugar-jdk = { group = "com.android.tools", name = "desugar_jdk_libs", 
 androidx-startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "androidxStartup" }
 
 androidx-core = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivityCompose" }
 
 androidx-collection = { group = "androidx.collection", name = "collection", version.ref = "androidxCollection" }

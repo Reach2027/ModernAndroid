@@ -64,6 +64,7 @@ dependencies {
     implementation(libs.androidx.startup)
 
     implementation(libs.androidx.core)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.material3.adaptive)
     implementation(libs.compose.material3.adaptive.navigation)

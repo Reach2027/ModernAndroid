@@ -39,13 +39,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import com.reach.base.ui.common.devicepreview.DevicePreviews
-import com.reach.modernandroid.core.data.datastore.model.DarkThemeConfig
-import com.reach.modernandroid.core.data.datastore.model.UserSetting
+import com.reach.modernandroid.core.data.datastore.model.UserSettings
 import com.reach.modernandroid.core.ui.common.AppPreview
 import com.reach.modernandroid.core.ui.common.AppUiState
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
@@ -70,9 +70,9 @@ private fun SettingsRoute(
 
     SettingsScreen(
         onBackClick = { appUiState.getNavController().navigateUp() },
-        settings = settings,
         onDynamicColorChange = { viewModel.setDynamicTheme(it) },
         onDarkModeClick = { viewModel.setDarkThemeConfig(it) },
+        settings = settings,
     )
 }
 
@@ -80,9 +80,9 @@ private fun SettingsRoute(
 @Composable
 private fun SettingsScreen(
     onBackClick: () -> Unit,
-    settings: UserSetting,
     onDynamicColorChange: (Boolean) -> Unit,
     onDarkModeClick: (Int) -> Unit,
+    settings: UserSettings,
 ) {
     Column {
         AppTopBarWithBack(
@@ -90,18 +90,20 @@ private fun SettingsScreen(
             onBackClick = onBackClick,
         )
         ThemeSetting(
-            settings = settings,
             onDynamicColorChange = onDynamicColorChange,
             onDarkModeClick = onDarkModeClick,
+            settings = settings,
+            darkModes = stringArrayResource(id = R.array.dark_modes),
         )
     }
 }
 
 @Composable
 private fun ThemeSetting(
-    settings: UserSetting,
     onDynamicColorChange: (Boolean) -> Unit,
     onDarkModeClick: (Int) -> Unit,
+    settings: UserSettings,
+    darkModes: Array<String>,
 ) {
     var showDarkModeDialog by rememberSaveable { mutableStateOf(false) }
 
@@ -118,7 +120,7 @@ private fun ThemeSetting(
         Text(text = stringResource(id = R.string.dark_mode))
         Spacer(modifier = Modifier.weight(1f))
         Text(
-            text = settings.darkThemeConfig.name,
+            text = darkModes[settings.darkThemeConfig.ordinal],
             modifier = Modifier
                 .clickable { showDarkModeDialog = true }
                 .padding(4.dp),
@@ -134,10 +136,10 @@ private fun ThemeSetting(
 
     if (showDarkModeDialog) {
         DarkModeDialog(
-            selectedOption = settings.darkThemeConfig.ordinal,
+            darkModes = darkModes,
             onDismissRequest = { showDarkModeDialog = false },
-            options = DarkThemeConfig.entries.map { it.name },
             onDarkModeClick = onDarkModeClick,
+            selectedMode = settings.darkThemeConfig.ordinal,
         )
     }
 }
@@ -147,7 +149,7 @@ private fun SettingItem(content: @Composable RowScope.() -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(96.dp)
+            .height(90.dp)
             .padding(horizontal = 16.dp),
         verticalAlignment = Alignment.CenterVertically,
         content = content,
@@ -157,10 +159,10 @@ private fun SettingItem(content: @Composable RowScope.() -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DarkModeDialog(
-    selectedOption: Int,
+    darkModes: Array<String>,
     onDismissRequest: () -> Unit,
-    options: List<String>,
     onDarkModeClick: (Int) -> Unit,
+    selectedMode: Int,
 ) {
     BasicAlertDialog(onDismissRequest = onDismissRequest) {
         Card(modifier = Modifier.fillMaxWidth()) {
@@ -180,7 +182,7 @@ fun DarkModeDialog(
                 )
             }
 
-            options.forEachIndexed { index, str ->
+            darkModes.forEachIndexed { index, str ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -193,7 +195,7 @@ fun DarkModeDialog(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     RadioButton(
-                        selected = index == selectedOption,
+                        selected = index == selectedMode,
                         onClick = {
                             onDismissRequest()
                             onDarkModeClick(index)
@@ -212,9 +214,9 @@ private fun SettingsScreenPreview() {
     AppPreview {
         SettingsScreen(
             onBackClick = { },
-            settings = UserSetting(),
             onDynamicColorChange = {},
             onDarkModeClick = {},
+            settings = UserSettings(),
         )
     }
 }

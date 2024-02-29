@@ -31,6 +31,7 @@ import com.reach.modernandroid.core.ui.common.navigation.AppRoute
 import com.reach.modernandroid.core.ui.common.navigation.screenComposable
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.core.ui.design.theme.AppTheme
+import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
 fun NavGraphBuilder.albumRoute() {
@@ -44,6 +45,7 @@ fun NavGraphBuilder.albumRoute() {
 @Composable
 private fun AlbumRoute(
     appUiState: AppUiState = koinInject(),
+    viewModel: AlbumViewModel = koinNavViewModel(),
 ) {
     AlbumScreen(
         onBackClick = { appUiState.getNavController().navigateUp() },

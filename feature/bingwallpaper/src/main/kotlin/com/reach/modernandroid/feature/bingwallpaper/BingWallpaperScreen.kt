@@ -38,6 +38,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -150,8 +151,21 @@ private fun BingWallpaperScreen(
                         BingWallpaperItem(items[index])
                     }
 
-                    item(span = StaggeredGridItemSpan.FullLine) {
-                        Spacer(modifier = Modifier.height(32.dp))
+                    if (items.itemCount > 0) {
+                        item(span = StaggeredGridItemSpan.FullLine) {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                            ) {
+                                HorizontalDivider()
+                                Spacer(modifier = Modifier.height(8.dp))
+                                Text(
+                                    text = "这是底线",
+                                    style = MaterialTheme.typography.labelMedium,
+                                )
+                                Spacer(modifier = Modifier.height(32.dp))
+                            }
+                        }
                     }
                 }
             }

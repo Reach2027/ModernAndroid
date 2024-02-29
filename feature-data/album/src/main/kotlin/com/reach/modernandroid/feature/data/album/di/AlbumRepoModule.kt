@@ -14,23 +14,13 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.feature.data.album.model
+package com.reach.modernandroid.feature.data.album.di
 
-import android.net.Uri
+import com.reach.modernandroid.feature.data.album.source.LocalImagePagingSource
+import org.koin.core.module.dsl.factoryOf
+import org.koin.dsl.module
 
-data class LocalPictureModel(
-    val id: String,
-    val uri: Uri,
-    val modifierDate: Long,
-    val albumId: Long,
-    val albumName: String,
-    var title: String = "",
-)
+val albumRepoModule = module {
 
-data class LocalAlbumInfo(
-    val albumId: Long,
-    val albumName: String,
-    val coverId: String,
-    val coverUri: Uri,
-    val size: Int,
-)
+    factoryOf(::LocalImagePagingSource)
+}

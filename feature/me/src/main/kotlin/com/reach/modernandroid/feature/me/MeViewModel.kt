@@ -21,7 +21,7 @@ import androidx.lifecycle.viewModelScope
 import com.reach.base.android.common.devicestate.DeviceState
 import com.reach.base.android.common.devicestate.network.NetworkType
 import com.reach.base.jvm.common.Result
-import com.reach.modernandroid.feature.data.bingwallpaper.BingWallpaperRepository
+import com.reach.modernandroid.feature.data.bingwallpaper.BingWallpaperRepo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -36,7 +36,7 @@ internal data class MeUiState(
 
 internal class MeViewModel(
     private val deviceState: DeviceState,
-    private val bingWallpaperRepo: BingWallpaperRepository,
+    private val bingWallpaperRepo: BingWallpaperRepo,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(MeUiState())

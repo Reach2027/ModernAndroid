@@ -27,7 +27,7 @@ import com.reach.modernandroid.feature.data.bingwallpaper.source.BingWallpaperPa
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 
-interface BingWallpaperRepository {
+interface BingWallpaperRepo {
 
     fun getTodayWallpaper(): Flow<Result<BingWallpaperModel>>
 
@@ -38,7 +38,7 @@ internal class DefaultBingWallpaperRepo(
     private val bingWallpaperApi: BingWallpaperApi,
     private val bingWallpaperPagingSource: BingWallpaperPagingSource,
     private val dispatcher: CoroutineDispatcher,
-) : BingWallpaperRepository {
+) : BingWallpaperRepo {
 
     override fun getTodayWallpaper(): Flow<Result<BingWallpaperModel>> =
         flowResult(dispatcher) {

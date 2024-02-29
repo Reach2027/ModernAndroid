@@ -27,29 +27,42 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.reach.modernandroid.core.data.datastore.model.DarkThemeConfig
 import com.reach.modernandroid.core.ui.design.theme.AppTheme
-import com.reach.modernandroid.feature.data.settings.SettingsRepository
 import com.reach.modernandroid.ui.App
-import org.koin.android.ext.android.inject
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
-    private val settingsRepo: SettingsRepository by inject()
+    private val viewModel: MainActivityViewModel by viewModel()
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val splashScreen = installSplashScreen()
+
+        var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState())
+
+        lifecycleScope.launch {
+            viewModel.uiState.collect { uiState = it }
+        }
+
+        splashScreen.setKeepOnScreenCondition {
+            uiState.isLoading
+        }
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         enableEdgeToEdge()
 
         setContent {
-            val settings by settingsRepo.userSetting.collectAsStateWithLifecycle()
-
-            val darkTheme = when (settings.darkThemeConfig) {
+            val darkTheme = when (uiState.settings.darkThemeConfig) {
                 DarkThemeConfig.Light -> false
                 DarkThemeConfig.Dark -> true
                 DarkThemeConfig.FollowSystem -> isSystemInDarkTheme()
@@ -70,7 +83,7 @@ class MainActivity : ComponentActivity() {
             }
 
             AppTheme(
-                dynamicTheme = settings.dynamicColor,
+                dynamicTheme = uiState.settings.dynamicColor,
                 darkTheme = darkTheme,
             ) {
                 App(windowSizeClass = calculateWindowSizeClass(activity = this))

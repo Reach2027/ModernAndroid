@@ -14,8 +14,22 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.feature.data.album
+package com.reach.modernandroid.feature.data.album.model
 
-interface LocalPictureRepository
+import android.net.Uri
 
-internal class DefaultLocalPictureRepository() : LocalPictureRepository
+data class LocalImageModel(
+    val id: String,
+    val uri: Uri,
+    val modifierTime: Long,
+    val albumId: Long,
+    val albumName: String,
+)
+
+data class LocalAlbumInfo(
+    val albumId: Long,
+    val albumName: String,
+    val coverId: String,
+    val coverUri: Uri,
+    val size: Int,
+)

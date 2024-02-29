@@ -27,5 +27,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.baseJvm.common)
 
+    implementation(libs.androidx.paging.common)
 }

@@ -18,16 +18,16 @@ package com.reach.modernandroid.feature.data.settings.di
 
 import com.reach.base.jvm.common.di.QualifierCoroutineScope
 import com.reach.modernandroid.core.data.datastore.di.dataStoreModule
-import com.reach.modernandroid.feature.data.settings.DefaultSettingsRepository
-import com.reach.modernandroid.feature.data.settings.SettingsRepository
+import com.reach.modernandroid.feature.data.settings.DefaultSettingsRepo
+import com.reach.modernandroid.feature.data.settings.SettingsRepo
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 
 val settingsRepoModule = module {
     includes(dataStoreModule)
 
-    factory<SettingsRepository> {
-        DefaultSettingsRepository(
+    factory<SettingsRepo> {
+        DefaultSettingsRepo(
             get(),
             get(qualifier(QualifierCoroutineScope.AppIo)),
         )

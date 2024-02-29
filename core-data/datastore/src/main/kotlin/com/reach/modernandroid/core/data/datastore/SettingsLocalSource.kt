@@ -18,7 +18,7 @@ package com.reach.modernandroid.core.data.datastore
 
 import androidx.datastore.core.DataStore
 import com.reach.modernandroid.core.data.datastore.model.DarkThemeConfig
-import com.reach.modernandroid.core.data.datastore.model.UserSetting
+import com.reach.modernandroid.core.data.datastore.model.UserSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,7 +27,7 @@ import kotlinx.coroutines.flow.stateIn
 
 interface SettingsLocalSource {
 
-    val settings: StateFlow<UserSetting>
+    val settings: StateFlow<UserSettings>
 
     suspend fun setDynamicTheme(dynamicTheme: Boolean)
 
@@ -39,8 +39,9 @@ internal class DefaultSettingsLocalSource(
     coroutineScope: CoroutineScope,
 ) : SettingsLocalSource {
 
-    override val settings: StateFlow<UserSetting> = dataStore.data.map {
-        UserSetting(
+    override val settings: StateFlow<UserSettings> = dataStore.data.map {
+        UserSettings(
+            isLoading = false,
             dynamicColor = it.dynamicTheme,
             darkThemeConfig = when (it.darkThemeConfig) {
                 1 -> DarkThemeConfig.Light
@@ -51,7 +52,7 @@ internal class DefaultSettingsLocalSource(
     }.stateIn(
         scope = coroutineScope,
         started = SharingStarted.Lazily,
-        initialValue = UserSetting(),
+        initialValue = UserSettings(),
     )
 
     override suspend fun setDynamicTheme(dynamicTheme: Boolean) {
