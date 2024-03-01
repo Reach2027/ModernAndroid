@@ -13,23 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.reach.compose.library)
-}
 
-android {
-    namespace = "com.reach.modernandroid.core.ui.common"
+package com.reach.base.android.common.util
 
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
-    }
-}
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.provider.Settings
 
-dependencies {
-    implementation(projects.baseJvm.common)
-    implementation(projects.baseAndroid.common)
-    implementation(projects.coreUi.design)
-
-    implementation(libs.accompanist.permissions)
+fun Context.toAppDetailSettings() {
+    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+    intent.data = Uri.fromParts("package", packageName, null)
+    startActivity(intent)
 }

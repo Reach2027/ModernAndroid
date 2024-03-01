@@ -16,6 +16,7 @@
 
 package com.reach.modernandroid.feature.album
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -38,25 +39,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.paging.LoadState
+import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import coil.request.CachePolicy
+import coil.request.ImageRequest
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.reach.base.android.common.util.getReadImagePermission
+import com.reach.base.ui.common.devicepreview.previewWindowSizeClass
 import com.reach.base.ui.common.toDp
 import com.reach.base.ui.common.widget.SkeletonAsyncImage
 import com.reach.modernandroid.core.ui.common.AppPreview
 import com.reach.modernandroid.core.ui.common.AppUiState
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
 import com.reach.modernandroid.core.ui.common.navigation.screenComposable
+import com.reach.modernandroid.core.ui.common.permission.RequestPermissionScreen
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
@@ -68,16 +78,19 @@ fun NavGraphBuilder.albumRoute() {
     }
 }
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun AlbumRoute(
     appUiState: AppUiState = koinInject(),
     viewModel: AlbumViewModel = koinNavViewModel(),
 ) {
-    AlbumScreen(
-        onBackClick = { appUiState.getNavController().navigateUp() },
-        windowSizeClass = appUiState.getWindowSizeClass(),
-        localImages = viewModel.localImages,
-    )
+    RequestPermissionScreen(permission = getReadImagePermission()) {
+        AlbumScreen(
+            onBackClick = { appUiState.getNavController().navigateUp() },
+            windowSizeClass = appUiState.getWindowSizeClass(),
+            localImages = viewModel.localImages,
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -143,7 +156,11 @@ private fun LocalImageItem(localImageModel: LocalImageModel?) {
 
     Box {
         SkeletonAsyncImage(
-            model = localImageModel.uri,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(localImageModel.uri)
+                .memoryCachePolicy(CachePolicy.DISABLED)
+                .diskCachePolicy(CachePolicy.DISABLED)
+                .build(),
             contentDescription = "",
             modifier = Modifier
                 .fillMaxWidth()
@@ -160,5 +177,27 @@ private fun LocalImageItem(localImageModel: LocalImageModel?) {
 @Composable
 private fun AlbumScreenPreview() {
     AppPreview {
+        val previewData = listOf(
+            LocalImageModel(
+                id = "1",
+                uri = Uri.parse("a"),
+                modifierTime = 0L,
+                albumId = 11L,
+                albumName = "Album",
+            ),
+        )
+        val pagingData = PagingData.from(
+            data = previewData,
+            sourceLoadStates = LoadStates(
+                refresh = LoadState.NotLoading(false),
+                prepend = LoadState.NotLoading(false),
+                append = LoadState.NotLoading(false),
+            ),
+        )
+        AlbumScreen(
+            onBackClick = { },
+            windowSizeClass = previewWindowSizeClass(),
+            localImages = flow { emit(pagingData) },
+        )
     }
 }

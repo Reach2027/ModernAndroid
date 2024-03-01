@@ -13,23 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-plugins {
-    alias(libs.plugins.reach.compose.library)
-}
 
-android {
-    namespace = "com.reach.modernandroid.core.ui.common"
+package com.reach.base.android.common.util
 
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+import android.os.Build
+
+fun getReadImagePermission() =
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        android.Manifest.permission.READ_MEDIA_IMAGES
+    } else {
+        android.Manifest.permission.READ_EXTERNAL_STORAGE
     }
-}
-
-dependencies {
-    implementation(projects.baseJvm.common)
-    implementation(projects.baseAndroid.common)
-    implementation(projects.coreUi.design)
-
-    implementation(libs.accompanist.permissions)
-}

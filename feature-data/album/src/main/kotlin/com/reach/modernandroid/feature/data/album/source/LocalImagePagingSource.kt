@@ -27,7 +27,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 
-internal const val LIMIT = 600
+internal const val LIMIT = 500
 
 internal class LocalImagePagingSource(
     private val application: Application,
