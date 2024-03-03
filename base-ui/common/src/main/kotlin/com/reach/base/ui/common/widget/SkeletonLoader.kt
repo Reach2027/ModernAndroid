@@ -36,7 +36,7 @@ fun SkeletonLoader(
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
     val alphaAni by infiniteTransition.animateFloat(
-        initialValue = 0.2f,
+        initialValue = 0.3f,
         targetValue = 1f,
         animationSpec = infiniteRepeatable(
             animation = tween(

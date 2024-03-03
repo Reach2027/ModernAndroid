@@ -17,6 +17,7 @@
 package com.reach.modernandroid.feature.album
 
 import android.net.Uri
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -30,13 +31,16 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -51,13 +55,12 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.reach.base.android.common.util.getReadImagePermission
 import com.reach.base.ui.common.devicepreview.previewWindowSizeClass
 import com.reach.base.ui.common.toDp
-import com.reach.base.ui.common.widget.SkeletonAsyncImage
 import com.reach.modernandroid.core.ui.common.AppPreview
 import com.reach.modernandroid.core.ui.common.AppUiState
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
@@ -78,7 +81,6 @@ fun NavGraphBuilder.albumRoute() {
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun AlbumRoute(
     appUiState: AppUiState = koinInject(),
@@ -102,8 +104,8 @@ private fun AlbumScreen(
 ) {
     val fixedCount = when (windowSizeClass.widthSizeClass) {
         WindowWidthSizeClass.Compact -> 3
-        WindowWidthSizeClass.Medium -> 5
-        else -> 6
+        WindowWidthSizeClass.Medium -> 4
+        else -> 5
     }
 
     val items: LazyPagingItems<LocalImageModel> = localImages.collectAsLazyPagingItems()
@@ -155,7 +157,7 @@ private fun LocalImageItem(localImageModel: LocalImageModel?) {
     if (localImageModel == null) return
 
     Box {
-        SkeletonAsyncImage(
+        AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(localImageModel.uri)
                 .memoryCachePolicy(CachePolicy.DISABLED)
@@ -163,9 +165,15 @@ private fun LocalImageItem(localImageModel: LocalImageModel?) {
                 .build(),
             contentDescription = "",
             modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f),
-            placeHolderModifier = Modifier
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                            MaterialTheme.colorScheme.surfaceVariant,
+                        ),
+                    ),
+                    shape = RectangleShape,
+                )
                 .fillMaxWidth()
                 .aspectRatio(1f),
             contentScale = ContentScale.Crop,

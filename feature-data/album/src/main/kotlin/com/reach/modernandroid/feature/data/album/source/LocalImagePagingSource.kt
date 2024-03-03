@@ -65,9 +65,9 @@ internal class LocalImagePagingSource(
 
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
             val bundle = Bundle().apply {
-                putString(
+                putStringArray(
                     ContentResolver.QUERY_ARG_SORT_COLUMNS,
-                    MediaStore.Images.ImageColumns.DATE_MODIFIED,
+                    arrayOf(MediaStore.Images.ImageColumns.DATE_MODIFIED),
                 )
                 putInt(
                     ContentResolver.QUERY_ARG_SORT_DIRECTION,
