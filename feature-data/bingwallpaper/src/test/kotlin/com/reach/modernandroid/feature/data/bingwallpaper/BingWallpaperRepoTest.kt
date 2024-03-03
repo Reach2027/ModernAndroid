@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.data.feature.bingwallpaper
+package com.reach.modernandroid.feature.data.bingwallpaper
 
 import kotlinx.coroutines.test.runTest
 import kotlin.test.Test
