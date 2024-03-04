@@ -20,9 +20,11 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,6 +39,10 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -61,11 +67,13 @@ import coil.request.ImageRequest
 import com.reach.base.android.common.util.getReadImagePermission
 import com.reach.base.ui.common.devicepreview.previewWindowSizeClass
 import com.reach.base.ui.common.toDp
+import com.reach.base.ui.common.widget.VerticalTransparentBg
 import com.reach.modernandroid.core.ui.common.AppPreview
-import com.reach.modernandroid.core.ui.common.AppUiState
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
 import com.reach.modernandroid.core.ui.common.navigation.screenComposable
 import com.reach.modernandroid.core.ui.common.permission.RequestPermissionScreen
+import com.reach.modernandroid.core.ui.common.state.AppUiState
+import com.reach.modernandroid.core.ui.common.state.StatusDarkMode
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 import kotlinx.coroutines.flow.Flow
@@ -86,9 +94,14 @@ private fun AlbumRoute(
     appUiState: AppUiState = koinInject(),
     viewModel: AlbumViewModel = koinNavViewModel(),
 ) {
-    RequestPermissionScreen(permission = getReadImagePermission()) {
+    RequestPermissionScreen(
+        permission = getReadImagePermission(),
+        requestTitle = R.string.request_permission_title,
+        onBackClick = { appUiState.getNavController().navigateUp() },
+    ) {
         AlbumScreen(
             onBackClick = { appUiState.getNavController().navigateUp() },
+            onStatusDarkModeSet = { appUiState.setStatusDarkMode(it) },
             windowSizeClass = appUiState.getWindowSizeClass(),
             localImages = viewModel.localImages,
         )
@@ -99,6 +112,7 @@ private fun AlbumRoute(
 @Composable
 private fun AlbumScreen(
     onBackClick: () -> Unit,
+    onStatusDarkModeSet: (StatusDarkMode) -> Unit,
     windowSizeClass: WindowSizeClass,
     localImages: Flow<PagingData<LocalImageModel>>,
 ) {
@@ -111,6 +125,20 @@ private fun AlbumScreen(
     val items: LazyPagingItems<LocalImageModel> = localImages.collectAsLazyPagingItems()
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
+    val topBarContentBeWhite by remember {
+        derivedStateOf { scrollBehavior.state.overlappedFraction > 0.3f }
+    }
+
+    DisposableEffect(topBarContentBeWhite) {
+        if (topBarContentBeWhite) {
+            onStatusDarkModeSet(StatusDarkMode.Dark)
+        } else {
+            onStatusDarkModeSet(StatusDarkMode.FollowTheme)
+        }
+
+        onDispose { onStatusDarkModeSet(StatusDarkMode.FollowTheme) }
+    }
 
     val systemBarH = WindowInsets.systemBars.getTop(LocalDensity.current).toDp()
 
@@ -140,15 +168,30 @@ private fun AlbumScreen(
             }
         }
 
-        AppTopBarWithBack(
-            title = { Text(text = stringResource(id = R.string.photos)) },
-            onBackClick = onBackClick,
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                scrolledContainerColor = Color.Transparent,
-            ),
-            scrollBehavior = scrollBehavior,
-        )
+        Box(modifier = Modifier.height(IntrinsicSize.Max)) {
+            if (topBarContentBeWhite) {
+                VerticalTransparentBg(modifier = Modifier.fillMaxHeight())
+            }
+            AppTopBarWithBack(
+                title = { Text(text = stringResource(id = R.string.photos)) },
+                onBackClick = onBackClick,
+                colors = if (topBarContentBeWhite) {
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                        scrolledContainerColor = Color.Transparent,
+                        navigationIconContentColor = Color.White,
+                        titleContentColor = Color.White,
+                        actionIconContentColor = Color.White,
+                    )
+                } else {
+                    TopAppBarDefaults.topAppBarColors(
+                        containerColor = Color.Transparent,
+                        scrolledContainerColor = Color.Transparent,
+                    )
+                },
+                scrollBehavior = scrollBehavior,
+            )
+        }
     }
 }
 
@@ -204,6 +247,7 @@ private fun AlbumScreenPreview() {
         )
         AlbumScreen(
             onBackClick = { },
+            onStatusDarkModeSet = { },
             windowSizeClass = previewWindowSizeClass(),
             localImages = flow { emit(pagingData) },
         )

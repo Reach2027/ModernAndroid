@@ -22,7 +22,7 @@
         <item name="android:windowLightNavigationBar" tools:targetApi="27">true</item>
     </style>
 
-    <style name="Theme.ModernAndroid.Splash" parent="Theme.SplashScreen">
+    <style name="Theme.ModernAndroid.Splash" parent="Adjusted.ModernAndroid.Splash">
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
         <item name="postSplashScreenTheme">@style/Theme.ModernAndroid</item>
     </style>

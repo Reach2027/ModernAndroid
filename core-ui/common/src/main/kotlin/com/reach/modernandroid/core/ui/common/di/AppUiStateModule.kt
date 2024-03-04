@@ -18,8 +18,8 @@ package com.reach.modernandroid.core.ui.common.di
 
 import com.reach.base.jvm.common.di.QualifierCoroutineScope
 import com.reach.base.jvm.common.di.coroutineScopeModule
-import com.reach.modernandroid.core.ui.common.AppUiState
-import com.reach.modernandroid.core.ui.common.DefaultAppUiState
+import com.reach.modernandroid.core.ui.common.state.AppUiState
+import com.reach.modernandroid.core.ui.common.state.DefaultAppUiState
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 

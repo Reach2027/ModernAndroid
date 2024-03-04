@@ -23,6 +23,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -44,6 +45,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -67,12 +69,15 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.reach.base.ui.common.devicepreview.DevicePreviews
+import com.reach.base.ui.common.toDp
 import com.reach.base.ui.common.widget.SkeletonAsyncImage
 import com.reach.base.ui.common.widget.SkeletonLoader
+import com.reach.base.ui.common.widget.VerticalTransparentBg
 import com.reach.modernandroid.core.ui.common.AppPreview
-import com.reach.modernandroid.core.ui.common.AppUiState
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
 import com.reach.modernandroid.core.ui.common.navigation.screenComposable
+import com.reach.modernandroid.core.ui.common.state.AppUiState
+import com.reach.modernandroid.core.ui.common.state.StatusDarkMode
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.core.ui.design.animation.widgetEnter
 import com.reach.modernandroid.core.ui.design.animation.widgetExit
@@ -95,6 +100,7 @@ private fun BingWallpaperRoute(
 ) {
     BingWallpaperScreen(
         onBackClick = { appUiState.getNavController().navigateUp() },
+        onStatusDarkModeSet = { appUiState.setStatusDarkMode(it) },
         bingWallPapers = viewModel.bingWallpapers,
     )
 }
@@ -103,70 +109,93 @@ private fun BingWallpaperRoute(
 @Composable
 private fun BingWallpaperScreen(
     onBackClick: () -> Unit,
+    onStatusDarkModeSet: (StatusDarkMode) -> Unit,
     bingWallPapers: Flow<PagingData<BingWallpaperModel>>,
 ) {
     val items: LazyPagingItems<BingWallpaperModel> = bingWallPapers.collectAsLazyPagingItems()
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val collapsedFraction by remember {
+    val statusContentBeWhite by remember {
         derivedStateOf {
-            scrollBehavior.state.collapsedFraction
+            scrollBehavior.state.collapsedFraction > 0.9f
         }
+    }
+
+    DisposableEffect(statusContentBeWhite) {
+        if (statusContentBeWhite) {
+            onStatusDarkModeSet(StatusDarkMode.Dark)
+        } else {
+            onStatusDarkModeSet(StatusDarkMode.FollowTheme)
+        }
+        onDispose { onStatusDarkModeSet(StatusDarkMode.FollowTheme) }
     }
 
     val systemBarH = WindowInsets.systemBars.getTop(LocalDensity.current)
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        AppTopBarWithBack(
-            title = { Text(text = stringResource(id = R.string.bing_wallpaper)) },
-            onBackClick = onBackClick,
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
-            windowInsets = WindowInsets(0, (systemBarH * (1f - collapsedFraction)).toInt(), 0, 0),
-            scrollBehavior = scrollBehavior,
-        )
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            AppTopBarWithBack(
+                title = { Text(text = stringResource(id = R.string.bing_wallpaper)) },
+                onBackClick = onBackClick,
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
+                windowInsets = WindowInsets(
+                    0,
+                    (systemBarH * (1f - scrollBehavior.state.collapsedFraction)).toInt(),
+                    0,
+                    0,
+                ),
+                scrollBehavior = scrollBehavior,
+            )
 
-        LazyVerticalStaggeredGrid(
-            columns = StaggeredGridCells.Adaptive(minSize = 390.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            verticalItemSpacing = 16.dp,
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        ) {
-            when (items.loadState.refresh) {
-                is LoadState.Loading -> {
-                    items(count = 8) {
-                        BingWallPaperItemLoading()
-                    }
-                }
-
-                is LoadState.Error -> {}
-
-                is LoadState.NotLoading -> {
-                    items(
-                        count = items.itemCount,
-                        key = items.itemKey { it.imageUrl },
-                    ) { index ->
-                        BingWallpaperItem(items[index])
+            LazyVerticalStaggeredGrid(
+                columns = StaggeredGridCells.Adaptive(minSize = 390.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp),
+                verticalItemSpacing = 16.dp,
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            ) {
+                when (items.loadState.refresh) {
+                    is LoadState.Loading -> {
+                        items(count = 8) {
+                            BingWallPaperItemLoading()
+                        }
                     }
 
-                    if (items.itemCount > 0) {
-                        item(span = StaggeredGridItemSpan.FullLine) {
-                            Column(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                            ) {
-                                HorizontalDivider()
-                                Spacer(modifier = Modifier.height(8.dp))
-                                Text(
-                                    text = "这是底线",
-                                    style = MaterialTheme.typography.labelMedium,
-                                )
-                                Spacer(modifier = Modifier.height(32.dp))
+                    is LoadState.Error -> {}
+
+                    is LoadState.NotLoading -> {
+                        items(
+                            count = items.itemCount,
+                            key = items.itemKey { it.imageUrl },
+                        ) { index ->
+                            BingWallpaperItem(items[index])
+                        }
+
+                        if (items.itemCount > 0) {
+                            item(span = StaggeredGridItemSpan.FullLine) {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                ) {
+                                    HorizontalDivider()
+                                    Spacer(modifier = Modifier.height(8.dp))
+                                    Text(
+                                        text = "这是底线",
+                                        style = MaterialTheme.typography.labelMedium,
+                                    )
+                                    Spacer(modifier = Modifier.height(32.dp))
+                                }
                             }
                         }
                     }
                 }
             }
+        }
+
+        if (statusContentBeWhite) {
+            VerticalTransparentBg(
+                modifier = Modifier.height(systemBarH.toDp()),
+            )
         }
     }
 }
@@ -265,6 +294,7 @@ private fun BingWallpaperScreenPreview() {
 
         BingWallpaperScreen(
             onBackClick = {},
+            onStatusDarkModeSet = {},
             bingWallPapers = flow { emit(pagingData) },
         )
     }

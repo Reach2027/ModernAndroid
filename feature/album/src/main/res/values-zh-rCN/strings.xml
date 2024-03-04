@@ -15,7 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <string name="photos">Photos</string>
-
-    <string name="request_permission_title">Photos need read images permission</string>
+    <string name="photos">照片</string>
+    <string name="request_permission_title">照片需要读取照片权限</string>
 </resources>

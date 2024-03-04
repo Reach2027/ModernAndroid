@@ -14,27 +14,10 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.core.ui.common.navigation
+package com.reach.modernandroid.core.ui.common.state
 
-object AppRoute {
-    const val APP = "route_app"
-
-    // Top destination
-    const val ME = "route_me"
-    const val MORE = "route_more"
-
-    // Feature
-    const val SETTINGS = "route_settings"
-
-    const val ALBUM = "route_album"
-
-    const val CAMERAX = "route_camerax"
-
-    const val LOTTIE = "route_lottie"
-
-    const val SKELETON_LOADER = "route_skeleton_loader"
-
-    const val BING_WALLPAPER = "route_bing_wallpaper"
-
-    internal val fullScreenRoute = arrayOf(ME, BING_WALLPAPER, ALBUM)
+enum class StatusDarkMode {
+    FollowTheme,
+    Light,
+    Dark,
 }

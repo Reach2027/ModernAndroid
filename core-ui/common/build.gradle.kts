@@ -29,6 +29,7 @@ android {
 dependencies {
     implementation(projects.baseJvm.common)
     implementation(projects.baseAndroid.common)
+    implementation(projects.baseUi.common)
     implementation(projects.coreUi.design)
 
     implementation(libs.accompanist.permissions)

@@ -37,8 +37,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.reach.modernandroid.core.ui.common.AppUiState
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
+import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.core.ui.design.animation.topDestEnterTransition
 import com.reach.modernandroid.core.ui.design.animation.topDestExitTransition
 import com.reach.modernandroid.core.ui.design.theme.AppTheme

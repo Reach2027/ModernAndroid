@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.core.ui.common
+package com.reach.modernandroid.core.ui.common.state
 
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.navigation.NavHostController
@@ -30,16 +30,19 @@ interface AppUiState {
 
     val isFullScreen: StateFlow<Boolean>
 
-    fun setup(
-        windowSizeClass: WindowSizeClass,
-        navController: NavHostController,
-    )
+    val statusDarkMode: StateFlow<StatusDarkMode>
 
     fun getWindowSizeClass(): WindowSizeClass
 
+    fun setWindowSizeClass(windowSizeClass: WindowSizeClass)
+
     fun getNavController(): NavHostController
 
+    fun setNavController(navController: NavHostController)
+
     fun setFullScreen(fullScreen: Boolean)
+
+    fun setStatusDarkMode(statusDarkMode: StatusDarkMode)
 }
 
 internal class DefaultAppUiState(
@@ -53,13 +56,29 @@ internal class DefaultAppUiState(
     private val _isFullScreen = MutableStateFlow(false)
     override val isFullScreen = _isFullScreen.asStateFlow()
 
+    private val _statusDarkMode = MutableStateFlow(StatusDarkMode.FollowTheme)
+    override val statusDarkMode = _statusDarkMode.asStateFlow()
+
     private var navJob: Job? = null
 
-    override fun setup(
-        windowSizeClass: WindowSizeClass,
-        navController: NavHostController,
-    ) {
-        this.windowSizeClass = windowSizeClass
+    override fun getWindowSizeClass(): WindowSizeClass {
+        return requireNotNull(windowSizeClass)
+    }
+
+    override fun setWindowSizeClass(windowSizeClass: WindowSizeClass) {
+        if (this.windowSizeClass != windowSizeClass) {
+            this.windowSizeClass = windowSizeClass
+        }
+    }
+
+    override fun getNavController(): NavHostController {
+        return requireNotNull(navController)
+    }
+
+    override fun setNavController(navController: NavHostController) {
+        if (this.navController == navController) {
+            return
+        }
         this.navController = navController
 
         navJob?.apply {
@@ -67,7 +86,6 @@ internal class DefaultAppUiState(
                 cancel()
             }
         }
-
         navJob = coroutineScope.launch {
             navController.currentBackStackEntryFlow.collect {
                 val needFullScreen = AppRoute.fullScreenRoute.contains(it.destination.route)
@@ -76,15 +94,11 @@ internal class DefaultAppUiState(
         }
     }
 
-    override fun getWindowSizeClass(): WindowSizeClass {
-        return requireNotNull(windowSizeClass)
-    }
-
-    override fun getNavController(): NavHostController {
-        return requireNotNull(navController)
-    }
-
     override fun setFullScreen(fullScreen: Boolean) {
         _isFullScreen.value = fullScreen
+    }
+
+    override fun setStatusDarkMode(statusDarkMode: StatusDarkMode) {
+        _statusDarkMode.value = statusDarkMode
     }
 }

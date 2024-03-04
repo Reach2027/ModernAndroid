@@ -2,7 +2,7 @@
 
 # Plugin
 agp = "8.2.2"
-androidTools = "31.2.2"
+androidTools = "31.3.0"
 kotlin = "1.9.22"
 ksp = "1.9.22-1.0.17"
 protobufPlugin = "0.9.4"

@@ -36,14 +36,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -52,9 +59,11 @@ import com.reach.base.ui.common.devicepreview.previewWindowSizeClass
 import com.reach.base.ui.common.toDp
 import com.reach.base.ui.common.widget.SkeletonAsyncImage
 import com.reach.base.ui.common.widget.SkeletonLoader
+import com.reach.base.ui.common.widget.VerticalTransparentBg
 import com.reach.modernandroid.core.ui.common.AppPreview
-import com.reach.modernandroid.core.ui.common.AppUiState
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
+import com.reach.modernandroid.core.ui.common.state.AppUiState
+import com.reach.modernandroid.core.ui.common.state.StatusDarkMode
 import com.reach.modernandroid.core.ui.design.AppIcons
 import com.reach.modernandroid.core.ui.design.animation.topDestEnterTransition
 import com.reach.modernandroid.core.ui.design.animation.topDestExitTransition
@@ -79,32 +88,61 @@ private fun MeRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     MeScreen(
-        windowSizeClass = appUiState.getWindowSizeClass(),
-        uiState = uiState,
         onWallpaperClick = { appUiState.getNavController().navigate(AppRoute.BING_WALLPAPER) },
         onSettingsClick = { appUiState.getNavController().navigate(AppRoute.SETTINGS) },
+        onStatusDarkModeSet = { appUiState.setStatusDarkMode(it) },
+        windowSizeClass = appUiState.getWindowSizeClass(),
+        uiState = uiState,
     )
 }
 
 @Composable
 private fun MeScreen(
-    windowSizeClass: WindowSizeClass,
-    uiState: MeUiState,
     onWallpaperClick: () -> Unit,
     onSettingsClick: () -> Unit,
+    onStatusDarkModeSet: (StatusDarkMode) -> Unit,
+    windowSizeClass: WindowSizeClass,
+    uiState: MeUiState,
 ) {
+    var isExpanded by remember { mutableStateOf(false) }
+
     if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded) {
+        isExpanded = true
         MeScreenExpanded(
             uiState = uiState,
             onWallpaperClick = onWallpaperClick,
             onSettingsClick = onSettingsClick,
         )
     } else {
+        isExpanded = false
         MeScreenCompat(
             uiState = uiState,
             onWallpaperClick = onWallpaperClick,
             onSettingsClick = onSettingsClick,
         )
+    }
+
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner, isExpanded) {
+        var observer: LifecycleEventObserver? = null
+        if (isExpanded) {
+            onStatusDarkModeSet(StatusDarkMode.FollowTheme)
+        } else {
+            observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_START) {
+                    onStatusDarkModeSet(StatusDarkMode.Dark)
+                } else if (event == Lifecycle.Event.ON_STOP) {
+                    onStatusDarkModeSet(StatusDarkMode.FollowTheme)
+                }
+            }
+            lifecycleOwner.lifecycle.addObserver(observer)
+        }
+
+        onDispose {
+            if (observer != null) {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
+        }
     }
 }
 
@@ -145,9 +183,9 @@ private fun MeScreenExpanded(
 
 @Composable
 private fun MeScreenCompat(
-    uiState: MeUiState,
     onWallpaperClick: () -> Unit,
     onSettingsClick: () -> Unit,
+    uiState: MeUiState,
 ) {
     Column(
         modifier = Modifier
@@ -189,6 +227,14 @@ private fun PersonInfo(
                     .aspectRatio(16f / 9f),
             )
         }
+        VerticalTransparentBg(
+            modifier = Modifier.height(
+                WindowInsets.systemBars
+                    .getTop(LocalDensity.current)
+                    .toDp(),
+            ),
+        )
+
         Icon(
             imageVector = AppIcons.Settings,
             contentDescription = "",
@@ -224,10 +270,11 @@ private fun DeviceInfo(uiState: MeUiState) {
 private fun MeScreenPreview() {
     AppPreview {
         MeScreen(
-            windowSizeClass = previewWindowSizeClass(),
-            uiState = MeUiState(),
             onWallpaperClick = {},
             onSettingsClick = {},
+            onStatusDarkModeSet = {},
+            windowSizeClass = previewWindowSizeClass(),
+            uiState = MeUiState(),
         )
     }
 }

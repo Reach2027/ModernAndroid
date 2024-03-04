@@ -25,7 +25,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -33,14 +33,19 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.reach.modernandroid.core.data.datastore.model.DarkThemeConfig
+import com.reach.modernandroid.core.ui.common.state.AppUiState
+import com.reach.modernandroid.core.ui.common.state.StatusDarkMode
 import com.reach.modernandroid.core.ui.design.theme.AppTheme
 import com.reach.modernandroid.ui.App
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : ComponentActivity() {
 
     private val viewModel: MainActivityViewModel by viewModel()
+
+    private val appUiState: AppUiState by inject()
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +54,6 @@ class MainActivity : ComponentActivity() {
         val splashScreen = installSplashScreen()
 
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState())
-
         lifecycleScope.launch {
             viewModel.uiState.collect { uiState = it }
         }
@@ -59,7 +63,11 @@ class MainActivity : ComponentActivity() {
         }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
-        enableEdgeToEdge()
+
+        var statusDarkMode: StatusDarkMode by mutableStateOf(StatusDarkMode.FollowTheme)
+        lifecycleScope.launch {
+            appUiState.statusDarkMode.collect { statusDarkMode = it }
+        }
 
         setContent {
             val darkTheme = when (uiState.settings.darkThemeConfig) {
@@ -68,18 +76,23 @@ class MainActivity : ComponentActivity() {
                 DarkThemeConfig.FollowSystem -> isSystemInDarkTheme()
             }
 
-            DisposableEffect(darkTheme) {
+            LaunchedEffect(darkTheme, statusDarkMode) {
                 enableEdgeToEdge(
                     statusBarStyle = SystemBarStyle.auto(
                         Color.TRANSPARENT,
                         Color.TRANSPARENT,
-                    ) { darkTheme },
+                    ) {
+                        when (statusDarkMode) {
+                            StatusDarkMode.FollowTheme -> darkTheme
+                            StatusDarkMode.Light -> false
+                            StatusDarkMode.Dark -> true
+                        }
+                    },
                     navigationBarStyle = SystemBarStyle.auto(
                         LightScrim,
                         DarkScrim,
                     ) { darkTheme },
                 )
-                onDispose {}
             }
 
             AppTheme(
