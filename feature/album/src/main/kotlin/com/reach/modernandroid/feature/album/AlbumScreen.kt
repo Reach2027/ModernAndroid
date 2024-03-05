@@ -17,7 +17,7 @@
 package com.reach.modernandroid.feature.album
 
 import android.net.Uri
-import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -31,9 +31,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -44,12 +45,9 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,12 +59,10 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import coil.compose.AsyncImage
-import coil.request.CachePolicy
-import coil.request.ImageRequest
 import com.reach.base.android.common.util.getReadImagePermission
 import com.reach.base.ui.common.devicepreview.previewWindowSizeClass
 import com.reach.base.ui.common.toDp
+import com.reach.base.ui.common.widget.AsyncLocalImage
 import com.reach.base.ui.common.widget.VerticalTransparentBg
 import com.reach.modernandroid.core.ui.common.AppPreview
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
@@ -101,6 +97,7 @@ private fun AlbumRoute(
     ) {
         AlbumScreen(
             onBackClick = { appUiState.getNavController().navigateUp() },
+            onImageClick = {},
             onStatusDarkModeSet = { appUiState.setStatusDarkMode(it) },
             windowSizeClass = appUiState.getWindowSizeClass(),
             localImages = viewModel.localImages,
@@ -112,6 +109,7 @@ private fun AlbumRoute(
 @Composable
 private fun AlbumScreen(
     onBackClick: () -> Unit,
+    onImageClick: (Uri) -> Unit,
     onStatusDarkModeSet: (StatusDarkMode) -> Unit,
     windowSizeClass: WindowSizeClass,
     localImages: Flow<PagingData<LocalImageModel>>,
@@ -125,7 +123,6 @@ private fun AlbumScreen(
     val items: LazyPagingItems<LocalImageModel> = localImages.collectAsLazyPagingItems()
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
     val topBarContentBeWhite by remember {
         derivedStateOf { scrollBehavior.state.overlappedFraction > 0.3f }
     }
@@ -142,12 +139,15 @@ private fun AlbumScreen(
 
     val systemBarH = WindowInsets.systemBars.getTop(LocalDensity.current).toDp()
 
+    val scrollState: LazyGridState = rememberLazyGridState()
+
     Box(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(fixedCount),
             verticalArrangement = Arrangement.spacedBy(2.dp),
             horizontalArrangement = Arrangement.spacedBy(2.dp),
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            state = scrollState,
         ) {
             item(span = { GridItemSpan(maxCurrentLineSpan) }) {
                 Spacer(modifier = Modifier.height(systemBarH + 64.dp))
@@ -162,7 +162,10 @@ private fun AlbumScreen(
                         count = items.itemCount,
                         key = items.itemKey { it.id },
                     ) { index ->
-                        LocalImageItem(items[index])
+                        LocalImageItem(
+                            onImageClick = onImageClick,
+                            localImageModel = items[index],
+                        )
                     }
                 }
             }
@@ -196,29 +199,22 @@ private fun AlbumScreen(
 }
 
 @Composable
-private fun LocalImageItem(localImageModel: LocalImageModel?) {
+private fun LocalImageItem(
+    onImageClick: (Uri) -> Unit,
+    localImageModel: LocalImageModel?,
+) {
     if (localImageModel == null) return
 
     Box {
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(localImageModel.uri)
-                .memoryCachePolicy(CachePolicy.DISABLED)
-                .diskCachePolicy(CachePolicy.DISABLED)
-                .build(),
+        AsyncLocalImage(
+            model = localImageModel.uri,
             contentDescription = "",
             modifier = Modifier
-                .background(
-                    brush = Brush.verticalGradient(
-                        colors = listOf(
-                            MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                            MaterialTheme.colorScheme.surfaceVariant,
-                        ),
-                    ),
-                    shape = RectangleShape,
-                )
                 .fillMaxWidth()
-                .aspectRatio(1f),
+                .aspectRatio(1f)
+                .clickable {
+                    onImageClick(localImageModel.uri)
+                },
             contentScale = ContentScale.Crop,
         )
     }
@@ -247,6 +243,7 @@ private fun AlbumScreenPreview() {
         )
         AlbumScreen(
             onBackClick = { },
+            onImageClick = {},
             onStatusDarkModeSet = { },
             windowSizeClass = previewWindowSizeClass(),
             localImages = flow { emit(pagingData) },

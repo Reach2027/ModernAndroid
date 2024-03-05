@@ -17,12 +17,12 @@
 package com.reach.modernandroid.feature.album.di
 
 import com.reach.modernandroid.feature.album.AlbumViewModel
-import com.reach.modernandroid.feature.data.album.di.albumRepoModule
+import com.reach.modernandroid.feature.data.album.di.albumDataModule
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
 val albumModule = module {
-    includes(albumRepoModule)
+    includes(albumDataModule)
 
     viewModelOf(::AlbumViewModel)
 }

@@ -29,7 +29,7 @@ import org.koin.core.module.dsl.factoryOf
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 
-val bingWallpaperRepoModule = module {
+val bingWallpaperDataModule = module {
     includes(httpClientModule, dispatcherModule)
 
     factoryOf(::DefaultBingWallpaperApi) {

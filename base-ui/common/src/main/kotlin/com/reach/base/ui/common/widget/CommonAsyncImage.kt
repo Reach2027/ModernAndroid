@@ -30,13 +30,62 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.DefaultAlpha
 import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import coil.compose.AsyncImagePainter
+import coil.compose.DefaultModelEqualityDelegate
+import coil.compose.EqualityDelegate
+
+@Composable
+fun AsyncLocalImage(
+    model: Any?,
+    contentDescription: String?,
+    modifier: Modifier = Modifier,
+    showBg: Boolean = true,
+    alignment: Alignment = Alignment.Center,
+    contentScale: ContentScale = ContentScale.Fit,
+    alpha: Float = DefaultAlpha,
+    colorFilter: ColorFilter? = null,
+    filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
+    clipToBounds: Boolean = true,
+    modelEqualityDelegate: EqualityDelegate = DefaultModelEqualityDelegate,
+) {
+    var isSuccess by remember { mutableStateOf(false) }
+
+    AsyncImage(
+        model = model,
+        contentDescription = contentDescription,
+        modifier = if (showBg && isSuccess.not()) {
+            modifier.background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
+                        MaterialTheme.colorScheme.surfaceVariant,
+                    ),
+                ),
+                shape = RectangleShape,
+            )
+        } else {
+            modifier
+        },
+        onState = { state ->
+            isSuccess = state is AsyncImagePainter.State.Success
+        },
+        alignment = alignment,
+        contentScale = contentScale,
+        alpha = alpha,
+        colorFilter = colorFilter,
+        filterQuality = filterQuality,
+        clipToBounds = clipToBounds,
+        modelEqualityDelegate = modelEqualityDelegate,
+    )
+}
 
 @Composable
 fun SkeletonAsyncImage(
@@ -49,6 +98,8 @@ fun SkeletonAsyncImage(
     alpha: Float = DefaultAlpha,
     colorFilter: ColorFilter? = null,
     filterQuality: FilterQuality = DrawScope.DefaultFilterQuality,
+    clipToBounds: Boolean = true,
+    modelEqualityDelegate: EqualityDelegate = DefaultModelEqualityDelegate,
 ) {
     var isLoading by remember { mutableStateOf(false) }
     var isSuccess by remember { mutableStateOf(false) }
@@ -69,6 +120,8 @@ fun SkeletonAsyncImage(
             alpha = alpha,
             colorFilter = colorFilter,
             filterQuality = filterQuality,
+            clipToBounds = clipToBounds,
+            modelEqualityDelegate = modelEqualityDelegate,
         )
 
         LoadingState(isLoading = isLoading, modifier = placeHolderModifier)

@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 
-package com.reach.modernandroid.feature.data.settings.di
+package com.reach.modernandroid.feature.data.album.di
 
-import com.reach.base.jvm.common.di.QualifierCoroutineScope
-import com.reach.modernandroid.core.data.datastore.di.dataStoreModule
-import com.reach.modernandroid.feature.data.settings.DefaultSettingsRepo
-import com.reach.modernandroid.feature.data.settings.SettingsRepo
-import org.koin.core.qualifier.qualifier
+import com.reach.modernandroid.feature.data.album.DefaultLocalImageRepo
+import com.reach.modernandroid.feature.data.album.LocalImageRepo
+import com.reach.modernandroid.feature.data.album.source.LocalImagePagingSource
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
-val settingsRepoModule = module {
-    includes(dataStoreModule)
+val albumDataModule = module {
 
-    factory<SettingsRepo> {
-        DefaultSettingsRepo(
-            get(),
-            get(qualifier(QualifierCoroutineScope.AppIo)),
-        )
+    factoryOf(::LocalImagePagingSource)
+
+    factoryOf(::DefaultLocalImageRepo) {
+        bind<LocalImageRepo>()
     }
 }

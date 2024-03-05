@@ -20,7 +20,7 @@ import com.reach.modernandroid.MainActivityViewModel
 import com.reach.modernandroid.core.ui.common.di.appUiStateStateModule
 import com.reach.modernandroid.feature.album.di.albumModule
 import com.reach.modernandroid.feature.bingwallpaper.di.bingWallpaperModule
-import com.reach.modernandroid.feature.data.settings.di.settingsRepoModule
+import com.reach.modernandroid.feature.data.settings.di.settingsDataModule
 import com.reach.modernandroid.feature.me.di.meModule
 import com.reach.modernandroid.feature.settings.di.settingsModule
 import org.koin.androidx.viewmodel.dsl.viewModelOf
@@ -28,12 +28,13 @@ import org.koin.dsl.module
 
 internal val appModule = module {
     includes(
+        settingsDataModule,
         appUiStateStateModule,
+
         meModule,
         bingWallpaperModule,
-        settingsModule,
-        settingsRepoModule,
         albumModule,
+        settingsModule,
     )
 
     viewModelOf(::MainActivityViewModel)
