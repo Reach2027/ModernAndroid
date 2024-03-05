@@ -187,17 +187,26 @@ private fun MeScreenCompat(
     onSettingsClick: () -> Unit,
     uiState: MeUiState,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-    ) {
-        PersonInfo(
-            uiState = uiState,
-            onWallpaperClick = onWallpaperClick,
-            onSettingsClick = onSettingsClick,
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+        ) {
+            PersonInfo(
+                uiState = uiState,
+                onWallpaperClick = onWallpaperClick,
+                onSettingsClick = onSettingsClick,
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            DeviceInfo(uiState = uiState)
+        }
+        VerticalTransparentBg(
+            modifier = Modifier.height(
+                WindowInsets.systemBars
+                    .getTop(LocalDensity.current)
+                    .toDp(),
+            ),
         )
-        Spacer(modifier = Modifier.height(16.dp))
-        DeviceInfo(uiState = uiState)
     }
 }
 
@@ -227,13 +236,6 @@ private fun PersonInfo(
                     .aspectRatio(16f / 9f),
             )
         }
-        VerticalTransparentBg(
-            modifier = Modifier.height(
-                WindowInsets.systemBars
-                    .getTop(LocalDensity.current)
-                    .toDp(),
-            ),
-        )
 
         Icon(
             imageVector = AppIcons.Settings,

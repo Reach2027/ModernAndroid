@@ -17,8 +17,6 @@
 package com.reach.modernandroid.core.ui.common.navigation
 
 object AppRoute {
-    const val APP = "route_app"
-
     // Top destination
     const val ME = "route_me"
     const val MORE = "route_more"
@@ -35,6 +33,4 @@ object AppRoute {
     const val SKELETON_LOADER = "route_skeleton_loader"
 
     const val BING_WALLPAPER = "route_bing_wallpaper"
-
-    internal val fullScreenRoute = arrayOf(ME, BING_WALLPAPER, ALBUM)
 }

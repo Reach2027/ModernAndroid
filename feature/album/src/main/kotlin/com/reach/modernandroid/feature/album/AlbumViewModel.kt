@@ -23,12 +23,21 @@ import androidx.paging.cachedIn
 import com.reach.modernandroid.feature.data.album.LocalImageRepo
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
 internal class AlbumViewModel(
     localImageRepo: LocalImageRepo,
 ) : ViewModel() {
 
+    private val _previewIndex = MutableStateFlow(0)
+    val previewIndex = _previewIndex.asStateFlow()
+
     val localImages: Flow<PagingData<LocalImageModel>> =
         localImageRepo.getLocalImages()
             .cachedIn(viewModelScope)
+
+    fun setPreViewIndex(index: Int) {
+        _previewIndex.value = index
+    }
 }

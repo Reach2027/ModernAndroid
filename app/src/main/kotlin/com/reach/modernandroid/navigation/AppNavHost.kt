@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
-import com.reach.modernandroid.feature.album.albumRoute
+import com.reach.modernandroid.feature.album.navigation.albumGraph
 import com.reach.modernandroid.feature.bingwallpaper.bingWallpaperRoute
 import com.reach.modernandroid.feature.camerax.cameraxRoute
 import com.reach.modernandroid.feature.me.meRoute
@@ -52,7 +52,7 @@ internal fun AppNavHost(
 
         bingWallpaperRoute()
 
-        albumRoute()
+        albumGraph()
 
         cameraxRoute()
     }

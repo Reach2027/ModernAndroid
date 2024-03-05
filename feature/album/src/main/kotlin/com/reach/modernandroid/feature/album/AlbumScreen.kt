@@ -17,6 +17,7 @@
 package com.reach.modernandroid.feature.album
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -24,11 +25,14 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.waterfall
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -41,6 +45,7 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -52,7 +57,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavGraphBuilder
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
@@ -65,31 +70,24 @@ import com.reach.base.ui.common.toDp
 import com.reach.base.ui.common.widget.AsyncLocalImage
 import com.reach.base.ui.common.widget.VerticalTransparentBg
 import com.reach.modernandroid.core.ui.common.AppPreview
-import com.reach.modernandroid.core.ui.common.navigation.AppRoute
-import com.reach.modernandroid.core.ui.common.navigation.screenComposable
 import com.reach.modernandroid.core.ui.common.permission.RequestPermissionScreen
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.core.ui.common.state.StatusDarkMode
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
+import com.reach.modernandroid.feature.album.navigation.ROUTE_ALBUM_PREVIEW
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
-fun NavGraphBuilder.albumRoute() {
-    screenComposable(
-        route = AppRoute.ALBUM,
-    ) {
-        AlbumRoute()
-    }
-}
-
 @Composable
-private fun AlbumRoute(
+internal fun AlbumRoute(
     appUiState: AppUiState = koinInject(),
     viewModel: AlbumViewModel = koinNavViewModel(),
 ) {
+    val previewIndex by viewModel.previewIndex.collectAsStateWithLifecycle()
+
     RequestPermissionScreen(
         permission = getReadImagePermission(),
         requestTitle = R.string.request_permission_title,
@@ -97,10 +95,14 @@ private fun AlbumRoute(
     ) {
         AlbumScreen(
             onBackClick = { appUiState.getNavController().navigateUp() },
-            onImageClick = {},
+            onImageClick = {
+                viewModel.setPreViewIndex(it)
+                appUiState.getNavController().navigate(ROUTE_ALBUM_PREVIEW)
+            },
             onStatusDarkModeSet = { appUiState.setStatusDarkMode(it) },
             windowSizeClass = appUiState.getWindowSizeClass(),
             localImages = viewModel.localImages,
+            previewIndex = previewIndex,
         )
     }
 }
@@ -109,10 +111,11 @@ private fun AlbumRoute(
 @Composable
 private fun AlbumScreen(
     onBackClick: () -> Unit,
-    onImageClick: (Uri) -> Unit,
+    onImageClick: (Int) -> Unit,
     onStatusDarkModeSet: (StatusDarkMode) -> Unit,
     windowSizeClass: WindowSizeClass,
     localImages: Flow<PagingData<LocalImageModel>>,
+    previewIndex: Int,
 ) {
     val fixedCount = when (windowSizeClass.widthSizeClass) {
         WindowWidthSizeClass.Compact -> 3
@@ -140,6 +143,9 @@ private fun AlbumScreen(
     val systemBarH = WindowInsets.systemBars.getTop(LocalDensity.current).toDp()
 
     val scrollState: LazyGridState = rememberLazyGridState()
+    LaunchedEffect(previewIndex) {
+        scrollState.animateScrollToItem(previewIndex)
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
@@ -163,7 +169,7 @@ private fun AlbumScreen(
                         key = items.itemKey { it.id },
                     ) { index ->
                         LocalImageItem(
-                            onImageClick = onImageClick,
+                            onImageClick = { onImageClick(index) },
                             localImageModel = items[index],
                         )
                     }
@@ -200,7 +206,7 @@ private fun AlbumScreen(
 
 @Composable
 private fun LocalImageItem(
-    onImageClick: (Uri) -> Unit,
+    onImageClick: () -> Unit,
     localImageModel: LocalImageModel?,
 ) {
     if (localImageModel == null) return
@@ -212,9 +218,7 @@ private fun LocalImageItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .clickable {
-                    onImageClick(localImageModel.uri)
-                },
+                .clickable { onImageClick() },
             contentScale = ContentScale.Crop,
         )
     }
@@ -247,6 +251,7 @@ private fun AlbumScreenPreview() {
             onStatusDarkModeSet = { },
             windowSizeClass = previewWindowSizeClass(),
             localImages = flow { emit(pagingData) },
+            previewIndex = 0,
         )
     }
 }

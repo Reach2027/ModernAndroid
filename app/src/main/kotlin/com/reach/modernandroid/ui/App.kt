@@ -24,7 +24,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -33,11 +32,9 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -78,8 +75,6 @@ private fun AppScreen(
         .value
         ?.destination
 
-    val fullScreen by appUiState.isFullScreen.collectAsStateWithLifecycle()
-
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
@@ -108,11 +103,7 @@ private fun AppScreen(
             }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
-        contentWindowInsets = if (fullScreen) {
-            WindowInsets(0, 0, 0, 0)
-        } else {
-            WindowInsets.statusBars
-        },
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
     ) { padding ->
         AppNavHost(
             modifier = Modifier
