@@ -27,7 +27,8 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 
-internal const val LIMIT = 500
+internal const val PAGE_LIMIT = 500
+internal const val MAX_ITEM = PAGE_LIMIT * 3
 
 internal class LocalImagePagingSource(
     private val application: Application,
@@ -41,11 +42,11 @@ internal class LocalImagePagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LocalImageModel> = try {
         val currentPage = params.key ?: 0
-        val localImages = queryLocalImage(currentPage * LIMIT)
+        val localImages = queryLocalImage(currentPage * PAGE_LIMIT)
         LoadResult.Page(
             data = localImages,
             prevKey = if (currentPage < 1) null else currentPage - 1,
-            nextKey = if (localImages.size < LIMIT) null else currentPage + 1,
+            nextKey = if (localImages.size < PAGE_LIMIT) null else currentPage + 1,
         )
     } catch (e: Exception) {
         LoadResult.Error(e)
@@ -73,7 +74,7 @@ internal class LocalImagePagingSource(
                     ContentResolver.QUERY_ARG_SORT_DIRECTION,
                     ContentResolver.QUERY_SORT_DIRECTION_DESCENDING,
                 )
-                putInt(ContentResolver.QUERY_ARG_LIMIT, LIMIT)
+                putInt(ContentResolver.QUERY_ARG_LIMIT, PAGE_LIMIT)
                 putInt(ContentResolver.QUERY_ARG_OFFSET, offset)
             }
             contentResolver.query(
@@ -88,7 +89,7 @@ internal class LocalImagePagingSource(
                 projection,
                 null,
                 null,
-                "${MediaStore.Images.ImageColumns.DATE_MODIFIED} DESC LIMIT $LIMIT OFFSET $offset",
+                "${MediaStore.Images.ImageColumns.DATE_MODIFIED} DESC LIMIT $PAGE_LIMIT OFFSET $offset",
             )
         }?.use {
             val idIndex = it.getColumnIndexOrThrow(MediaStore.Images.ImageColumns._ID)

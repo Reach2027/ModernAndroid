@@ -17,7 +17,6 @@
 package com.reach.modernandroid.feature.album
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,14 +24,11 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.waterfall
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -80,6 +76,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
+import kotlin.math.max
 
 @Composable
 internal fun AlbumRoute(
@@ -117,10 +114,12 @@ private fun AlbumScreen(
     localImages: Flow<PagingData<LocalImageModel>>,
     previewIndex: Int,
 ) {
-    val fixedCount = when (windowSizeClass.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> 3
-        WindowWidthSizeClass.Medium -> 4
-        else -> 5
+    val fixedCount = remember(windowSizeClass) {
+        when (windowSizeClass.widthSizeClass) {
+            WindowWidthSizeClass.Compact -> 3
+            WindowWidthSizeClass.Medium -> 4
+            else -> 5
+        }
     }
 
     val items: LazyPagingItems<LocalImageModel> = localImages.collectAsLazyPagingItems()
@@ -144,7 +143,14 @@ private fun AlbumScreen(
 
     val scrollState: LazyGridState = rememberLazyGridState()
     LaunchedEffect(previewIndex) {
-        scrollState.animateScrollToItem(previewIndex)
+        val visibleSize = scrollState.layoutInfo.visibleItemsInfo.size
+        val middleSize = visibleSize / fixedCount
+
+        if (previewIndex < scrollState.firstVisibleItemIndex) {
+            scrollState.animateScrollToItem(max(previewIndex - middleSize, 0))
+        } else if (previewIndex > scrollState.firstVisibleItemIndex + visibleSize) {
+            scrollState.animateScrollToItem(max(previewIndex - middleSize, 0))
+        }
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
