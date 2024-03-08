@@ -16,24 +16,39 @@
 
 package com.reach.modernandroid.feature.album.preview
 
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateIntOffsetAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.IntOffset
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import coil.request.ImageRequest
+import coil.size.Size
 import com.reach.base.ui.common.widget.AsyncLocalImage
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
@@ -97,10 +112,35 @@ private fun PreviewItem(localImageModel: LocalImageModel?) {
     if (localImageModel == null) {
         return
     }
+
+    var scale: Float by remember { mutableFloatStateOf(1f) }
+    val scaleAni by animateFloatAsState(targetValue = scale, label = "")
+
+    var offset: Offset by remember { mutableStateOf(Offset.Zero) }
+    val offsetAni by animateIntOffsetAsState(
+        targetValue = IntOffset(
+            offset.x.toInt(),
+            offset.y.toInt(),
+        ),
+        label = "",
+    )
+
     AsyncLocalImage(
-        model = localImageModel.uri,
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(localImageModel.uri)
+            .size(Size.ORIGINAL)
+            .build(),
         contentDescription = "",
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .scale(scaleAni)
+            .offset { offsetAni }
+            .pointerInput(Unit) {
+                detectTransformGestures { _, pan, zoom, _ ->
+                    scale *= zoom
+                    offset += pan
+                }
+            },
         contentScale = ContentScale.Fit,
     )
 }
