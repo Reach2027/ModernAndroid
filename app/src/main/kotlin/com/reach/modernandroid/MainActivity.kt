@@ -18,6 +18,7 @@ package com.reach.modernandroid
 
 import android.graphics.Color
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
@@ -51,6 +52,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        setupFullScreen()
+
         val splashScreen = installSplashScreen()
 
         var uiState: MainActivityUiState by mutableStateOf(MainActivityUiState())
@@ -58,11 +62,7 @@ class MainActivity : ComponentActivity() {
             viewModel.uiState.collect { uiState = it }
         }
 
-        splashScreen.setKeepOnScreenCondition {
-            uiState.isLoading
-        }
-
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        splashScreen.setKeepOnScreenCondition { uiState.isLoading }
 
         var statusDarkMode: StatusDarkMode by mutableStateOf(StatusDarkMode.FollowTheme)
         lifecycleScope.launch {
@@ -100,6 +100,25 @@ class MainActivity : ComponentActivity() {
                 darkTheme = darkTheme,
             ) {
                 App(windowSizeClass = calculateWindowSizeClass(activity = this))
+            }
+        }
+    }
+
+    private fun setupFullScreen() {
+        /*val insetsController = WindowCompat.getInsetsController(window, window.decorView.rootView)*/
+        lifecycleScope.launch {
+            appUiState.fullScreen.collect {
+                // The animation is too slow
+                /*if (it) {
+                    insetsController.hide(WindowInsetsCompat.Type.systemBars())
+                } else {
+                    insetsController.show(WindowInsetsCompat.Type.systemBars())
+                }*/
+                if (it) {
+                    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                } else {
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                }
             }
         }
     }

@@ -22,25 +22,41 @@ import com.reach.modernandroid.core.ui.common.navigation.AppRoute
 internal enum class Function(
     val text: String,
     val navTo: (NavController) -> Unit,
+    val isTitle: Boolean,
 ) {
+    ComposeLearn(
+        text = "Compose Learn",
+        navTo = {},
+        isTitle = true,
+    ),
     Lottie(
         text = "Lottie Example",
-        { it.navigate(AppRoute.LOTTIE) },
+        navTo = { it.navigate(AppRoute.LOTTIE) },
+        isTitle = false,
     ),
     SkeletonLoader(
         text = "Skeleton Loader",
-        { it.navigate(AppRoute.SKELETON_LOADER) },
+        navTo = { it.navigate(AppRoute.SKELETON_LOADER) },
+        isTitle = false,
+    ),
+    Feature(
+        text = "Feature",
+        navTo = {},
+        isTitle = true,
     ),
     BingWallpaper(
         text = "Bing Wallpaper",
-        { it.navigate(AppRoute.BING_WALLPAPER) },
+        navTo = { it.navigate(AppRoute.BING_WALLPAPER) },
+        isTitle = false,
     ),
     LocalAlbum(
         text = "Local Album",
-        { it.navigate(AppRoute.ALBUM) },
+        navTo = { it.navigate(AppRoute.ALBUM) },
+        isTitle = false,
     ),
     Camerax(
         text = "Camerax",
-        { it.navigate(AppRoute.CAMERAX) },
+        navTo = { it.navigate(AppRoute.CAMERAX) },
+        isTitle = false,
     ),
 }

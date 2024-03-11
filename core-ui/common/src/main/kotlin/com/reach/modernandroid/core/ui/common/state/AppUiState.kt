@@ -19,7 +19,6 @@ package com.reach.modernandroid.core.ui.common.state
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,6 +26,8 @@ import kotlinx.coroutines.flow.asStateFlow
 interface AppUiState {
 
     val statusDarkMode: StateFlow<StatusDarkMode>
+
+    val fullScreen: StateFlow<Boolean>
 
     fun getWindowSizeClass(): WindowSizeClass
 
@@ -37,6 +38,8 @@ interface AppUiState {
     fun setNavController(navController: NavHostController)
 
     fun setStatusDarkMode(statusDarkMode: StatusDarkMode)
+
+    fun setFullScreen(fullScreen: Boolean)
 }
 
 internal class DefaultAppUiState(
@@ -50,7 +53,8 @@ internal class DefaultAppUiState(
     private val _statusDarkMode = MutableStateFlow(StatusDarkMode.FollowTheme)
     override val statusDarkMode = _statusDarkMode.asStateFlow()
 
-    private var navJob: Job? = null
+    private val _fullScreen = MutableStateFlow(false)
+    override val fullScreen = _fullScreen.asStateFlow()
 
     override fun getWindowSizeClass(): WindowSizeClass {
         return requireNotNull(windowSizeClass)
@@ -74,5 +78,9 @@ internal class DefaultAppUiState(
 
     override fun setStatusDarkMode(statusDarkMode: StatusDarkMode) {
         _statusDarkMode.value = statusDarkMode
+    }
+
+    override fun setFullScreen(fullScreen: Boolean) {
+        _fullScreen.value = fullScreen
     }
 }

@@ -48,6 +48,8 @@ fun AsyncLocalImage(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     showBg: Boolean = true,
+    transform: (AsyncImagePainter.State) -> AsyncImagePainter.State = AsyncImagePainter.DefaultTransform,
+    onState: ((AsyncImagePainter.State) -> Unit)? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     alpha: Float = DefaultAlpha,
@@ -74,8 +76,12 @@ fun AsyncLocalImage(
         } else {
             modifier
         },
+        transform = transform,
         onState = { state ->
             isSuccess = state is AsyncImagePainter.State.Success
+            if (onState != null) {
+                onState(state)
+            }
         },
         alignment = alignment,
         contentScale = contentScale,
@@ -93,6 +99,8 @@ fun SkeletonAsyncImage(
     contentDescription: String?,
     modifier: Modifier = Modifier,
     placeHolderModifier: Modifier,
+    transform: (AsyncImagePainter.State) -> AsyncImagePainter.State = AsyncImagePainter.DefaultTransform,
+    onState: ((AsyncImagePainter.State) -> Unit)? = null,
     alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     alpha: Float = DefaultAlpha,
@@ -110,10 +118,14 @@ fun SkeletonAsyncImage(
             model = model,
             contentDescription = contentDescription,
             modifier = if (isSuccess) modifier else placeHolderModifier,
+            transform = transform,
             onState = { state ->
                 isLoading = state is AsyncImagePainter.State.Loading
                 isSuccess = state is AsyncImagePainter.State.Success
                 isError = state is AsyncImagePainter.State.Error
+                if (onState != null) {
+                    onState(state)
+                }
             },
             alignment = alignment,
             contentScale = contentScale,

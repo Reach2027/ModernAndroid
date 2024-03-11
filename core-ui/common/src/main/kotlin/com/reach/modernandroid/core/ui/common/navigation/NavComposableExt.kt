@@ -38,23 +38,19 @@ fun NavGraphBuilder.screenComposable(
     enterTransition: (
         @JvmSuppressWildcards
         AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?
-    )? =
-        { enterScreenTransition() },
+    )? = { enterScreenTransition() },
     exitTransition: (
         @JvmSuppressWildcards
         AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?
-    )? =
-        { exitScreenTransition() },
+    )? = { exitScreenTransition() },
     popEnterTransition: (
         @JvmSuppressWildcards
         AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?
-    )? =
-        { popEnterScreenTransition() },
+    )? = { popEnterScreenTransition() },
     popExitTransition: (
         @JvmSuppressWildcards
         AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?
-    )? =
-        { popExitScreenTransition() },
+    )? = { popExitScreenTransition() },
     content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
 ) {
     this.composable(

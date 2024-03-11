@@ -28,3 +28,7 @@ fun Int.toDp(): Dp = with(LocalDensity.current) { toDp() }
 @Stable
 @Composable
 fun Float.toDp(): Dp = with(LocalDensity.current) { toDp() }
+
+@Stable
+@Composable
+fun Dp.toPx(): Float = with(LocalDensity.current) { toPx() }

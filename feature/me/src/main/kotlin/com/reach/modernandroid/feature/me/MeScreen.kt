@@ -129,9 +129,9 @@ private fun MeScreen(
             onStatusDarkModeSet(StatusDarkMode.FollowTheme)
         } else {
             observer = LifecycleEventObserver { _, event ->
-                if (event == Lifecycle.Event.ON_START) {
+                if (event == Lifecycle.Event.ON_RESUME) {
                     onStatusDarkModeSet(StatusDarkMode.Dark)
-                } else if (event == Lifecycle.Event.ON_STOP) {
+                } else if (event == Lifecycle.Event.ON_PAUSE) {
                     onStatusDarkModeSet(StatusDarkMode.FollowTheme)
                 }
             }

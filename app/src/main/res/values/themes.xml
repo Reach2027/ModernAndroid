@@ -15,7 +15,9 @@
      limitations under the License.
 -->
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.ModernAndroid" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Adjusted.ModernAndroid" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.ModernAndroid" parent="Adjusted.ModernAndroid" />
 
     <style name="Adjusted.ModernAndroid.Splash" parent="Theme.SplashScreen">
         <item name="android:windowLightStatusBar" tools:targetApi="23">true</item>
@@ -25,6 +27,8 @@
     <style name="Theme.ModernAndroid.Splash" parent="Adjusted.ModernAndroid.Splash">
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
         <item name="postSplashScreenTheme">@style/Theme.ModernAndroid</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
     </style>
 
 </resources>

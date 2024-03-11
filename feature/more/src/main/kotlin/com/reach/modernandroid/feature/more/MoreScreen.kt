@@ -22,11 +22,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -81,9 +84,24 @@ private fun MoreScreen(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
+            item(
+                key = "Top Padding",
+                span = { GridItemSpan(maxLineSpan) },
+                contentType = "Top Padding",
+            ) {
+                Spacer(modifier = Modifier.height(32.dp))
+            }
             items(
                 items = functions,
                 key = { it.text },
+                span = {
+                    if (it.isTitle) {
+                        GridItemSpan(maxLineSpan)
+                    } else {
+                        GridItemSpan(1)
+                    }
+                },
+                contentType = { it.isTitle },
             ) {
                 MoreFunctionItem(
                     function = it,
@@ -99,11 +117,19 @@ private fun MoreFunctionItem(
     function: Function,
     navController: NavController,
 ) {
-    Button(
-        onClick = { function.navTo(navController) },
-        modifier = Modifier.wrapContentSize(),
-    ) {
-        Text(text = function.text)
+    if (function.isTitle) {
+        Text(
+            text = function.text,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(start = 16.dp),
+        )
+    } else {
+        Button(
+            onClick = { function.navTo(navController) },
+            modifier = Modifier.wrapContentSize(),
+        ) {
+            Text(text = function.text)
+        }
     }
 }
 
