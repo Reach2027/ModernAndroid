@@ -253,7 +253,7 @@ private fun AlbumScreenPreview() {
         )
         AlbumScreen(
             onBackClick = { },
-            onImageClick = {},
+            onImageClick = { },
             onStatusDarkModeSet = { },
             windowSizeClass = previewWindowSizeClass(),
             localImages = flow { emit(pagingData) },

@@ -16,11 +16,15 @@
 
 package com.reach.modernandroid.feature.album.preview
 
+import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.SpringSpec
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.animateOffsetAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -46,6 +50,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -67,6 +72,7 @@ import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -75,11 +81,14 @@ import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
+import androidx.paging.LoadStates
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImagePainter
 import com.reach.base.ui.common.widget.SkeletonAsyncImage
+import com.reach.modernandroid.core.ui.common.AppPreview
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.core.ui.design.animation.widgetEnter
@@ -87,6 +96,7 @@ import com.reach.modernandroid.feature.album.AlbumViewModel
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
 import kotlin.math.PI
 import kotlin.math.abs
 
@@ -95,14 +105,14 @@ internal fun PreviewRoute(
     viewModel: AlbumViewModel,
     appUiState: AppUiState,
 ) {
-    val index by viewModel.previewIndex.collectAsStateWithLifecycle()
+    val previewIndex by viewModel.previewIndex.collectAsStateWithLifecycle()
 
     PreviewScreen(
         onBackClick = { appUiState.getNavController().navigateUp() },
         onIndexChange = { viewModel.setPreViewIndex(it) },
         setFullScreen = { appUiState.setFullScreen(it) },
         localImages = viewModel.localImages,
-        index = index,
+        previewIndex = previewIndex,
     )
 }
 
@@ -113,13 +123,11 @@ private fun PreviewScreen(
     onIndexChange: (Int) -> Unit,
     setFullScreen: (Boolean) -> Unit,
     localImages: Flow<PagingData<LocalImageModel>>,
-    index: Int,
+    previewIndex: Int,
 ) {
     val items: LazyPagingItems<LocalImageModel> = localImages.collectAsLazyPagingItems()
 
-    val pagerState = rememberPagerState(initialPage = index) {
-        items.itemCount
-    }
+    val pagerState = rememberPagerState(initialPage = previewIndex) { items.itemCount }
     LaunchedEffect(pagerState) {
         snapshotFlow { pagerState.currentPage }.collect {
             onIndexChange(it)
@@ -140,7 +148,11 @@ private fun PreviewScreen(
         onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = if (fullScreen) Color.Black else Color.Transparent),
+    ) {
         HorizontalPager(
             state = pagerState,
             modifier = Modifier.fillMaxSize(),
@@ -197,11 +209,16 @@ private fun PreviewItem(
 
     val previewBg by animateColorAsState(
         targetValue = if (fullScreen) Color.Black else Color.Transparent,
+        animationSpec = defaultSpring(),
         label = "",
     )
 
     var scale: Float by remember { mutableFloatStateOf(1f) }
-    val scaleAni by animateFloatAsState(targetValue = scale, label = "")
+    val scaleAni by animateFloatAsState(
+        targetValue = scale,
+        animationSpec = defaultSpring(),
+        label = "",
+    )
     LaunchedEffect(localImageModel.id) {
         snapshotFlow { scale }.collectLatest {
             if (scale > 1f && fullScreen.not()) {
@@ -211,7 +228,11 @@ private fun PreviewItem(
     }
 
     var offset: Offset by remember { mutableStateOf(Offset.Zero) }
-    val offsetAni by animateOffsetAsState(targetValue = offset, label = "")
+    val offsetAni by animateOffsetAsState(
+        targetValue = offset,
+        animationSpec = defaultSpring(visibilityThreshold = Offset.VisibilityThreshold),
+        label = "",
+    )
 
     var downPointerCount by remember { mutableIntStateOf(0) }
 
@@ -315,7 +336,7 @@ private fun PreviewItem(
                 if ((scale > 1f && maxOffset != Offset.Zero) ||
                     (scale <= 1f && maxOffset == Offset.Zero)
                 ) {
-                    val nX = if (offset.x >= maxOffset.x) {
+                    val offsetX = if (offset.x >= maxOffset.x) {
                         consume.value = false
                         maxOffset.x
                     } else if (offset.x <= -maxOffset.x) {
@@ -326,14 +347,14 @@ private fun PreviewItem(
                         offset.x
                     }
 
-                    val nY = if (offset.y >= maxOffset.y) {
+                    val offsetY = if (offset.y >= maxOffset.y) {
                         maxOffset.y
                     } else if (offset.y <= -maxOffset.y) {
                         -maxOffset.y
                     } else {
                         offset.y
                     }
-                    offset = Offset(nX, nY)
+                    offset = Offset(offsetX, offsetY)
                 }
 
                 translationX = offsetAni.x
@@ -404,5 +425,47 @@ suspend fun PointerInputScope.customDetectTransformGestures(
                 }
             }
         } while (!canceled && event.changes.fastAny { it.pressed })
+    }
+}
+
+@Stable
+private fun <T> defaultSpring(
+    dampingRatio: Float = Spring.DampingRatioNoBouncy,
+    stiffness: Float = Spring.StiffnessMediumLow,
+    visibilityThreshold: T? = null,
+): SpringSpec<T> = spring(
+    dampingRatio = dampingRatio,
+    stiffness = stiffness,
+    visibilityThreshold = visibilityThreshold,
+)
+
+@Preview
+@Composable
+private fun AlbumScreenPreview() {
+    AppPreview {
+        val previewData = listOf(
+            LocalImageModel(
+                id = "1",
+                uri = Uri.parse("a"),
+                modifierTime = 0L,
+                albumId = 11L,
+                albumName = "Album",
+            ),
+        )
+        val pagingData = PagingData.from(
+            data = previewData,
+            sourceLoadStates = LoadStates(
+                refresh = LoadState.NotLoading(false),
+                prepend = LoadState.NotLoading(false),
+                append = LoadState.NotLoading(false),
+            ),
+        )
+        PreviewScreen(
+            onBackClick = { },
+            onIndexChange = { },
+            setFullScreen = { },
+            localImages = flow { emit(pagingData) },
+            previewIndex = 0,
+        )
     }
 }
