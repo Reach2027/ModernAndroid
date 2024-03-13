@@ -27,22 +27,26 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculateCentroid
+import androidx.compose.foundation.gestures.calculateCentroidSize
+import androidx.compose.foundation.gestures.calculatePan
+import androidx.compose.foundation.gestures.calculateRotation
+import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.gestures.rememberTransformableState
-import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -57,13 +61,17 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEventType
+import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.compose.ui.util.fastAny
+import androidx.compose.ui.util.fastForEach
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -79,6 +87,8 @@ import com.reach.modernandroid.feature.album.AlbumViewModel
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
+import kotlin.math.PI
+import kotlin.math.abs
 
 @Composable
 internal fun PreviewRoute(
@@ -135,7 +145,6 @@ private fun PreviewScreen(
             state = pagerState,
             modifier = Modifier.fillMaxSize(),
             pageSpacing = 32.dp,
-            userScrollEnabled = false,
         ) { index ->
             PreviewItem(
                 onImageClick = {
@@ -149,7 +158,6 @@ private fun PreviewScreen(
                 exitPreview = onBackClick,
                 localImageModel = items[index],
                 fullScreen = fullScreen,
-                pagerState = pagerState,
             )
         }
 
@@ -175,7 +183,6 @@ private fun PreviewScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PreviewItem(
     onImageClick: () -> Unit,
@@ -183,20 +190,9 @@ private fun PreviewItem(
     exitPreview: () -> Unit,
     localImageModel: LocalImageModel?,
     fullScreen: Boolean,
-    pagerState: PagerState,
 ) {
     if (localImageModel == null) {
         return
-    }
-
-    var scale: Float by remember(localImageModel) { mutableFloatStateOf(1f) }
-    val scaleAni by animateFloatAsState(targetValue = scale, label = "")
-    LaunchedEffect(localImageModel) {
-        snapshotFlow { scale }.collectLatest {
-            if (scale > 1f && fullScreen.not()) {
-                previewImage()
-            }
-        }
     }
 
     val previewBg by animateColorAsState(
@@ -204,13 +200,18 @@ private fun PreviewItem(
         label = "",
     )
 
-    var offset: Offset by remember(localImageModel) { mutableStateOf(Offset.Zero) }
-    val offsetAni by animateOffsetAsState(targetValue = offset, label = "")
-
-    val state = rememberTransformableState { zoomChange, panChange, _ ->
-        scale *= zoomChange
-        offset += panChange
+    var scale: Float by remember { mutableFloatStateOf(1f) }
+    val scaleAni by animateFloatAsState(targetValue = scale, label = "")
+    LaunchedEffect(localImageModel.id) {
+        snapshotFlow { scale }.collectLatest {
+            if (scale > 1f && fullScreen.not()) {
+                previewImage()
+            }
+        }
     }
+
+    var offset: Offset by remember { mutableStateOf(Offset.Zero) }
+    val offsetAni by animateOffsetAsState(targetValue = offset, label = "")
 
     var downPointerCount by remember { mutableIntStateOf(0) }
 
@@ -222,7 +223,7 @@ private fun PreviewItem(
 
     var maxOffset by remember { mutableStateOf(Offset.Zero) }
 
-    var overOffsetX by remember { mutableFloatStateOf(0f) }
+    val consume = remember { mutableStateOf(true) }
 
     LaunchedEffect(painterSize, boxSize) {
         if (painterSize == Size.Zero || boxSize == Size.Zero) {
@@ -253,89 +254,155 @@ private fun PreviewItem(
         )
     }
 
-    Box(
+    SkeletonAsyncImage(
+        model = localImageModel.uri,
+        onState = {
+            if (it is AsyncImagePainter.State.Success) {
+                painterSize = it.painter.intrinsicSize
+            }
+        },
+        contentDescription = "",
         modifier = Modifier
             .fillMaxSize()
             .background(color = previewBg)
-            .onSizeChanged { boxSize = it.toSize() },
-    ) {
-        SkeletonAsyncImage(
-            model = localImageModel.uri,
-            onState = {
-                if (it is AsyncImagePainter.State.Success) {
-                    painterSize = it.painter.intrinsicSize
+            .onSizeChanged { boxSize = it.toSize() }
+            .pointerInput(localImageModel.id) {
+                detectTapGestures(
+                    onTap = { onImageClick() },
+                    onDoubleTap = {
+                        if (scale == 1f) {
+                            scale = 2f
+                            offset = Offset(
+                                boxSize.width / 2f - it.x,
+                                boxSize.height / 2f - it.y,
+                            ) * ((scale - 1f) / 2f + 1f)
+                        } else {
+                            scale = 1f
+                            offset = Offset.Zero
+                        }
+                    },
+                )
+            }
+            .pointerInput(localImageModel.id) {
+                awaitPointerEventScope {
+                    while (true) {
+                        val event = awaitPointerEvent()
+                        if (event.type == PointerEventType.Press) {
+                            downPointerCount++
+                        } else if (event.type == PointerEventType.Release) {
+                            downPointerCount--
+                        }
+
+                        if (scale < 1f && scale > 0.6f && downPointerCount == 0) {
+                            scale = 1f
+                            offset = Offset.Zero
+                        } else if (scale <= 0.6f && downPointerCount == 0) {
+                            exitPreview()
+                        }
+                    }
                 }
+            }
+            .pointerInput(localImageModel.id) {
+                customDetectTransformGestures(consume = consume) { _, pan, zoom, _ ->
+                    scale *= zoom
+                    offset += pan
+                }
+            }
+            .graphicsLayer {
+                scaleX = scaleAni
+                scaleY = scaleAni
+
+                if ((scale > 1f && maxOffset != Offset.Zero) ||
+                    (scale <= 1f && maxOffset == Offset.Zero)
+                ) {
+                    val nX = if (offset.x >= maxOffset.x) {
+                        consume.value = false
+                        maxOffset.x
+                    } else if (offset.x <= -maxOffset.x) {
+                        consume.value = false
+                        -maxOffset.x
+                    } else {
+                        consume.value = true
+                        offset.x
+                    }
+
+                    val nY = if (offset.y >= maxOffset.y) {
+                        maxOffset.y
+                    } else if (offset.y <= -maxOffset.y) {
+                        -maxOffset.y
+                    } else {
+                        offset.y
+                    }
+                    offset = Offset(nX, nY)
+                }
+
+                translationX = offsetAni.x
+                translationY = offsetAni.y
             },
-            contentDescription = "",
-            modifier = Modifier
-                .fillMaxSize()
-                .transformable(state)
-                .graphicsLayer {
-                    scaleX = scaleAni
-                    scaleY = scaleAni
+        placeHolderModifier = Modifier.fillMaxSize(),
+        contentScale = ContentScale.Fit,
+    )
+}
 
-                    if ((scale > 1f && maxOffset != Offset.Zero)
-                        || (scale <= 1f && maxOffset == Offset.Zero)
+suspend fun PointerInputScope.customDetectTransformGestures(
+    consume: State<Boolean>,
+    panZoomLock: Boolean = false,
+    onGesture: (centroid: Offset, pan: Offset, zoom: Float, rotation: Float) -> Unit,
+) {
+    awaitEachGesture {
+        var rotation = 0f
+        var zoom = 1f
+        var pan = Offset.Zero
+        var pastTouchSlop = false
+        val touchSlop = viewConfiguration.touchSlop
+        var lockedToPanZoom = false
+
+        awaitFirstDown(requireUnconsumed = false)
+        do {
+            val event = awaitPointerEvent()
+            val canceled = event.changes.fastAny { it.isConsumed }
+            if (!canceled) {
+                val zoomChange = event.calculateZoom()
+                val rotationChange = event.calculateRotation()
+                val panChange = event.calculatePan()
+
+                if (!pastTouchSlop) {
+                    zoom *= zoomChange
+                    rotation += rotationChange
+                    pan += panChange
+
+                    val centroidSize = event.calculateCentroidSize(useCurrent = false)
+                    val zoomMotion = abs(1 - zoom) * centroidSize
+                    val rotationMotion = abs(rotation * PI.toFloat() * centroidSize / 180f)
+                    val panMotion = pan.getDistance()
+
+                    if (zoomMotion > touchSlop ||
+                        rotationMotion > touchSlop ||
+                        panMotion > touchSlop
                     ) {
-                        val nX = if (offset.x > maxOffset.x) {
-                            overOffsetX = maxOffset.x - offset.x
-                            maxOffset.x
-                        } else if (offset.x < -maxOffset.x) {
-                            overOffsetX = maxOffset.x - offset.x
-                            -maxOffset.x
-                        } else {
-                            offset.x
-                        }
-
-                        val nY = if (offset.y > maxOffset.y) {
-                            maxOffset.y
-                        } else if (offset.y < -maxOffset.y) {
-                            -maxOffset.y
-                        } else {
-                            offset.y
-                        }
-                        offset = Offset(nX, nY)
+                        pastTouchSlop = true
+                        lockedToPanZoom = panZoomLock && rotationMotion < touchSlop
                     }
-
-                    translationX = offsetAni.x
-                    translationY = offsetAni.y
                 }
-                .pointerInput(localImageModel) {
-                    detectTapGestures(
-                        onTap = { onImageClick() },
-                        onDoubleTap = {
-                            if (scale == 1f) {
-                                scale = 2f
-                                offset =
-                                    Offset(boxSize.width / 2f - it.x, boxSize.height / 2f - it.y)
-                            } else {
-                                scale = 1f
-                                offset = Offset.Zero
-                            }
-                        },
-                    )
-                }
-                .pointerInput(localImageModel) {
-                    awaitPointerEventScope {
-                        while (true) {
-                            val event = awaitPointerEvent()
-                            if (event.type == PointerEventType.Press) {
-                                downPointerCount++
-                            } else if (event.type == PointerEventType.Release) {
-                                downPointerCount--
-                            }
 
-                            if (scale < 1f && scale > 0.6f && downPointerCount == 0) {
-                                scale = 1f
-                                offset = Offset.Zero
-                            } else if (scale <= 0.6f && downPointerCount == 0) {
-                                exitPreview()
+                if (pastTouchSlop) {
+                    val centroid = event.calculateCentroid(useCurrent = false)
+                    val effectiveRotation = if (lockedToPanZoom) 0f else rotationChange
+                    if (effectiveRotation != 0f ||
+                        zoomChange != 1f ||
+                        panChange != Offset.Zero
+                    ) {
+                        onGesture(centroid, panChange, zoomChange, effectiveRotation)
+                    }
+                    if (consume.value) {
+                        event.changes.fastForEach {
+                            if (it.positionChanged()) {
+                                it.consume()
                             }
                         }
                     }
-                },
-            placeHolderModifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Fit,
-        )
+                }
+            }
+        } while (!canceled && event.changes.fastAny { it.pressed })
     }
 }
