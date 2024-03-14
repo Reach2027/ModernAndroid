@@ -70,7 +70,7 @@ private fun SkeletonLoaderScreen(
         modifier = Modifier.fillMaxSize(),
     ) {
         AppTopBarWithBack(
-            title = { Text(text = stringResource(id = R.string.skeleton_loader)) },
+            title = { Text(text = stringResource(id = R.string.uilearn_skeleton_loader)) },
             onBackClick = onBackClick,
             colors = TopAppBarDefaults.topAppBarColors(
                 containerColor = Color.Transparent,

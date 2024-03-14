@@ -18,7 +18,7 @@ plugins {
 }
 
 android {
-    namespace = "com.reach.modernandroid.core.ui.resource"
+    namespace = "com.reach.modernandroid.core.ui.design"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

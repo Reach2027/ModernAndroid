@@ -15,5 +15,5 @@
      limitations under the License.
 -->
 <resources>
-    <string name="bing_wallpaper">必应壁纸</string>
+    <string name="bing_wallpaper_title">必应壁纸</string>
 </resources>

@@ -34,7 +34,9 @@ androidxPaging = "3.2.1"
 
 androidxRoom = "2.6.1"
 
-androidxDataStore = "1.1.0-beta01"
+androidxDataStore = "1.1.0-beta02"
+
+androidxCamerax = "1.3.2"
 
 # KotlinX
 kotlinxCoroutines = "1.8.0"
@@ -113,6 +115,11 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "androidxRoom" }
 
 androidx-datastore = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDataStore" }
+
+androidx-camerax-core = { group = "androidx.camera", name = "camera-core", version.ref = "androidxCamerax" }
+androidx-camerax-camera2 = { group = "androidx.camera", name = "camera-camera2", version.ref = "androidxCamerax" }
+androidx-camerax-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "androidxCamerax" }
+androidx-camerax-view = { group = "androidx.camera", name = "camera-view", version.ref = "androidxCamerax" }
 
 # KotlinX
 kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }

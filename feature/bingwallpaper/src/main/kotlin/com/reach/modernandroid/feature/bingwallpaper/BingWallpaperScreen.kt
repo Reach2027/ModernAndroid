@@ -135,7 +135,7 @@ private fun BingWallpaperScreen(
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             AppTopBarWithBack(
-                title = { Text(text = stringResource(id = R.string.bing_wallpaper)) },
+                title = { Text(text = stringResource(id = R.string.bing_wallpaper_title)) },
                 onBackClick = onBackClick,
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                 windowInsets = WindowInsets(

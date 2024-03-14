@@ -15,5 +15,5 @@
      limitations under the License.
 -->
 <resources>
-    <string name="bing_wallpaper">Bing Wallpaper</string>
+    <string name="bing_wallpaper_title">Bing Wallpaper</string>
 </resources>

@@ -27,4 +27,11 @@ android {
 }
 
 dependencies {
+    implementation(projects.featureData.album)
+
+    implementation(libs.accompanist.permissions)
+    implementation(libs.androidx.camerax.core)
+    implementation(libs.androidx.camerax.camera2)
+    implementation(libs.androidx.camerax.lifecycle)
+    implementation(libs.androidx.camerax.view)
 }

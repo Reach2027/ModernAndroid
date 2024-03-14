@@ -94,6 +94,7 @@ import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.core.ui.design.animation.widgetEnter
 import com.reach.modernandroid.feature.album.AlbumViewModel
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
@@ -135,6 +136,12 @@ private fun PreviewScreen(
     }
 
     var fullScreen by rememberSaveable { mutableStateOf(false) }
+    var showTopBar by remember { mutableStateOf(false) }
+    LaunchedEffect(previewIndex) {
+        delay(400L)
+        showTopBar = true
+    }
+
     val lifecycleOwner = LocalLifecycleOwner.current
     DisposableEffect(lifecycleOwner) {
         val observer = LifecycleEventObserver { _, event ->
@@ -174,7 +181,7 @@ private fun PreviewScreen(
         }
 
         AnimatedVisibility(
-            visible = fullScreen.not(),
+            visible = fullScreen.not() && showTopBar,
             enter = fadeIn(animationSpec = widgetEnter()) + slideInVertically(
                 animationSpec = widgetEnter(visibilityThreshold = IntOffset.VisibilityThreshold),
                 initialOffsetY = { -it },
@@ -209,7 +216,6 @@ private fun PreviewItem(
 
     val previewBg by animateColorAsState(
         targetValue = if (fullScreen) Color.Black else Color.Transparent,
-        animationSpec = defaultSpring(),
         label = "",
     )
 
@@ -287,7 +293,7 @@ private fun PreviewItem(
             .fillMaxSize()
             .background(color = previewBg)
             .onSizeChanged { boxSize = it.toSize() }
-            .pointerInput(localImageModel.id) {
+            .pointerInput(Unit) {
                 detectTapGestures(
                     onTap = { onImageClick() },
                     onDoubleTap = {
@@ -304,7 +310,7 @@ private fun PreviewItem(
                     },
                 )
             }
-            .pointerInput(localImageModel.id) {
+            .pointerInput(Unit) {
                 awaitPointerEventScope {
                     while (true) {
                         val event = awaitPointerEvent()
@@ -323,7 +329,7 @@ private fun PreviewItem(
                     }
                 }
             }
-            .pointerInput(localImageModel.id) {
+            .pointerInput(Unit) {
                 customDetectTransformGestures(consume = consume) { _, pan, zoom, _ ->
                     scale *= zoom
                     offset += pan
@@ -365,7 +371,7 @@ private fun PreviewItem(
     )
 }
 
-suspend fun PointerInputScope.customDetectTransformGestures(
+private suspend fun PointerInputScope.customDetectTransformGestures(
     consume: State<Boolean>,
     panZoomLock: Boolean = false,
     onGesture: (centroid: Offset, pan: Offset, zoom: Float, rotation: Float) -> Unit,

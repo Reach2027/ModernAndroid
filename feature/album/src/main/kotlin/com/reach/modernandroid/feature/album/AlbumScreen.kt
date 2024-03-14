@@ -44,7 +44,10 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -87,7 +90,7 @@ internal fun AlbumRoute(
 
     RequestPermissionScreen(
         permission = getReadImagePermission(),
-        requestTitle = R.string.request_permission_title,
+        requestTitle = R.string.album_request_permission,
         onBackClick = { appUiState.getNavController().navigateUp() },
     ) {
         AlbumScreen(
@@ -114,13 +117,8 @@ private fun AlbumScreen(
     localImages: Flow<PagingData<LocalImageModel>>,
     previewIndex: Int,
 ) {
-    val fixedCount = remember(windowSizeClass) {
-        when (windowSizeClass.widthSizeClass) {
-            WindowWidthSizeClass.Compact -> 3
-            WindowWidthSizeClass.Medium -> 4
-            else -> 5
-        }
-    }
+    val fixedCount = rememberColumnCount(windowSizeClass = windowSizeClass)
+    var columnCountIndex by rememberSaveable { mutableIntStateOf(1) }
 
     val items: LazyPagingItems<LocalImageModel> = localImages.collectAsLazyPagingItems()
 
@@ -144,7 +142,7 @@ private fun AlbumScreen(
     val scrollState: LazyGridState = rememberLazyGridState()
     LaunchedEffect(previewIndex) {
         val visibleSize = scrollState.layoutInfo.visibleItemsInfo.size
-        val middleSize = visibleSize / fixedCount
+        val middleSize = visibleSize / fixedCount[columnCountIndex]
 
         if (previewIndex < scrollState.firstVisibleItemIndex) {
             scrollState.animateScrollToItem(max(previewIndex - middleSize, 0))
@@ -155,10 +153,11 @@ private fun AlbumScreen(
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(fixedCount),
+            columns = GridCells.Fixed(fixedCount[columnCountIndex]),
             verticalArrangement = Arrangement.spacedBy(2.dp),
             horizontalArrangement = Arrangement.spacedBy(2.dp),
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
             state = scrollState,
         ) {
             item(span = { GridItemSpan(maxCurrentLineSpan) }) {
@@ -188,7 +187,7 @@ private fun AlbumScreen(
                 VerticalTransparentBg(modifier = Modifier.fillMaxHeight())
             }
             AppTopBarWithBack(
-                title = { Text(text = stringResource(id = R.string.photos)) },
+                title = { Text(text = stringResource(id = R.string.album_photos)) },
                 onBackClick = onBackClick,
                 colors = if (topBarContentBeWhite) {
                     TopAppBarDefaults.topAppBarColors(
@@ -227,6 +226,17 @@ private fun LocalImageItem(
                 .clickable { onImageClick() },
             contentScale = ContentScale.Crop,
         )
+    }
+}
+
+@Composable
+private fun rememberColumnCount(windowSizeClass: WindowSizeClass): IntArray {
+    return remember(windowSizeClass) {
+        when (windowSizeClass.widthSizeClass) {
+            WindowWidthSizeClass.Compact -> intArrayOf(1, 3, 4)
+            WindowWidthSizeClass.Medium -> intArrayOf(2, 4, 5)
+            else -> intArrayOf(3, 5, 6)
+        }
     }
 }
 

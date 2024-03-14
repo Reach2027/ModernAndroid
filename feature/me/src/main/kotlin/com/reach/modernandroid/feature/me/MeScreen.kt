@@ -258,12 +258,12 @@ private fun DeviceInfo(uiState: MeUiState) {
     ) {
         Text(
             text = stringResource(
-                id = R.string.network_available,
+                id = R.string.me_network_available,
                 uiState.isNetworkAvailable.toString(),
             ),
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = stringResource(id = R.string.network_type, uiState.networkType.name))
+        Text(text = stringResource(id = R.string.me_network_type, uiState.networkType.name))
     }
 }
 

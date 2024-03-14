@@ -72,7 +72,7 @@ private fun LottieRoute(appUiState: AppUiState = koinInject()) {
 private fun LottieScreen(onBackClick: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         AppTopBarWithBack(
-            title = { Text(text = stringResource(id = R.string.lottie_example)) },
+            title = { Text(text = stringResource(id = R.string.uilearn_lottie_example)) },
             onBackClick = onBackClick,
         )
 

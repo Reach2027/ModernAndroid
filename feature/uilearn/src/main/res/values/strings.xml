@@ -15,6 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <string name="lottie_example">Lottie Example</string>
-    <string name="skeleton_loader">Skeleton Loader</string>
+    <string name="uilearn_lottie_example">Lottie Example</string>
+    <string name="uilearn_skeleton_loader">Skeleton Loader</string>
 </resources>

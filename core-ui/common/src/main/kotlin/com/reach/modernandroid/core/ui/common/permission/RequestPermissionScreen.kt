@@ -43,9 +43,9 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
 import com.reach.base.android.common.util.toAppDetailSettings
-import com.reach.modernandroid.core.ui.common.R
 import com.reach.modernandroid.core.ui.design.animation.groupEnter
 import com.reach.modernandroid.core.ui.design.animation.groupExit
+import com.reach.modernandroid.core.ui.design.R as designR
 
 private val ContentPadding = 32.dp
 
@@ -86,11 +86,11 @@ fun RequestPermissionScreen(
                     Spacer(modifier = Modifier.height(ContentPadding))
                     Row {
                         Button(onClick = onBackClick) {
-                            Text(text = stringResource(id = R.string.later))
+                            Text(text = stringResource(id = designR.string.later))
                         }
                         Spacer(modifier = Modifier.width(ContentPadding))
                         Button(onClick = { context.toAppDetailSettings() }) {
-                            Text(text = stringResource(id = R.string.to_request_permission))
+                            Text(text = stringResource(id = designR.string.to_request_permission))
                         }
                     }
                 }

@@ -16,19 +16,32 @@
 
 package com.reach.modernandroid.feature.camerax
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.navigation.NavGraphBuilder
+import com.reach.base.ui.common.toDp
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
 import com.reach.modernandroid.core.ui.common.navigation.screenComposable
+import com.reach.modernandroid.core.ui.common.permission.RequestPermissionScreen
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import org.koin.compose.koinInject
 
@@ -41,27 +54,69 @@ fun NavGraphBuilder.cameraxRoute() {
 }
 
 @Composable
-internal fun CameraxRoute() {
-    val appUiState = koinInject<AppUiState>()
+internal fun CameraxRoute(
+    appUiState: AppUiState = koinInject(),
+) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                appUiState.setFullScreen(true)
+            } else if (event == Lifecycle.Event.ON_STOP) {
+                appUiState.setFullScreen(false)
+            }
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
-    CameraxScreen(
-        navToAlbum = { appUiState.getNavController().navigate(AppRoute.ALBUM) },
-    )
+    RequestPermissionScreen(
+        permission = android.Manifest.permission.CAMERA,
+        requestTitle = R.string.camerax_request_permission,
+        onBackClick = { appUiState.getNavController().navigateUp() },
+    ) {
+        CameraxScreen(
+            navToAlbum = { appUiState.getNavController().navigate(AppRoute.ALBUM) },
+        )
+    }
 }
 
 @Composable
 private fun CameraxScreen(
     navToAlbum: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black),
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
-        Text(text = "CameraxRoute")
-        Spacer(modifier = Modifier.height(32.dp))
-        Button(onClick = { navToAlbum() }) {
-            Text(text = "To Album")
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomStart)
+                .padding(
+                    bottom = WindowInsets.navigationBars
+                        .getBottom(LocalDensity.current)
+                        .toDp() + 64.dp,
+                ),
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(start = 48.dp)
+                    .size(56.dp, 56.dp)
+                    .clip(shape = CircleShape)
+                    .background(Color.White)
+                    .align(Alignment.CenterStart)
+                    .clickable { navToAlbum() },
+            )
+
+            Box(
+                modifier = Modifier
+                    .size(64.dp, 64.dp)
+                    .clip(shape = CircleShape)
+                    .background(Color.White)
+                    .align(Alignment.Center),
+            )
         }
     }
 }

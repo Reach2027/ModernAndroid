@@ -86,14 +86,14 @@ private fun SettingsScreen(
 ) {
     Column {
         AppTopBarWithBack(
-            title = { Text(text = stringResource(id = R.string.settings)) },
+            title = { Text(text = stringResource(id = R.string.settings_title)) },
             onBackClick = onBackClick,
         )
         ThemeSetting(
             onDynamicColorChange = onDynamicColorChange,
             onDarkModeClick = onDarkModeClick,
             settings = settings,
-            darkModes = stringArrayResource(id = R.array.dark_modes),
+            darkModes = stringArrayResource(id = R.array.settings_dark_modes),
         )
     }
 }
@@ -108,7 +108,7 @@ private fun ThemeSetting(
     var showDarkModeDialog by rememberSaveable { mutableStateOf(false) }
 
     SettingItem {
-        Text(text = stringResource(id = R.string.dynamic_color))
+        Text(text = stringResource(id = R.string.settings_dynamic_color))
         Spacer(modifier = Modifier.weight(1f))
         Switch(
             checked = settings.dynamicColor,
@@ -117,7 +117,7 @@ private fun ThemeSetting(
     }
 
     SettingItem {
-        Text(text = stringResource(id = R.string.dark_mode))
+        Text(text = stringResource(id = R.string.settings_dark_mode))
         Spacer(modifier = Modifier.weight(1f))
         Text(
             text = darkModes[settings.darkThemeConfig.ordinal],
@@ -170,7 +170,7 @@ fun DarkModeDialog(
                 modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
-                Text(text = stringResource(id = R.string.dark_mode))
+                Text(text = stringResource(id = R.string.settings_dark_mode))
 
                 Icon(
                     imageVector = AppIcons.Close,
