@@ -17,6 +17,7 @@
 package com.reach.modernandroid.feature.album.preview
 
 import android.net.Uri
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -454,7 +455,7 @@ private fun AlbumScreenPreview() {
                 id = "1",
                 uri = Uri.parse("a"),
                 modifierTime = 0L,
-                albumId = 11L,
+                albumId = "11",
                 albumName = "Album",
             ),
         )

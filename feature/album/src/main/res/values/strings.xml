@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <resources>
-    <string name="album_photos">Photos</string>
+    <string name="album_all_photos">All photos</string>
 
     <string name="album_request_permission">Photos need read images permission</string>
 </resources>

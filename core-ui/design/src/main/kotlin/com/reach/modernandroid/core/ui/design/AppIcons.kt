@@ -27,6 +27,8 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
 import androidx.compose.material.icons.outlined.RocketLaunch
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.ExpandLess
+import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.PersonOutline
@@ -50,6 +52,9 @@ object AppIcons {
 
     val Last = Icons.AutoMirrored.Rounded.ArrowBackIos
     val next = Icons.AutoMirrored.Rounded.ArrowForwardIos
+
+    val ExpandMore = Icons.Rounded.ExpandMore
+    val ExpandLess = Icons.Rounded.ExpandLess
 
     val Settings = Icons.Outlined.Settings
 }
@@ -84,6 +89,10 @@ private fun AppIconsPreview() {
             Icon(imageVector = AppIcons.Last, contentDescription = "")
             Spacer(modifier = Modifier.width(16.dp))
             Icon(imageVector = AppIcons.next, contentDescription = "")
+            Spacer(modifier = Modifier.width(16.dp))
+            Icon(imageVector = AppIcons.ExpandMore, contentDescription = "")
+            Spacer(modifier = Modifier.width(16.dp))
+            Icon(imageVector = AppIcons.ExpandLess, contentDescription = "")
         }
     }
 }

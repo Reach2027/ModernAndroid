@@ -15,6 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <string name="album_photos">照片</string>
+    <string name="album_all_photos">全部照片</string>
     <string name="album_request_permission">照片需要读取照片权限</string>
 </resources>

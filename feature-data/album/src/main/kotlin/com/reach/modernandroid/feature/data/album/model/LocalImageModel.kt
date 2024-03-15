@@ -22,14 +22,14 @@ data class LocalImageModel(
     val id: String,
     val uri: Uri,
     val modifierTime: Long,
-    val albumId: Long,
+    val albumId: String,
     val albumName: String,
 )
 
-data class LocalAlbumInfo(
-    val albumId: Long,
+data class LocalAlbumModel(
+    val albumId: String,
     val albumName: String,
     val coverId: String,
     val coverUri: Uri,
-    val size: Int,
+    val count: Int,
 )

@@ -16,28 +16,69 @@
 
 package com.reach.modernandroid.feature.album
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.reach.modernandroid.feature.data.album.LocalImageRepo
+import com.reach.modernandroid.feature.data.album.model.LocalAlbumModel
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+internal data class AlbumUiState(
+    val localAlbums: List<LocalAlbumModel> = emptyList(),
+    val currentAlbum: LocalAlbumModel = LocalAlbumModel(
+        albumId = "",
+        albumName = "",
+        coverId = "",
+        coverUri = Uri.EMPTY,
+        count = 0,
+    ),
+)
 
 internal class AlbumViewModel(
-    localImageRepo: LocalImageRepo,
+    private val localImageRepo: LocalImageRepo,
 ) : ViewModel() {
 
     private val _previewIndex = MutableStateFlow(0)
     val previewIndex = _previewIndex.asStateFlow()
 
-    val localImages: Flow<PagingData<LocalImageModel>> =
-        localImageRepo.getLocalImages()
+    private val _uiState = MutableStateFlow(AlbumUiState())
+    val uiState = _uiState.asStateFlow()
+
+    var localImages: Flow<PagingData<LocalImageModel>> =
+        localImageRepo.getLocalImages(null)
             .cachedIn(viewModelScope)
+
+    init {
+        getLocalAlbums()
+    }
 
     fun setPreViewIndex(index: Int) {
         _previewIndex.value = index
+    }
+
+    fun changeAlbum(albumModel: LocalAlbumModel) {
+        if (albumModel == _uiState.value.currentAlbum) {
+            return
+        }
+        _uiState.value = _uiState.value.copy(currentAlbum = albumModel)
+        localImages = localImageRepo.getLocalImages(albumModel.albumId.toLongOrNull())
+            .cachedIn(viewModelScope)
+    }
+
+    private fun getLocalAlbums() {
+        if (_uiState.value.localAlbums.isNotEmpty()) {
+            return
+        }
+        viewModelScope.launch {
+            localImageRepo.getLocalAlbums().collect {
+                _uiState.emit(_uiState.value.copy(localAlbums = it))
+            }
+        }
     }
 }
