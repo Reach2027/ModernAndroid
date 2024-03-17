@@ -16,8 +16,8 @@
 
 package com.reach.modernandroid.feature.album.preview
 
+import android.annotation.SuppressLint
 import android.net.Uri
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -101,6 +101,11 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
 import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
+
+private const val MAX_SHOW_SCALE = 5f
+private const val MAX_SCALE = 5.3f
 
 @Composable
 internal fun PreviewRoute(
@@ -203,6 +208,7 @@ private fun PreviewScreen(
     }
 }
 
+@SuppressLint("ReturnFromAwaitPointerEventScope")
 @Composable
 private fun PreviewItem(
     onImageClick: () -> Unit,
@@ -251,7 +257,7 @@ private fun PreviewItem(
 
     var maxOffset by remember { mutableStateOf(Offset.Zero) }
 
-    val consume = remember { mutableStateOf(true) }
+    val consumeHorizontalOffset = remember { mutableStateOf(true) }
 
     LaunchedEffect(painterSize, boxSize) {
         if (painterSize == Size.Zero || boxSize == Size.Zero) {
@@ -299,7 +305,11 @@ private fun PreviewItem(
                     onTap = { onImageClick() },
                     onDoubleTap = {
                         if (scale == 1f) {
-                            scale = 2f
+                            val fullScreenScale = max(
+                                boxSize.width / showSize.width,
+                                boxSize.height / showSize.height,
+                            )
+                            scale = max(fullScreenScale, 2f)
                             offset = Offset(
                                 boxSize.width / 2f - it.x,
                                 boxSize.height / 2f - it.y,
@@ -321,19 +331,22 @@ private fun PreviewItem(
                             downPointerCount--
                         }
 
-                        if (scale < 1f && scale > 0.6f && downPointerCount == 0) {
+                        if (downPointerCount == 0 && scale < 1f && scale > 0.6f) {
                             scale = 1f
                             offset = Offset.Zero
-                        } else if (scale <= 0.6f && downPointerCount == 0) {
+                        } else if (downPointerCount == 0 && scale <= 0.6f) {
                             exitPreview()
+                        } else if (downPointerCount == 0 && scale > MAX_SHOW_SCALE) {
+                            scale = MAX_SHOW_SCALE
                         }
                     }
                 }
             }
             .pointerInput(Unit) {
-                customDetectTransformGestures(consume = consume) { _, pan, zoom, _ ->
+                customDetectTransformGestures(consume = consumeHorizontalOffset) { _, pan, zoom, _ ->
                     scale *= zoom
-                    offset += pan
+                    scale = min(scale, MAX_SCALE)
+                    offset += pan * zoom
                 }
             }
             .graphicsLayer {
@@ -344,13 +357,13 @@ private fun PreviewItem(
                     (scale <= 1f && maxOffset == Offset.Zero)
                 ) {
                     val offsetX = if (offset.x >= maxOffset.x) {
-                        consume.value = false
+                        consumeHorizontalOffset.value = false
                         maxOffset.x
                     } else if (offset.x <= -maxOffset.x) {
-                        consume.value = false
+                        consumeHorizontalOffset.value = false
                         -maxOffset.x
                     } else {
-                        consume.value = true
+                        consumeHorizontalOffset.value = true
                         offset.x
                     }
 

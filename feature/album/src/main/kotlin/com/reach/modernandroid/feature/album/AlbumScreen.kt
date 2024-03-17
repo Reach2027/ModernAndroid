@@ -17,6 +17,7 @@
 package com.reach.modernandroid.feature.album
 
 import android.net.Uri
+import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
@@ -24,8 +25,11 @@ import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -46,6 +50,7 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridItemScope
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -101,6 +106,9 @@ import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.core.ui.common.state.StatusDarkMode
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.core.ui.design.AppIcons
+import com.reach.modernandroid.core.ui.design.animation.AppAniSpec
+import com.reach.modernandroid.core.ui.design.animation.groupEnter
+import com.reach.modernandroid.core.ui.design.animation.groupExit
 import com.reach.modernandroid.feature.album.navigation.ROUTE_ALBUM_PREVIEW
 import com.reach.modernandroid.feature.data.album.model.LocalAlbumModel
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
@@ -123,6 +131,7 @@ internal fun AlbumRoute(
         permission = getReadImagePermission(),
         requestTitle = R.string.album_request_permission,
         onBackClick = { appUiState.getNavController().navigateUp() },
+        grantedCallback = { viewModel.getLocalAlbums() },
     ) {
         AlbumScreen(
             onBackClick = { appUiState.getNavController().navigateUp() },
@@ -287,16 +296,13 @@ private fun LocalAlbum(
 
     AnimatedVisibility(
         visible = showAlbumSelector,
-        enter = slideInVertically(
-            animationSpec = spring(
-                stiffness = Spring.StiffnessMediumLow,
-                visibilityThreshold = IntOffset.VisibilityThreshold,
-            ),
+        enter = fadeIn(animationSpec = groupEnter()) + slideInVertically(
+            animationSpec = groupEnter(visibilityThreshold = IntOffset.VisibilityThreshold),
             initialOffsetY = { -it },
         ),
-        exit = slideOutVertically(
-            animationSpec = spring(
-                stiffness = Spring.StiffnessMediumLow,
+        exit = fadeOut(animationSpec = groupExit()) + slideOutVertically(
+            animationSpec = groupExit(
+                stiffness = AppAniSpec.STIFFNESS_GROUP_EXIT_LOW,
                 visibilityThreshold = IntOffset.VisibilityThreshold,
             ),
             targetOffsetY = { -it },
@@ -305,7 +311,15 @@ private fun LocalAlbum(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background.copy(alpha = 0.98f))
+                .background(
+                    color = MaterialTheme.colorScheme.background.copy(
+                        alpha = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) {
+                            0.6f
+                        } else {
+                            0.98f
+                        },
+                    ),
+                )
                 .padding(top = topBarH),
         ) {
             LazyVerticalGrid(
@@ -317,6 +331,9 @@ private fun LocalAlbum(
                     key = { it.albumId },
                 ) {
                     LocalAlbumItem(onAlbumClick = onAlbumClick, localAlbumModel = it)
+                }
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
             }
         }
@@ -393,7 +410,7 @@ private fun LocalImage(
     }
 
     val blur by animateDpAsState(
-        targetValue = if (showAlbumSelector) 128.dp else 0.dp,
+        targetValue = if (showAlbumSelector) 80.dp else 0.dp,
         animationSpec = spring(
             stiffness = Spring.StiffnessMediumLow,
             visibilityThreshold = Dp.VisibilityThreshold,
@@ -446,14 +463,15 @@ private fun LocalImage(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun LocalImageItem(
+private fun LazyGridItemScope.LocalImageItem(
     onImageClick: () -> Unit,
     localImageModel: LocalImageModel?,
 ) {
     if (localImageModel == null) return
 
-    Box {
+    Box(modifier = Modifier.animateItemPlacement()) {
         AsyncLocalImage(
             model = localImageModel.uri,
             contentDescription = "",

@@ -38,6 +38,7 @@ import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.core.ui.common.state.StatusDarkMode
 import com.reach.modernandroid.core.ui.design.theme.AppTheme
 import com.reach.modernandroid.ui.App
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -51,6 +52,14 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            appUiState.requestedOrientation.collectLatest {
+                if (requestedOrientation != it) {
+                    requestedOrientation = it
+                }
+            }
+        }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         setupFullScreen()
@@ -66,7 +75,7 @@ class MainActivity : ComponentActivity() {
 
         var statusDarkMode: StatusDarkMode by mutableStateOf(StatusDarkMode.FollowTheme)
         lifecycleScope.launch {
-            appUiState.statusDarkMode.collect { statusDarkMode = it }
+            appUiState.statusDarkMode.collectLatest { statusDarkMode = it }
         }
 
         setContent {
@@ -107,7 +116,7 @@ class MainActivity : ComponentActivity() {
     private fun setupFullScreen() {
         /*val insetsController = WindowCompat.getInsetsController(window, window.decorView.rootView)*/
         lifecycleScope.launch {
-            appUiState.fullScreen.collect {
+            appUiState.fullScreen.collectLatest {
                 // The animation is too slow
                 /*if (it) {
                     insetsController.hide(WindowInsetsCompat.Type.systemBars())

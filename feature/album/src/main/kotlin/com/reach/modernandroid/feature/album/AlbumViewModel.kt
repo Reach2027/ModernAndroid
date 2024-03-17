@@ -51,12 +51,8 @@ internal class AlbumViewModel(
     val uiState = _uiState.asStateFlow()
 
     var localImages: Flow<PagingData<LocalImageModel>> =
-        localImageRepo.getLocalImages(null)
+        localImageRepo.getLocalImages()
             .cachedIn(viewModelScope)
-
-    init {
-        getLocalAlbums()
-    }
 
     fun setPreViewIndex(index: Int) {
         _previewIndex.value = index
@@ -71,7 +67,7 @@ internal class AlbumViewModel(
             .cachedIn(viewModelScope)
     }
 
-    private fun getLocalAlbums() {
+    fun getLocalAlbums() {
         if (_uiState.value.localAlbums.isNotEmpty()) {
             return
         }

@@ -20,6 +20,7 @@ import com.reach.modernandroid.MainActivityViewModel
 import com.reach.modernandroid.core.ui.common.di.appUiStateStateModule
 import com.reach.modernandroid.feature.album.di.albumModule
 import com.reach.modernandroid.feature.bingwallpaper.di.bingWallpaperModule
+import com.reach.modernandroid.feature.camerax.di.cameraxModule
 import com.reach.modernandroid.feature.data.settings.di.settingsDataModule
 import com.reach.modernandroid.feature.me.di.meModule
 import com.reach.modernandroid.feature.settings.di.settingsModule
@@ -34,6 +35,7 @@ internal val appModule = module {
         meModule,
         bingWallpaperModule,
         albumModule,
+        cameraxModule,
         settingsModule,
     )
 

@@ -16,6 +16,7 @@
 
 package com.reach.modernandroid.core.ui.common.state
 
+import android.content.pm.ActivityInfo
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.CoroutineScope
@@ -29,6 +30,8 @@ interface AppUiState {
 
     val fullScreen: StateFlow<Boolean>
 
+    val requestedOrientation: StateFlow<Int>
+
     fun getWindowSizeClass(): WindowSizeClass
 
     fun setWindowSizeClass(windowSizeClass: WindowSizeClass)
@@ -40,6 +43,10 @@ interface AppUiState {
     fun setStatusDarkMode(statusDarkMode: StatusDarkMode)
 
     fun setFullScreen(fullScreen: Boolean)
+
+    fun setRequestedOrientation(requestedOrientation: Int)
+
+    fun resetRequestedOrientation()
 }
 
 internal class DefaultAppUiState(
@@ -55,6 +62,10 @@ internal class DefaultAppUiState(
 
     private val _fullScreen = MutableStateFlow(false)
     override val fullScreen = _fullScreen.asStateFlow()
+
+    private val _requestedOrientation =
+        MutableStateFlow(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
+    override val requestedOrientation = _requestedOrientation.asStateFlow()
 
     override fun getWindowSizeClass(): WindowSizeClass {
         return requireNotNull(windowSizeClass)
@@ -82,5 +93,13 @@ internal class DefaultAppUiState(
 
     override fun setFullScreen(fullScreen: Boolean) {
         _fullScreen.value = fullScreen
+    }
+
+    override fun setRequestedOrientation(requestedOrientation: Int) {
+        _requestedOrientation.value = requestedOrientation
+    }
+
+    override fun resetRequestedOrientation() {
+        _requestedOrientation.value = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     }
 }

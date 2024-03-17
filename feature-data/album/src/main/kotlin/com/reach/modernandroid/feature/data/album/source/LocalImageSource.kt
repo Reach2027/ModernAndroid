@@ -39,12 +39,15 @@ internal suspend fun Application.getLocalAlbums(): List<LocalAlbumModel> =
 
         val localAlbumModels = mutableListOf<LocalAlbumModel>()
         launch {
-            val coverImage = async { queryLocalImage(limit = 1)[0] }.await()
+            val coverImage = async { getLocalImage(limit = 1) }.await()
+            if (coverImage.isEmpty()) {
+                return@launch
+            }
             val allPhotosAlbum = LocalAlbumModel(
                 albumId = "",
                 albumName = "",
-                coverId = coverImage.id,
-                coverUri = coverImage.uri,
+                coverId = coverImage[0].id,
+                coverUri = coverImage[0].uri,
                 count = async { getImageCount() }.await(),
             )
             localAlbumModels.add(0, allPhotosAlbum)
@@ -89,7 +92,7 @@ internal suspend fun Application.getLocalAlbums(): List<LocalAlbumModel> =
                 val bucketId = it.getLong(bucketIdIndex)
                 val bucketName = it.getStringOrNull(bucketNameIndex) ?: ""
 
-                val coverImage = async { queryLocalImage(albumId = bucketId, limit = 1)[0] }.await()
+                val coverImage = async { getLocalImage(albumId = bucketId, limit = 1)[0] }.await()
                 val albumInfo = LocalAlbumModel(
                     albumId = bucketId.toString(),
                     albumName = bucketName,
@@ -129,7 +132,7 @@ internal suspend fun Application.getImageCount(albumId: Long? = null): Int =
         return@withContext 0
     }
 
-internal suspend fun Application.queryLocalImage(
+internal suspend fun Application.getLocalImage(
     albumId: Long? = null,
     offset: Int = 0,
     limit: Int? = null,

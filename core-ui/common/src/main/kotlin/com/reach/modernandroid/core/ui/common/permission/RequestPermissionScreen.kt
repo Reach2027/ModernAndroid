@@ -55,12 +55,18 @@ fun RequestPermissionScreen(
     permission: String,
     @StringRes requestTitle: Int,
     onBackClick: () -> Unit,
+    grantedCallback: () -> Unit = {},
     permissionGrantedContent: @Composable () -> Unit,
 ) {
     val permissionState = rememberPermissionState(permission = permission)
     if (permissionState.status.isGranted.not()) {
         LaunchedEffect(true) {
             permissionState.launchPermissionRequest()
+        }
+    }
+    LaunchedEffect(permissionState.status.isGranted) {
+        if (permissionState.status.isGranted) {
+            grantedCallback()
         }
     }
 

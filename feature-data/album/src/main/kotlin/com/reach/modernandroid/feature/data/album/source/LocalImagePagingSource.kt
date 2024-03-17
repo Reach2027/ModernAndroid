@@ -38,7 +38,7 @@ internal class LocalImagePagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, LocalImageModel> = try {
         val currentPage = params.key ?: 0
-        val localImages = application.queryLocalImage(
+        val localImages = application.getLocalImage(
             albumId = albumId,
             offset = currentPage * PAGE_LIMIT,
             limit = PAGE_LIMIT,

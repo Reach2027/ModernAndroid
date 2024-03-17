@@ -23,11 +23,13 @@ import androidx.compose.runtime.Stable
 
 object AppAniSpec {
 
-    const val STIFFNESS_WIDGET_ENTER = Spring.StiffnessMedium
-    const val STIFFNESS_WIDGET_EXIT = 6000f
+    const val STIFFNESS_WIDGET_ENTER = 800f
+    const val STIFFNESS_WIDGET_EXIT = 1200f
+    const val STIFFNESS_WIDGET_EXIT_LOW = 800f
 
-    const val STIFFNESS_GROUP_ENTER = Spring.StiffnessMediumLow
-    const val STIFFNESS_GROUP_EXIT = Spring.StiffnessMedium
+    const val STIFFNESS_GROUP_ENTER = 400f
+    const val STIFFNESS_GROUP_EXIT = 600f
+    const val STIFFNESS_GROUP_EXIT_LOW = 400f
 
     const val DAMPING_RATIO = 0.6f
 }
