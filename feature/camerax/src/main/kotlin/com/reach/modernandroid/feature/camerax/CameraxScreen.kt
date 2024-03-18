@@ -56,7 +56,7 @@ import com.reach.base.ui.common.toDp
 import com.reach.base.ui.common.widget.AsyncLocalImage
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
 import com.reach.modernandroid.core.ui.common.navigation.screenComposable
-import com.reach.modernandroid.core.ui.common.permission.RequestPermissionScreen
+import com.reach.modernandroid.core.ui.common.permission.RequestPermissionsScreen
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
@@ -92,8 +92,8 @@ internal fun CameraxRoute(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    RequestPermissionScreen(
-        permission = android.Manifest.permission.CAMERA,
+    RequestPermissionsScreen(
+        permissions = listOf(android.Manifest.permission.CAMERA),
         requestTitle = R.string.camerax_request_permission,
         onBackClick = { appUiState.getNavController().navigateUp() },
     ) {

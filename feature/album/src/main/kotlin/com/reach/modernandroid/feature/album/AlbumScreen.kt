@@ -101,7 +101,7 @@ import com.reach.base.ui.common.toDp
 import com.reach.base.ui.common.widget.AsyncLocalImage
 import com.reach.base.ui.common.widget.VerticalTransparentBg
 import com.reach.modernandroid.core.ui.common.AppPreview
-import com.reach.modernandroid.core.ui.common.permission.RequestPermissionScreen
+import com.reach.modernandroid.core.ui.common.permission.RequestPermissionsScreen
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.core.ui.common.state.StatusDarkMode
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
@@ -127,8 +127,8 @@ internal fun AlbumRoute(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    RequestPermissionScreen(
-        permission = getReadImagePermission(),
+    RequestPermissionsScreen(
+        permissions = listOf(getReadImagePermission()),
         requestTitle = R.string.album_request_permission,
         onBackClick = { appUiState.getNavController().navigateUp() },
         grantedCallback = { viewModel.getLocalAlbums() },
