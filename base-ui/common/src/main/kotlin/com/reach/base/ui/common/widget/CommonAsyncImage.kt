@@ -67,8 +67,8 @@ fun AsyncLocalImage(
             modifier.background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f),
-                        MaterialTheme.colorScheme.surfaceVariant,
+                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.1f),
+                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.9f),
                     ),
                 ),
                 shape = RectangleShape,

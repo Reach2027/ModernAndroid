@@ -88,7 +88,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImagePainter
-import com.reach.base.ui.common.widget.SkeletonAsyncImage
+import com.reach.base.ui.common.widget.AsyncLocalImage
 import com.reach.modernandroid.core.ui.common.AppPreview
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
@@ -288,7 +288,7 @@ private fun PreviewItem(
         )
     }
 
-    SkeletonAsyncImage(
+    AsyncLocalImage(
         model = localImageModel.uri,
         onState = {
             if (it is AsyncImagePainter.State.Success) {
@@ -380,7 +380,7 @@ private fun PreviewItem(
                 translationX = offsetAni.x
                 translationY = offsetAni.y
             },
-        placeHolderModifier = Modifier.fillMaxSize(),
+//        placeHolderModifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.Fit,
     )
 }
