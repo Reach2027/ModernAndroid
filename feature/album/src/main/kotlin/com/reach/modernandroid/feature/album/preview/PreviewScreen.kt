@@ -18,6 +18,7 @@ package com.reach.modernandroid.feature.album.preview
 
 import android.annotation.SuppressLint
 import android.net.Uri
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -32,13 +33,6 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.calculateCentroid
-import androidx.compose.foundation.gestures.calculateCentroidSize
-import androidx.compose.foundation.gestures.calculatePan
-import androidx.compose.foundation.gestures.calculateRotation
-import androidx.compose.foundation.gestures.calculateZoom
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -49,10 +43,8 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
@@ -67,20 +59,14 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.PointerEventType
-import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.input.pointer.positionChanged
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
-import androidx.compose.ui.util.fastAny
-import androidx.compose.ui.util.fastForEach
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
@@ -94,13 +80,12 @@ import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.core.ui.design.animation.widgetEnter
 import com.reach.modernandroid.feature.album.AlbumViewModel
+import com.reach.modernandroid.feature.album.ext.customDetectTransformGestures
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flow
-import kotlin.math.PI
-import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -123,7 +108,7 @@ internal fun PreviewRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PreviewScreen(
     onBackClick: () -> Unit,
@@ -142,23 +127,12 @@ private fun PreviewScreen(
     }
 
     var fullScreen by rememberSaveable { mutableStateOf(false) }
-    var showTopBar by remember { mutableStateOf(false) }
-    LaunchedEffect(previewIndex) {
-        delay(400L)
-        showTopBar = true
-    }
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
-                setFullScreen(fullScreen)
-            } else if (event == Lifecycle.Event.ON_STOP) {
-                setFullScreen(false)
-            }
+    LifecycleStartEffect {
+        setFullScreen(fullScreen)
+        onStopOrDispose {
+            setFullScreen(false)
         }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
     Box(
@@ -186,24 +160,44 @@ private fun PreviewScreen(
             )
         }
 
-        AnimatedVisibility(
-            visible = fullScreen.not() && showTopBar,
-            enter = fadeIn(animationSpec = widgetEnter()) + slideInVertically(
-                animationSpec = widgetEnter(visibilityThreshold = IntOffset.VisibilityThreshold),
-                initialOffsetY = { -it },
-            ),
-            exit = fadeOut(animationSpec = widgetEnter()) + slideOutVertically(
-                animationSpec = widgetEnter(visibilityThreshold = IntOffset.VisibilityThreshold),
-                targetOffsetY = { -it },
-            ),
-        ) {
-            Box(modifier = Modifier.height(IntrinsicSize.Max)) {
-                AppTopBarWithBack(
-                    title = { },
-                    onBackClick = onBackClick,
-                    colors = TopAppBarDefaults.topAppBarColors(),
-                )
-            }
+        TopBar(
+            onBackClick = onBackClick,
+            fullScreen = fullScreen,
+            previewIndex = previewIndex,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TopBar(
+    onBackClick: () -> Unit,
+    fullScreen: Boolean,
+    previewIndex: Int,
+) {
+    var showTopBar by remember { mutableStateOf(false) }
+    LaunchedEffect(previewIndex) {
+        delay(400L)
+        showTopBar = true
+    }
+
+    AnimatedVisibility(
+        visible = fullScreen.not() && showTopBar,
+        enter = fadeIn(animationSpec = widgetEnter()) + slideInVertically(
+            animationSpec = widgetEnter(visibilityThreshold = IntOffset.VisibilityThreshold),
+            initialOffsetY = { -it },
+        ),
+        exit = fadeOut(animationSpec = widgetEnter()) + slideOutVertically(
+            animationSpec = widgetEnter(visibilityThreshold = IntOffset.VisibilityThreshold),
+            targetOffsetY = { -it },
+        ),
+    ) {
+        Box(modifier = Modifier.height(IntrinsicSize.Max)) {
+            AppTopBarWithBack(
+                title = { },
+                onBackClick = onBackClick,
+                colors = TopAppBarDefaults.topAppBarColors(),
+            )
         }
     }
 }
@@ -250,14 +244,24 @@ private fun PreviewItem(
     var downPointerCount by remember { mutableIntStateOf(0) }
 
     var painterSize by remember { mutableStateOf(Size.Zero) }
-
     var boxSize by remember { mutableStateOf(Size.Zero) }
-
     var showSize by remember { mutableStateOf(Size.Zero) }
 
     var maxOffset by remember { mutableStateOf(Offset.Zero) }
 
     val consumeHorizontalOffset = remember { mutableStateOf(true) }
+
+    var overOffsetY by remember { mutableFloatStateOf(0f) }
+    LaunchedEffect(overOffsetY) {
+        Log.e("REACH", "LaunchedEffect overOffsetY: $overOffsetY")
+        if (overOffsetY > 0f) {
+            overOffsetY = min(boxSize.height, overOffsetY)
+            val yS = (boxSize.height - overOffsetY) / boxSize.height
+            Log.e("REACH", "yS: $yS")
+            scale = yS * 2f
+            Log.e("REACH", "scale: $yS")
+        }
+    }
 
     LaunchedEffect(painterSize, boxSize) {
         if (painterSize == Size.Zero || boxSize == Size.Zero) {
@@ -331,30 +335,37 @@ private fun PreviewItem(
                             downPointerCount--
                         }
 
-                        if (downPointerCount == 0 && scale < 1f && scale > 0.6f) {
-                            scale = 1f
-                            offset = Offset.Zero
-                        } else if (downPointerCount == 0 && scale <= 0.6f) {
-                            exitPreview()
-                        } else if (downPointerCount == 0 && scale > MAX_SHOW_SCALE) {
-                            scale = MAX_SHOW_SCALE
+                        if (downPointerCount == 0) {
+                            if (overOffsetY > 0.2f * boxSize.height) {
+//                                exitPreview()
+                            } else if (scale < 1f && scale > 0.6f) {
+                                scale = 1f
+                                offset = Offset.Zero
+                            } else if (scale <= 0.6f) {
+                                exitPreview()
+                            } else if (scale > MAX_SHOW_SCALE) {
+                                scale = MAX_SHOW_SCALE
+                            }
+                            overOffsetY = 0f
                         }
                     }
                 }
             }
             .pointerInput(Unit) {
                 customDetectTransformGestures(consume = consumeHorizontalOffset) { _, pan, zoom, _ ->
-                    scale *= zoom
-                    scale = min(scale, MAX_SCALE)
-                    offset += pan * zoom
+                    if (zoom != 1f) {
+                        scale *= zoom
+                        scale = min(scale, MAX_SCALE)
+                    }
+                    offset += pan / zoom
                 }
             }
             .graphicsLayer {
                 scaleX = scaleAni
                 scaleY = scaleAni
 
-                if ((scale > 1f && maxOffset != Offset.Zero) ||
-                    (scale <= 1f && maxOffset == Offset.Zero)
+                if ((scale > 1f && maxOffset != Offset.Zero)
+                    || (scale <= 1f && maxOffset == Offset.Zero)
                 ) {
                     val offsetX = if (offset.x >= maxOffset.x) {
                         consumeHorizontalOffset.value = false
@@ -368,84 +379,26 @@ private fun PreviewItem(
                     }
 
                     val offsetY = if (offset.y >= maxOffset.y) {
+                        overOffsetY += offset.y - maxOffset.y
                         maxOffset.y
                     } else if (offset.y <= -maxOffset.y) {
+                        overOffsetY += offset.y - maxOffset.y
                         -maxOffset.y
                     } else {
                         offset.y
                     }
+                    if (downPointerCount == 0) {
+                        overOffsetY = 0f
+                    }
+
                     offset = Offset(offsetX, offsetY)
                 }
 
                 translationX = offsetAni.x
                 translationY = offsetAni.y
             },
-//        placeHolderModifier = Modifier.fillMaxSize(),
         contentScale = ContentScale.Fit,
     )
-}
-
-private suspend fun PointerInputScope.customDetectTransformGestures(
-    consume: State<Boolean>,
-    panZoomLock: Boolean = false,
-    onGesture: (centroid: Offset, pan: Offset, zoom: Float, rotation: Float) -> Unit,
-) {
-    awaitEachGesture {
-        var rotation = 0f
-        var zoom = 1f
-        var pan = Offset.Zero
-        var pastTouchSlop = false
-        val touchSlop = viewConfiguration.touchSlop
-        var lockedToPanZoom = false
-
-        awaitFirstDown(requireUnconsumed = false)
-        do {
-            val event = awaitPointerEvent()
-            val canceled = event.changes.fastAny { it.isConsumed }
-            if (!canceled) {
-                val zoomChange = event.calculateZoom()
-                val rotationChange = event.calculateRotation()
-                val panChange = event.calculatePan()
-
-                if (!pastTouchSlop) {
-                    zoom *= zoomChange
-                    rotation += rotationChange
-                    pan += panChange
-
-                    val centroidSize = event.calculateCentroidSize(useCurrent = false)
-                    val zoomMotion = abs(1 - zoom) * centroidSize
-                    val rotationMotion = abs(rotation * PI.toFloat() * centroidSize / 180f)
-                    val panMotion = pan.getDistance()
-
-                    if (zoomMotion > touchSlop ||
-                        rotationMotion > touchSlop ||
-                        panMotion > touchSlop
-                    ) {
-                        pastTouchSlop = true
-                        lockedToPanZoom = panZoomLock && rotationMotion < touchSlop
-                    }
-                }
-
-                if (pastTouchSlop) {
-                    val centroid = event.calculateCentroid(useCurrent = false)
-                    val effectiveRotation = if (lockedToPanZoom) 0f else rotationChange
-                    if (effectiveRotation != 0f ||
-                        zoomChange != 1f ||
-                        panChange != Offset.Zero
-                    ) {
-                        onGesture(centroid, panChange, zoomChange, effectiveRotation)
-                    }
-                    if (consume.value) {
-                        event.changes.fastForEach {
-                            if (it.positionChanged()) {
-                                it.consume()
-                            }
-                        }
-                    }
-                }
-            }
-        } while (!canceled && event.changes.fastAny { it.pressed })
-    }
 }
 
 @Stable

@@ -36,7 +36,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,11 +45,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -122,26 +119,14 @@ private fun MeScreen(
         )
     }
 
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner, isExpanded) {
-        var observer: LifecycleEventObserver? = null
+    LifecycleResumeEffect {
         if (isExpanded) {
             onStatusDarkModeSet(StatusDarkMode.FollowTheme)
         } else {
-            observer = LifecycleEventObserver { _, event ->
-                if (event == Lifecycle.Event.ON_RESUME) {
-                    onStatusDarkModeSet(StatusDarkMode.Dark)
-                } else if (event == Lifecycle.Event.ON_PAUSE) {
-                    onStatusDarkModeSet(StatusDarkMode.FollowTheme)
-                }
-            }
-            lifecycleOwner.lifecycle.addObserver(observer)
+            onStatusDarkModeSet(StatusDarkMode.Dark)
         }
-
-        onDispose {
-            if (observer != null) {
-                lifecycleOwner.lifecycle.removeObserver(observer)
-            }
+        onPauseOrDispose {
+            onStatusDarkModeSet(StatusDarkMode.FollowTheme)
         }
     }
 }

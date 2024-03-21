@@ -37,7 +37,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,8 +47,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import com.reach.base.ui.common.toDp
@@ -75,19 +73,14 @@ internal fun CameraxRoute(
     appUiState: AppUiState = koinInject(),
     viewModel: CameraxViewModel = koinNavViewModel(),
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
-                appUiState.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT)
-                appUiState.setFullScreen(true)
-            } else if (event == Lifecycle.Event.ON_STOP) {
-                appUiState.setFullScreen(false)
-                appUiState.resetRequestedOrientation()
-            }
+    LifecycleStartEffect {
+        appUiState.setFullScreen(true)
+        appUiState.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT)
+
+        onStopOrDispose {
+            appUiState.setFullScreen(false)
+            appUiState.resetRequestedOrientation()
         }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
     }
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

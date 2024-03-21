@@ -3,14 +3,14 @@
 # Plugin
 agp = "8.2.2"
 androidTools = "31.3.1"
-kotlin = "1.9.22"
-ksp = "1.9.22-1.0.18"
+kotlin = "1.9.23"
+ksp = "1.9.23-1.0.19"
 protobufPlugin = "0.9.4"
 
 # Library
 # Compose
-composeBom = "2024.02.02"
-composeCompiler = "1.5.10"
+composeBom = "2024.03.00"
+composeCompiler = "1.5.11"
 material3 = "1.2.1"
 material3AdaptiveNavigation = "1.0.0-alpha05"
 
@@ -57,6 +57,8 @@ lottie = "6.4.0"
 shimmer = "1.2.0"
 
 protobuf = "3.25.2"
+
+haze = "0.6.2"
 
 # Test
 junit = "4.13.2"
@@ -155,6 +157,9 @@ shimmer = { group = "com.valentinilk.shimmer", name = "compose-shimmer", version
 
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
+
+haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze" }
+haze-materials = { group = "dev.chrisbanes.haze", name = "haze-materials", version.ref = "haze" }
 
 # Unit Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
