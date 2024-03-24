@@ -18,7 +18,6 @@ package com.reach.modernandroid.feature.album.preview
 
 import android.annotation.SuppressLint
 import android.net.Uri
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
@@ -44,6 +43,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -74,6 +74,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImagePainter
+import com.reach.base.ui.common.toPx
 import com.reach.base.ui.common.widget.AsyncLocalImage
 import com.reach.modernandroid.core.ui.common.AppPreview
 import com.reach.modernandroid.core.ui.common.state.AppUiState
@@ -90,7 +91,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 private const val MAX_SHOW_SCALE = 5f
-private const val MAX_SCALE = 5.3f
+private const val MAX_SCALE = 5.4f
 
 @Composable
 internal fun PreviewRoute(
@@ -135,6 +136,8 @@ private fun PreviewScreen(
         }
     }
 
+    val overOffsetY = 10.dp.toPx()
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -157,6 +160,7 @@ private fun PreviewScreen(
                 exitPreview = onBackClick,
                 localImageModel = items[index],
                 fullScreen = fullScreen,
+                overOffsetY = overOffsetY,
             )
         }
 
@@ -210,6 +214,7 @@ private fun PreviewItem(
     exitPreview: () -> Unit,
     localImageModel: LocalImageModel?,
     fullScreen: Boolean,
+    overOffsetY: Float,
 ) {
     if (localImageModel == null) {
         return
@@ -220,26 +225,28 @@ private fun PreviewItem(
         label = "",
     )
 
-    var scale: Float by remember { mutableFloatStateOf(1f) }
-    val scaleAni by animateFloatAsState(
-        targetValue = scale,
-        animationSpec = defaultSpring(),
-        label = "",
-    )
+    val scaleState = remember { mutableFloatStateOf(1f) }
     LaunchedEffect(localImageModel.id) {
-        snapshotFlow { scale }.collectLatest {
-            if (scale > 1f && fullScreen.not()) {
+        snapshotFlow { scaleState.floatValue }.collectLatest {
+            if (it > 1f && fullScreen.not()) {
                 previewImage()
             }
         }
     }
 
-    var offset: Offset by remember { mutableStateOf(Offset.Zero) }
+    val offsetState = remember { mutableStateOf(Offset.Zero) }
+
+    var aniFlag by remember { mutableStateOf(Pair(false, false)) }
+    val scaleAni by animateFloatAsState(
+        targetValue = scaleState.floatValue,
+        animationSpec = defaultSpring(),
+        label = "",
+    ) { aniFlag = aniFlag.copy(first = false) }
     val offsetAni by animateOffsetAsState(
-        targetValue = offset,
+        targetValue = offsetState.value,
         animationSpec = defaultSpring(visibilityThreshold = Offset.VisibilityThreshold),
         label = "",
-    )
+    ) { aniFlag = aniFlag.copy(second = false) }
 
     var downPointerCount by remember { mutableIntStateOf(0) }
 
@@ -247,21 +254,9 @@ private fun PreviewItem(
     var boxSize by remember { mutableStateOf(Size.Zero) }
     var showSize by remember { mutableStateOf(Size.Zero) }
 
-    var maxOffset by remember { mutableStateOf(Offset.Zero) }
+    val maxOffsetState = remember { mutableStateOf(Offset.Zero) }
 
-    val consumeHorizontalOffset = remember { mutableStateOf(true) }
-
-    var overOffsetY by remember { mutableFloatStateOf(0f) }
-    LaunchedEffect(overOffsetY) {
-        Log.e("REACH", "LaunchedEffect overOffsetY: $overOffsetY")
-        if (overOffsetY > 0f) {
-            overOffsetY = min(boxSize.height, overOffsetY)
-            val yS = (boxSize.height - overOffsetY) / boxSize.height
-            Log.e("REACH", "yS: $yS")
-            scale = yS * 2f
-            Log.e("REACH", "scale: $yS")
-        }
-    }
+    val consumeTransform = remember { mutableStateOf(true) }
 
     LaunchedEffect(painterSize, boxSize) {
         if (painterSize == Size.Zero || boxSize == Size.Zero) {
@@ -274,22 +269,6 @@ private fun PreviewItem(
         } else {
             Size(painterSize.width / painterSize.height * boxSize.height, boxSize.height)
         }
-    }
-
-    LaunchedEffect(showSize, scale) {
-        val currentSize = showSize * scale
-        maxOffset = Offset(
-            x = if (currentSize.width <= boxSize.width) {
-                0f
-            } else {
-                (currentSize.width - boxSize.width) / 2f
-            },
-            y = if (currentSize.height <= boxSize.height) {
-                0f
-            } else {
-                (currentSize.height - boxSize.height) / 2f
-            },
-        )
     }
 
     AsyncLocalImage(
@@ -308,20 +287,39 @@ private fun PreviewItem(
                 detectTapGestures(
                     onTap = { onImageClick() },
                     onDoubleTap = {
-                        if (scale == 1f) {
+                        val targetScale: Float
+                        val targetOffset: Offset
+                        if (scaleState.floatValue == 1f) {
                             val fullScreenScale = max(
                                 boxSize.width / showSize.width,
                                 boxSize.height / showSize.height,
                             )
-                            scale = max(fullScreenScale, 2f)
-                            offset = Offset(
+                            targetScale = max(fullScreenScale, 2f)
+                            targetOffset = Offset(
                                 boxSize.width / 2f - it.x,
                                 boxSize.height / 2f - it.y,
-                            ) * ((scale - 1f) / 2f + 1f)
+                            ) * ((targetScale - 1f) / 2f + 1f)
                         } else {
-                            scale = 1f
-                            offset = Offset.Zero
+                            targetScale = 1f
+                            targetOffset = Offset.Zero
                         }
+                        aniFlag = Pair(true, true)
+
+                        updateScale(
+                            scale = targetScale,
+                            scaleState = scaleState,
+                            showSize = showSize,
+                            boxSize = boxSize,
+                            maxOffsetState = maxOffsetState,
+                        )
+                        updateOffset(
+                            overOffsetY = overOffsetY,
+                            scale = targetScale,
+                            targetOffset = targetOffset,
+                            offsetState = offsetState,
+                            maxOffset = maxOffsetState.value,
+                            consumeTransform = consumeTransform,
+                        )
                     },
                 )
             }
@@ -336,69 +334,151 @@ private fun PreviewItem(
                         }
 
                         if (downPointerCount == 0) {
-                            if (overOffsetY > 0.2f * boxSize.height) {
+//                            if (offsetState.value.y > maxOffsetState.value.y) {
 //                                exitPreview()
-                            } else if (scale < 1f && scale > 0.6f) {
-                                scale = 1f
-                                offset = Offset.Zero
-                            } else if (scale <= 0.6f) {
+//                            } else
+                            if (scaleState.floatValue < 1f && scaleState.floatValue > 0.7f) {
+                                aniFlag = Pair(true, true)
+                                updateScale(
+                                    scale = 1f,
+                                    scaleState = scaleState,
+                                    showSize = showSize,
+                                    boxSize = boxSize,
+                                    maxOffsetState = maxOffsetState,
+                                )
+                                updateOffset(
+                                    overOffsetY = overOffsetY,
+                                    scale = 1f,
+                                    targetOffset = Offset.Zero,
+                                    offsetState = offsetState,
+                                    maxOffset = maxOffsetState.value,
+                                    consumeTransform = consumeTransform,
+                                )
+                            } else if (scaleState.floatValue <= 0.7f) {
                                 exitPreview()
-                            } else if (scale > MAX_SHOW_SCALE) {
-                                scale = MAX_SHOW_SCALE
+                            } else if (scaleState.floatValue > MAX_SHOW_SCALE) {
+                                aniFlag = Pair(true, false)
+                                updateScale(
+                                    scale = MAX_SHOW_SCALE,
+                                    scaleState = scaleState,
+                                    showSize = showSize,
+                                    boxSize = boxSize,
+                                    maxOffsetState = maxOffsetState,
+                                )
                             }
-                            overOffsetY = 0f
                         }
                     }
                 }
             }
             .pointerInput(Unit) {
-                customDetectTransformGestures(consume = consumeHorizontalOffset) { _, pan, zoom, _ ->
+                customDetectTransformGestures(consume = consumeTransform) { _, pan, zoom, _ ->
                     if (zoom != 1f) {
-                        scale *= zoom
-                        scale = min(scale, MAX_SCALE)
+                        val scale = min(scaleState.floatValue * zoom, MAX_SCALE)
+                        updateScale(
+                            scale = scale,
+                            scaleState = scaleState,
+                            showSize = showSize,
+                            boxSize = boxSize,
+                            maxOffsetState = maxOffsetState,
+                        )
                     }
-                    offset += pan / zoom
+                    updateOffset(
+                        overOffsetY = overOffsetY,
+                        scale = scaleState.floatValue,
+                        targetOffset = offsetState.value + pan / zoom,
+                        offsetState = offsetState,
+                        maxOffset = maxOffsetState.value,
+                        consumeTransform = consumeTransform,
+                    )
                 }
             }
             .graphicsLayer {
-                scaleX = scaleAni
-                scaleY = scaleAni
-
-                if ((scale > 1f && maxOffset != Offset.Zero)
-                    || (scale <= 1f && maxOffset == Offset.Zero)
-                ) {
-                    val offsetX = if (offset.x >= maxOffset.x) {
-                        consumeHorizontalOffset.value = false
-                        maxOffset.x
-                    } else if (offset.x <= -maxOffset.x) {
-                        consumeHorizontalOffset.value = false
-                        -maxOffset.x
-                    } else {
-                        consumeHorizontalOffset.value = true
-                        offset.x
-                    }
-
-                    val offsetY = if (offset.y >= maxOffset.y) {
-                        overOffsetY += offset.y - maxOffset.y
-                        maxOffset.y
-                    } else if (offset.y <= -maxOffset.y) {
-                        overOffsetY += offset.y - maxOffset.y
-                        -maxOffset.y
-                    } else {
-                        offset.y
-                    }
-                    if (downPointerCount == 0) {
-                        overOffsetY = 0f
-                    }
-
-                    offset = Offset(offsetX, offsetY)
+                if (aniFlag.first) {
+                    scaleX = scaleAni
+                    scaleY = scaleAni
+                } else {
+                    scaleX = scaleState.floatValue
+                    scaleY = scaleState.floatValue
                 }
+                var offsetY: Float
+                if (aniFlag.second) {
+                    translationX = offsetAni.x
+                    offsetY = offsetAni.y
+                } else {
+                    translationX = offsetState.value.x
+                    offsetY = offsetState.value.y
+                }
+                translationY = offsetY
 
-                translationX = offsetAni.x
-                translationY = offsetAni.y
+                if (aniFlag.second.not() && downPointerCount == 0) {
+                    if (offsetY > maxOffsetState.value.y) {
+                        offsetY = maxOffsetState.value.y
+                        aniFlag = Pair(false, true)
+                        offsetState.value = Offset(translationX, offsetY)
+                    } else if (offsetY < -maxOffsetState.value.y) {
+                        offsetY = -maxOffsetState.value.y
+                        aniFlag = Pair(false, true)
+                        offsetState.value = Offset(translationX, offsetY)
+                    }
+                }
             },
         contentScale = ContentScale.Fit,
     )
+}
+
+private fun updateScale(
+    scale: Float,
+    scaleState: MutableState<Float>,
+    showSize: Size,
+    boxSize: Size,
+    maxOffsetState: MutableState<Offset>,
+) {
+    scaleState.value = scale
+    val currentSize = showSize * scale
+    maxOffsetState.value = Offset(
+        x = if (currentSize.width <= boxSize.width) {
+            0f
+        } else {
+            (currentSize.width - boxSize.width) / 2f
+        },
+        y = if (currentSize.height <= boxSize.height) {
+            0f
+        } else {
+            (currentSize.height - boxSize.height) / 2f
+        },
+    )
+}
+
+private fun updateOffset(
+    overOffsetY: Float,
+    scale: Float,
+    targetOffset: Offset,
+    offsetState: MutableState<Offset>,
+    maxOffset: Offset,
+    consumeTransform: MutableState<Boolean>,
+) {
+    val offset = if (scale > 1f) {
+        val consumeT: Boolean
+        val offsetX = if (targetOffset.x >= maxOffset.x) {
+            consumeT = false
+            maxOffset.x
+        } else if (targetOffset.x <= -maxOffset.x) {
+            consumeT = false
+            -maxOffset.x
+        } else {
+            consumeT = true
+            targetOffset.x
+        }
+        consumeTransform.value = consumeT
+        Offset(offsetX, targetOffset.y)
+    } else if (scale == 1f) {
+        consumeTransform.value = false
+        Offset(0f, targetOffset.y)
+    } else {
+        consumeTransform.value = true
+        targetOffset
+    }
+    offsetState.value = offset
 }
 
 @Stable
