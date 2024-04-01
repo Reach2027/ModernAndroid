@@ -25,9 +25,12 @@ import androidx.compose.ui.Modifier
 import com.reach.modernandroid.core.ui.design.theme.AppTheme
 
 @Composable
-fun AppPreview(content: @Composable BoxScope.() -> Unit) {
+fun AppPreview(
+    modifier: Modifier = Modifier,
+    content: @Composable BoxScope.() -> Unit,
+) {
     AppTheme {
-        Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+        Box(modifier = modifier.background(MaterialTheme.colorScheme.background)) {
             content()
         }
     }

@@ -32,7 +32,7 @@ import com.reach.modernandroid.feature.uilearn.skeletonLoaderRoute
 
 @Composable
 internal fun AppNavHost(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     navController: NavHostController,
 ) {
     NavHost(

@@ -21,6 +21,7 @@ import android.content.ContentResolver
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.provider.MediaStore
 import androidx.core.database.getStringOrNull
 import com.reach.modernandroid.feature.data.album.model.LocalAlbumModel
@@ -30,12 +31,16 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+private const val MILLISECOND = 1000L
+
 internal suspend fun Application.getLocalAlbums(): List<LocalAlbumModel> =
     withContext(Dispatchers.IO) {
         val projection = arrayOf(
             MediaStore.Images.ImageColumns.BUCKET_ID,
             MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
         )
+
+        SystemClock.uptimeMillis()
 
         val localAlbumModels = mutableListOf<LocalAlbumModel>()
         launch {
@@ -207,7 +212,7 @@ internal suspend fun Application.getLocalImage(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 imageId,
             )
-            val modifierTime = it.getLong(dateIndex) * 1000L
+            val modifierTime = it.getLong(dateIndex) * MILLISECOND
             val bucketId = it.getLong(bucketIdIndex)
             val bucketName = it.getStringOrNull(bucketNameIndex) ?: ""
 

@@ -67,6 +67,8 @@ import com.reach.modernandroid.core.ui.design.animation.topDestExitTransition
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
+private const val RATIO_16_9 = 16f / 9f
+
 fun NavGraphBuilder.meRoute() {
     composable(
         route = AppRoute.ME,
@@ -206,7 +208,7 @@ private fun PersonInfo(
             SkeletonLoader(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(16f / 9f),
+                    .aspectRatio(RATIO_16_9),
             )
         } else {
             SkeletonAsyncImage(
@@ -218,7 +220,7 @@ private fun PersonInfo(
                     .clickable(onClick = onWallpaperClick),
                 placeHolderModifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(16f / 9f),
+                    .aspectRatio(RATIO_16_9),
             )
         }
 

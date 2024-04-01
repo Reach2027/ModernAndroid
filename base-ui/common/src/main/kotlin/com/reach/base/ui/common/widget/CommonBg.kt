@@ -24,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
+private const val BLACK_ALPHA = 0.4f
+
 @Composable
 fun VerticalTransparentBg(modifier: Modifier = Modifier) {
     Box(
@@ -32,7 +34,7 @@ fun VerticalTransparentBg(modifier: Modifier = Modifier) {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        Color.Black.copy(0.4f),
+                        Color.Black.copy(BLACK_ALPHA),
                         Color.Transparent,
                     ),
                 ),

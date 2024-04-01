@@ -20,13 +20,15 @@ import com.reach.base.jvm.common.di.QualifierCoroutineScope
 import com.reach.base.jvm.common.di.coroutineScopeModule
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.core.ui.common.state.DefaultAppUiState
+import org.koin.core.module.dsl.bind
+import org.koin.core.module.dsl.singleOf
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 
 val appUiStateStateModule = module {
     includes(coroutineScopeModule)
 
-    single<AppUiState> {
-        DefaultAppUiState(get(qualifier(QualifierCoroutineScope.AppIo)))
+    singleOf(::DefaultAppUiState) {
+        bind<AppUiState>()
     }
 }

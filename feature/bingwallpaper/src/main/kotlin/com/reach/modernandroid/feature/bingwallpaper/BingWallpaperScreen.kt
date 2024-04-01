@@ -87,6 +87,8 @@ import kotlinx.coroutines.flow.flow
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
+private const val RATIO_16_9 = 16f / 9f
+
 fun NavGraphBuilder.bingWallpaperRoute() {
     screenComposable(AppRoute.BING_WALLPAPER) {
         BingWallpaperRoute()
@@ -204,7 +206,7 @@ private fun BingWallpaperScreen(
 private fun BingWallPaperItemLoading() {
     SkeletonLoader(
         modifier = Modifier
-            .aspectRatio(16f / 9f)
+            .aspectRatio(RATIO_16_9)
             .clip(MaterialTheme.shapes.large),
     )
 }
@@ -244,7 +246,7 @@ private fun LazyStaggeredGridItemScope.BingWallpaperItem(bingWallpaperModel: Bin
                 .clickable { showInfo = showInfo.not() },
             placeHolderModifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(16f / 9f)
+                .aspectRatio(RATIO_16_9)
                 .clip(MaterialTheme.shapes.large),
         )
         AnimatedVisibility(

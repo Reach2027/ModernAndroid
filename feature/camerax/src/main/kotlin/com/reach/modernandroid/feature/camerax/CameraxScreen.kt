@@ -59,6 +59,8 @@ import com.reach.modernandroid.core.ui.common.state.AppUiState
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
+private const val RATIO_3_4 = 3f / 4f
+
 fun NavGraphBuilder.cameraxRoute() {
     screenComposable(
         route = AppRoute.CAMERAX,
@@ -154,7 +156,7 @@ private fun Camera(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(3f / 4f),
+            .aspectRatio(RATIO_3_4),
     )
 }
 

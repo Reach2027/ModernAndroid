@@ -22,13 +22,6 @@ import kotlinx.coroutines.SupervisorJob
 import org.koin.core.qualifier.qualifier
 import org.koin.dsl.module
 
-enum class QualifierCoroutineScope {
-    AppDefault,
-    AppIo,
-    OneParallelismDefault,
-    OneParallelismIo,
-}
-
 val coroutineScopeModule = module {
     includes(dispatcherModule)
 

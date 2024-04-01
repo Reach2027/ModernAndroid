@@ -19,7 +19,6 @@ package com.reach.modernandroid.core.ui.common.state
 import android.content.pm.ActivityInfo
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.navigation.NavHostController
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -49,9 +48,7 @@ interface AppUiState {
     fun resetRequestedOrientation()
 }
 
-internal class DefaultAppUiState(
-    private val coroutineScope: CoroutineScope,
-) : AppUiState {
+internal class DefaultAppUiState : AppUiState {
 
     private var windowSizeClass: WindowSizeClass? = null
 
