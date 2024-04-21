@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.reach.modernandroid.core.ui.design.AppIcons
 import com.reach.modernandroid.core.ui.design.theme.AppTheme
@@ -45,6 +46,7 @@ fun AppTopBarWithBack(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = {},
+    expandedHeight: Dp = TopAppBarDefaults.TopAppBarExpandedHeight,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors()
         .copy(containerColor = Color.Transparent),
@@ -63,6 +65,7 @@ fun AppTopBarWithBack(
             )
         },
         actions = actions,
+        expandedHeight = expandedHeight,
         windowInsets = windowInsets,
         colors = colors,
         scrollBehavior = scrollBehavior,
@@ -76,6 +79,7 @@ fun AppTopBar(
     modifier: Modifier = Modifier,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
+    expandedHeight: Dp = TopAppBarDefaults.TopAppBarExpandedHeight,
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     scrollBehavior: TopAppBarScrollBehavior? = null,
@@ -85,6 +89,7 @@ fun AppTopBar(
         modifier = modifier,
         navigationIcon = navigationIcon,
         actions = actions,
+        expandedHeight = expandedHeight,
         windowInsets = windowInsets,
         colors = colors,
         scrollBehavior = scrollBehavior,

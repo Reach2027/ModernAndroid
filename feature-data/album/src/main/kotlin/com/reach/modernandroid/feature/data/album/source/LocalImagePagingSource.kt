@@ -26,9 +26,8 @@ internal const val MAX_ITEM = PAGE_LIMIT * 3
 
 internal class LocalImagePagingSource(
     private val application: Application,
+    private val albumId: Long? = null,
 ) : PagingSource<Int, LocalImageModel>() {
-
-    var albumId: Long? = null
 
     override fun getRefreshKey(state: PagingState<Int, LocalImageModel>): Int? =
         state.anchorPosition?.let { position ->

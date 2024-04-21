@@ -18,14 +18,11 @@ package com.reach.modernandroid.feature.data.album.di
 
 import com.reach.modernandroid.feature.data.album.DefaultLocalImageRepo
 import com.reach.modernandroid.feature.data.album.LocalImageRepo
-import com.reach.modernandroid.feature.data.album.source.LocalImagePagingSource
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.factoryOf
 import org.koin.dsl.module
 
 val albumDataModule = module {
-
-    factoryOf(::LocalImagePagingSource)
 
     factoryOf(::DefaultLocalImageRepo) {
         bind<LocalImageRepo>()

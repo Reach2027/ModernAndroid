@@ -121,7 +121,7 @@ private fun MeScreen(
         )
     }
 
-    LifecycleResumeEffect {
+    LifecycleResumeEffect(true) {
         if (isExpanded) {
             onStatusDarkModeSet(StatusDarkMode.FollowTheme)
         } else {

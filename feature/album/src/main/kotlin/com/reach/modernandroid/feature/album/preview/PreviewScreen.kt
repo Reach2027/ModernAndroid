@@ -34,9 +34,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -129,7 +127,7 @@ private fun PreviewScreen(
 
     var fullScreen by rememberSaveable { mutableStateOf(false) }
 
-    LifecycleStartEffect {
+    LifecycleStartEffect(true) {
         setFullScreen(fullScreen)
         onStopOrDispose {
             setFullScreen(false)
@@ -196,13 +194,11 @@ private fun TopBar(
             targetOffsetY = { -it },
         ),
     ) {
-        Box(modifier = Modifier.height(IntrinsicSize.Max)) {
-            AppTopBarWithBack(
-                title = { },
-                onBackClick = onBackClick,
-                colors = TopAppBarDefaults.topAppBarColors(),
-            )
-        }
+        AppTopBarWithBack(
+            title = { },
+            onBackClick = onBackClick,
+            colors = TopAppBarDefaults.topAppBarColors(),
+        )
     }
 }
 

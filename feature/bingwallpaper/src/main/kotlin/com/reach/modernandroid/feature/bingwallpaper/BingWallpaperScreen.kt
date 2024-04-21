@@ -20,7 +20,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -211,14 +210,13 @@ private fun BingWallPaperItemLoading() {
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun LazyStaggeredGridItemScope.BingWallpaperItem(bingWallpaperModel: BingWallpaperModel?) {
     if (bingWallpaperModel == null) return
 
     var showInfo by rememberSaveable { mutableStateOf(false) }
 
-    Column(modifier = Modifier.animateItemPlacement()) {
+    Column(modifier = Modifier.animateItem()) {
         AnimatedVisibility(
             visible = showInfo,
             enter = expandVertically(

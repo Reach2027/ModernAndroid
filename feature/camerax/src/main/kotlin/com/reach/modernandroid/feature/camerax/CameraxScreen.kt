@@ -44,10 +44,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.LifecycleStartEffect
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import com.reach.base.ui.common.toDp
@@ -75,7 +75,7 @@ internal fun CameraxRoute(
     appUiState: AppUiState = koinInject(),
     viewModel: CameraxViewModel = koinNavViewModel(),
 ) {
-    LifecycleStartEffect {
+    LifecycleStartEffect(true) {
         appUiState.setFullScreen(true)
         appUiState.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER_PORTRAIT)
 

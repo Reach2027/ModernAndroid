@@ -41,7 +41,6 @@ interface LocalImageRepo {
 
 internal class DefaultLocalImageRepo(
     private val application: Application,
-    private val localImagePagingSource: LocalImagePagingSource,
 ) : LocalImageRepo {
 
     override fun getLocalImages(albumId: Long?): Flow<PagingData<LocalImageModel>> =
@@ -51,8 +50,7 @@ internal class DefaultLocalImageRepo(
                 maxSize = MAX_ITEM,
             ),
         ) {
-            localImagePagingSource.albumId = albumId
-            localImagePagingSource
+            LocalImagePagingSource(application, albumId)
         }.flow
 
     override fun getLocalImages(albumId: Long?, count: Int): Flow<List<LocalImageModel>> = flow {

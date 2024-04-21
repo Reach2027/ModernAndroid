@@ -20,6 +20,8 @@ import android.net.Uri
 import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateDpAsState
@@ -29,7 +31,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -40,7 +41,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -61,6 +61,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -73,6 +75,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.blur
@@ -112,11 +115,16 @@ import com.reach.modernandroid.core.ui.design.animation.groupExit
 import com.reach.modernandroid.feature.album.navigation.ROUTE_ALBUM_PREVIEW
 import com.reach.modernandroid.feature.data.album.model.LocalAlbumModel
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 import kotlin.math.max
+
+private const val TYPE_PADDING_TOP = 0x01
+private const val TYPE_ITEM = 0x11
+private const val TYPE_PADDING_BOTTOM = 0x21
 
 @Composable
 internal fun AlbumRoute(
@@ -229,9 +237,9 @@ private fun TopBar(
         onDispose { onStatusDarkModeSet(StatusDarkMode.FollowTheme) }
     }
 
-    Box(modifier = Modifier.height(IntrinsicSize.Max)) {
+    Box {
         if (topBarContentBeWhite) {
-            VerticalTransparentBg(modifier = Modifier.fillMaxHeight())
+            VerticalTransparentBg(modifier = Modifier.height(TopAppBarDefaults.TopAppBarExpandedHeight))
         }
         AppTopBarWithBack(
             title = {
@@ -409,6 +417,20 @@ private fun LocalImage(
         }
     }
 
+    val pullToRefreshState = rememberPullToRefreshState()
+    if (pullToRefreshState.isRefreshing) {
+        LaunchedEffect(true) {
+            items.refresh()
+            snapshotFlow { items.loadState.refresh }
+                .collect {
+                    if (it is LoadState.NotLoading) {
+                        pullToRefreshState.endRefresh()
+                        this.cancel()
+                    }
+                }
+        }
+    }
+
     val blur by animateDpAsState(
         targetValue = if (showAlbumSelector) 80.dp else 0.dp,
         animationSpec = spring(
@@ -421,6 +443,7 @@ private fun LocalImage(
     Box(
         modifier = Modifier
             .fillMaxSize()
+            .nestedScroll(pullToRefreshState.nestedScrollConnection)
             .blur(blur),
     ) {
         LazyVerticalGrid(
@@ -428,11 +451,14 @@ private fun LocalImage(
             verticalArrangement = Arrangement.spacedBy(2.dp),
             horizontalArrangement = Arrangement.spacedBy(2.dp),
             modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
             state = scrollState,
         ) {
-            item(span = { GridItemSpan(maxLineSpan) }) {
+            item(
+                span = { GridItemSpan(maxLineSpan) },
+                contentType = TYPE_PADDING_TOP,
+            ) {
                 Spacer(
                     modifier = Modifier.height(
                         WindowInsets.systemBars.getTop(LocalDensity.current).toDp() + 64.dp,
@@ -448,22 +474,30 @@ private fun LocalImage(
                     items(
                         count = items.itemCount,
                         key = items.itemKey { it.id },
+                        contentType = { TYPE_ITEM },
                     ) { index ->
                         LocalImageItem(
                             onImageClick = { onImageClick(index) },
                             localImageModel = items[index],
                         )
                     }
-                    item(span = { GridItemSpan(maxLineSpan) }) {
+                    item(
+                        span = { GridItemSpan(maxLineSpan) },
+                        contentType = TYPE_PADDING_BOTTOM,
+                    ) {
                         Spacer(modifier = Modifier.height(32.dp))
                     }
                 }
             }
         }
+
+        PullToRefreshContainer(
+            state = pullToRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+        )
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun LazyGridItemScope.LocalImageItem(
     onImageClick: () -> Unit,
@@ -471,7 +505,7 @@ private fun LazyGridItemScope.LocalImageItem(
 ) {
     if (localImageModel == null) return
 
-    Box(modifier = Modifier.animateItemPlacement()) {
+    Box(modifier = Modifier.animateItem()) {
         AsyncLocalImage(
             model = localImageModel.uri,
             contentDescription = "",
@@ -517,10 +551,10 @@ private fun AlbumScreenPreview() {
             ),
         )
         AlbumScreen(
-            onBackClick = { },
-            onImageClick = { },
+            onBackClick = {},
+            onImageClick = {},
             onAlbumClick = {},
-            onStatusDarkModeSet = { },
+            onStatusDarkModeSet = {},
             windowSizeClass = previewWindowSizeClass(),
             localImages = flow { emit(pagingData) },
             previewIndex = 0,
