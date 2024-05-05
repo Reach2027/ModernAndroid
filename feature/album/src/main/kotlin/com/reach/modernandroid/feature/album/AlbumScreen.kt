@@ -18,10 +18,9 @@ package com.reach.modernandroid.feature.album
 
 import android.net.Uri
 import android.os.Build
+import android.os.SystemClock
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
 import androidx.compose.animation.core.animateDpAsState
@@ -61,8 +60,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.pulltorefresh.PullToRefreshContainer
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -73,6 +71,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -116,8 +115,10 @@ import com.reach.modernandroid.feature.album.navigation.ROUTE_ALBUM_PREVIEW
 import com.reach.modernandroid.feature.data.album.model.LocalAlbumModel
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 import kotlin.math.max
@@ -417,20 +418,6 @@ private fun LocalImage(
         }
     }
 
-    val pullToRefreshState = rememberPullToRefreshState()
-    if (pullToRefreshState.isRefreshing) {
-        LaunchedEffect(true) {
-            items.refresh()
-            snapshotFlow { items.loadState.refresh }
-                .collect {
-                    if (it is LoadState.NotLoading) {
-                        pullToRefreshState.endRefresh()
-                        this.cancel()
-                    }
-                }
-        }
-    }
-
     val blur by animateDpAsState(
         targetValue = if (showAlbumSelector) 80.dp else 0.dp,
         animationSpec = spring(
@@ -440,10 +427,32 @@ private fun LocalImage(
         label = "",
     )
 
-    Box(
+    var isRefreshing by remember { mutableStateOf(false) }
+
+    val coroutineScope = rememberCoroutineScope()
+
+    PullToRefreshBox(
+        isRefreshing = isRefreshing,
+        onRefresh = {
+            coroutineScope.launch {
+                isRefreshing = true
+                items.refresh()
+                val start = SystemClock.uptimeMillis()
+                snapshotFlow { items.loadState.refresh }
+                    .collect {
+                        if (it is LoadState.NotLoading) {
+                            val interval = SystemClock.uptimeMillis() - start
+                            if (interval < 500L) {
+                                delay(500L)
+                            }
+                            isRefreshing = false
+                            this.cancel()
+                        }
+                    }
+            }
+        },
         modifier = Modifier
             .fillMaxSize()
-            .nestedScroll(pullToRefreshState.nestedScrollConnection)
             .blur(blur),
     ) {
         LazyVerticalGrid(
@@ -490,11 +499,6 @@ private fun LocalImage(
                 }
             }
         }
-
-        PullToRefreshContainer(
-            state = pullToRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter),
-        )
     }
 }
 
