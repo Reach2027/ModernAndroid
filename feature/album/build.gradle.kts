@@ -30,6 +30,8 @@ dependencies {
     implementation(projects.baseAndroid.common)
     implementation(projects.featureData.album)
 
-    implementation(libs.accompanist.permissions)
     implementation(libs.androidx.paging.compose)
+
+    implementation(libs.haze)
+    implementation(libs.haze.materials)
 }

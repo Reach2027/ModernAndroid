@@ -17,15 +17,11 @@
 package com.reach.modernandroid.feature.album
 
 import android.net.Uri
-import android.os.Build
 import android.os.SystemClock
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.VisibilityThreshold
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
@@ -77,7 +73,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
@@ -111,9 +106,16 @@ import com.reach.modernandroid.core.ui.design.AppIcons
 import com.reach.modernandroid.core.ui.design.animation.AppAniSpec
 import com.reach.modernandroid.core.ui.design.animation.groupEnter
 import com.reach.modernandroid.core.ui.design.animation.groupExit
+import com.reach.modernandroid.core.ui.design.animation.widgetEnter
+import com.reach.modernandroid.core.ui.design.animation.widgetExit
 import com.reach.modernandroid.feature.album.navigation.ROUTE_ALBUM_PREVIEW
 import com.reach.modernandroid.feature.data.album.model.LocalAlbumModel
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.haze
+import dev.chrisbanes.haze.hazeChild
+import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
+import dev.chrisbanes.haze.materials.HazeMaterials
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -177,6 +179,11 @@ private fun AlbumScreen(
         showAlbumSelector = false
     }
 
+    val hazeState = remember { HazeState() }
+
+    val topBarH = WindowInsets.systemBars.getTop(LocalDensity.current)
+        .toDp() + TopAppBarDefaults.TopAppBarExpandedHeight
+
     Box(modifier = Modifier.fillMaxSize()) {
         LocalImage(
             onImageClick = onImageClick,
@@ -184,7 +191,8 @@ private fun AlbumScreen(
             windowSizeClass = windowSizeClass,
             previewIndex = previewIndex,
             localImages = localImages,
-            showAlbumSelector = showAlbumSelector,
+            hazeState = hazeState,
+            topBarH = topBarH,
         )
 
         LocalAlbum(
@@ -194,6 +202,8 @@ private fun AlbumScreen(
             },
             showAlbumSelector = showAlbumSelector,
             localAlbums = uiState.localAlbums,
+            hazeState = hazeState,
+            topBarH = topBarH,
         )
 
         TopBar(
@@ -204,6 +214,7 @@ private fun AlbumScreen(
             loadAlbumFinished = uiState.localAlbums.isNotEmpty(),
             showAlbumSelector = showAlbumSelector,
             currentAlbum = uiState.currentAlbum,
+            topBarH = topBarH,
         )
     }
 }
@@ -218,6 +229,7 @@ private fun TopBar(
     onAlbumSelectorShow: (Boolean) -> Unit,
     showAlbumSelector: Boolean,
     currentAlbum: LocalAlbumModel,
+    topBarH: Dp,
 ) {
     val topBarContentBeWhite by remember {
         derivedStateOf { scrollBehavior.state.overlappedFraction > 0.3f }
@@ -228,8 +240,8 @@ private fun TopBar(
         label = "",
     )
 
-    DisposableEffect(topBarContentBeWhite) {
-        if (topBarContentBeWhite) {
+    DisposableEffect(topBarContentBeWhite && showAlbumSelector.not()) {
+        if (topBarContentBeWhite && showAlbumSelector.not()) {
             onStatusDarkModeSet(StatusDarkMode.Dark)
         } else {
             onStatusDarkModeSet(StatusDarkMode.FollowTheme)
@@ -239,8 +251,12 @@ private fun TopBar(
     }
 
     Box {
-        if (topBarContentBeWhite) {
-            VerticalTransparentBg(modifier = Modifier.height(TopAppBarDefaults.TopAppBarExpandedHeight))
+        AnimatedVisibility(
+            visible = topBarContentBeWhite && showAlbumSelector.not(),
+            enter = fadeIn(animationSpec = widgetEnter()),
+            exit = fadeOut(animationSpec = widgetExit()),
+        ) {
+            VerticalTransparentBg(modifier = Modifier.height(topBarH))
         }
         AppTopBarWithBack(
             title = {
@@ -276,7 +292,7 @@ private fun TopBar(
                 }
             },
             onBackClick = onBackClick,
-            colors = if (topBarContentBeWhite) {
+            colors = if (topBarContentBeWhite && showAlbumSelector.not()) {
                 TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent,
                     scrolledContainerColor = Color.Transparent,
@@ -295,14 +311,15 @@ private fun TopBar(
     }
 }
 
+@OptIn(ExperimentalHazeMaterialsApi::class)
 @Composable
 private fun LocalAlbum(
     onAlbumClick: (LocalAlbumModel) -> Unit,
     showAlbumSelector: Boolean,
     localAlbums: List<LocalAlbumModel>,
+    hazeState: HazeState,
+    topBarH: Dp,
 ) {
-    val topBarH = WindowInsets.systemBars.getTop(LocalDensity.current).toDp() + 64.dp
-
     AnimatedVisibility(
         visible = showAlbumSelector,
         enter = fadeIn(animationSpec = groupEnter()) + slideInVertically(
@@ -320,14 +337,10 @@ private fun LocalAlbum(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(
-                    color = MaterialTheme.colorScheme.background.copy(
-                        alpha = if (Build.VERSION.SDK_INT > Build.VERSION_CODES.S) {
-                            0.6f
-                        } else {
-                            0.98f
-                        },
-                    ),
+                .background(color = Color.Transparent)
+                .hazeChild(
+                    state = hazeState,
+                    style = HazeMaterials.thick(),
                 )
                 .padding(top = topBarH),
         ) {
@@ -399,7 +412,8 @@ private fun LocalImage(
     windowSizeClass: WindowSizeClass,
     previewIndex: Int,
     localImages: Flow<PagingData<LocalImageModel>>,
-    showAlbumSelector: Boolean,
+    hazeState: HazeState,
+    topBarH: Dp,
 ) {
     val fixedCount = rememberColumnCount(windowSizeClass = windowSizeClass)
     var columnCountIndex by rememberSaveable { mutableIntStateOf(1) }
@@ -417,15 +431,6 @@ private fun LocalImage(
             scrollState.animateScrollToItem(max(previewIndex - middleSize, 0))
         }
     }
-
-    val blur by animateDpAsState(
-        targetValue = if (showAlbumSelector) 80.dp else 0.dp,
-        animationSpec = spring(
-            stiffness = Spring.StiffnessMediumLow,
-            visibilityThreshold = Dp.VisibilityThreshold,
-        ),
-        label = "",
-    )
 
     var isRefreshing by remember { mutableStateOf(false) }
 
@@ -453,7 +458,7 @@ private fun LocalImage(
         },
         modifier = Modifier
             .fillMaxSize()
-            .blur(blur),
+            .haze(state = hazeState),
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(fixedCount[columnCountIndex]),
@@ -468,11 +473,7 @@ private fun LocalImage(
                 span = { GridItemSpan(maxLineSpan) },
                 contentType = TYPE_PADDING_TOP,
             ) {
-                Spacer(
-                    modifier = Modifier.height(
-                        WindowInsets.systemBars.getTop(LocalDensity.current).toDp() + 64.dp,
-                    ),
-                )
+                Spacer(modifier = Modifier.height(topBarH))
             }
             when (items.loadState.refresh) {
                 is LoadState.Loading -> {}
