@@ -22,7 +22,6 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.SizeTransform
 import androidx.compose.runtime.Composable
-import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
@@ -67,40 +66,6 @@ inline fun <reified T : Any> NavGraphBuilder.screenComposable(
         popEnterTransition = popEnterTransition,
         popExitTransition = popExitTransition,
         sizeTransform = sizeTransform,
-        content = content,
-    )
-}
-
-fun NavGraphBuilder.screenComposable(
-    route: String,
-    arguments: List<NamedNavArgument> = emptyList(),
-    deepLinks: List<NavDeepLink> = emptyList(),
-    enterTransition: (
-        @JvmSuppressWildcards
-        AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?
-    )? = { enterScreenTransition() },
-    exitTransition: (
-        @JvmSuppressWildcards
-        AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?
-    )? = { exitScreenTransition() },
-    popEnterTransition: (
-        @JvmSuppressWildcards
-        AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition?
-    )? = { popEnterScreenTransition() },
-    popExitTransition: (
-        @JvmSuppressWildcards
-        AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition?
-    )? = { popExitScreenTransition() },
-    content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
-) {
-    this.composable(
-        route = route,
-        arguments = arguments,
-        deepLinks = deepLinks,
-        enterTransition = enterTransition,
-        exitTransition = exitTransition,
-        popEnterTransition = popEnterTransition,
-        popExitTransition = popExitTransition,
         content = content,
     )
 }

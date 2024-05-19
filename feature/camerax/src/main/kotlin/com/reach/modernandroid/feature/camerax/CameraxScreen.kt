@@ -50,10 +50,10 @@ import androidx.lifecycle.compose.LifecycleStartEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import com.reach.base.ui.common.toDp
 import com.reach.base.ui.common.widget.AsyncLocalImage
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
-import com.reach.modernandroid.core.ui.common.navigation.screenComposable
 import com.reach.modernandroid.core.ui.common.permission.RequestPermissionsScreen
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import org.koin.androidx.compose.navigation.koinNavViewModel
@@ -62,7 +62,7 @@ import org.koin.compose.koinInject
 private const val RATIO_3_4 = 3f / 4f
 
 fun NavGraphBuilder.cameraxRoute() {
-    screenComposable<AppRoute.CameraX> {
+    composable<AppRoute.CameraX> {
         CameraxRoute()
     }
 }

@@ -18,9 +18,9 @@ package com.reach.modernandroid.feature.album.navigation
 
 import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
-import com.reach.modernandroid.core.ui.common.navigation.screenComposable
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.feature.album.AlbumRoute
 import com.reach.modernandroid.feature.album.preview.PreviewRoute
@@ -38,11 +38,11 @@ fun NavGraphBuilder.albumGraph() {
     navigation<GraphAlbum>(
         startDestination = AppRoute.Album,
     ) {
-        screenComposable<AppRoute.Album> {
+        composable<AppRoute.Album> {
             AlbumRoute()
         }
 
-        screenComposable<RoutePreview> {
+        composable<RoutePreview> {
             val appUiState: AppUiState = koinInject()
             val albumEntry = remember(it) {
                 appUiState.getNavController().getBackStackEntry(AppRoute.Album)

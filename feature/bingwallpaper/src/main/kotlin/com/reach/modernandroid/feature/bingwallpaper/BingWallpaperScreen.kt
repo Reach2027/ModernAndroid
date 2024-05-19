@@ -61,6 +61,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import androidx.paging.LoadState
 import androidx.paging.LoadStates
 import androidx.paging.PagingData
@@ -74,7 +75,6 @@ import com.reach.base.ui.common.widget.SkeletonLoader
 import com.reach.base.ui.common.widget.VerticalTransparentBg
 import com.reach.modernandroid.core.ui.common.AppPreview
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
-import com.reach.modernandroid.core.ui.common.navigation.screenComposable
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.core.ui.common.state.StatusDarkMode
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
@@ -89,7 +89,7 @@ import org.koin.compose.koinInject
 private const val RATIO_16_9 = 16f / 9f
 
 fun NavGraphBuilder.bingWallpaperRoute() {
-    screenComposable<AppRoute.BingWallpaper> {
+    composable<AppRoute.BingWallpaper> {
         BingWallpaperRoute()
     }
 }

@@ -21,6 +21,10 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
+import com.reach.modernandroid.core.ui.design.animation.enterScreenTransition
+import com.reach.modernandroid.core.ui.design.animation.exitScreenTransition
+import com.reach.modernandroid.core.ui.design.animation.popEnterScreenTransition
+import com.reach.modernandroid.core.ui.design.animation.popExitScreenTransition
 import com.reach.modernandroid.feature.album.navigation.albumGraph
 import com.reach.modernandroid.feature.bingwallpaper.bingWallpaperRoute
 import com.reach.modernandroid.feature.camerax.cameraxRoute
@@ -39,6 +43,10 @@ internal fun AppNavHost(
         modifier = modifier,
         navController = navController,
         startDestination = AppRoute.Me,
+        enterTransition = { enterScreenTransition() },
+        exitTransition = { exitScreenTransition() },
+        popEnterTransition = { popEnterScreenTransition() },
+        popExitTransition = { popExitScreenTransition() },
     ) {
         meRoute()
 

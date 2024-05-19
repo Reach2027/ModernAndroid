@@ -44,11 +44,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import com.reach.base.ui.common.devicepreview.DevicePreviews
 import com.reach.modernandroid.core.data.datastore.model.UserSettings
 import com.reach.modernandroid.core.ui.common.AppPreview
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
-import com.reach.modernandroid.core.ui.common.navigation.screenComposable
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.core.ui.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.core.ui.design.AppIcons
@@ -56,7 +56,7 @@ import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
 fun NavGraphBuilder.settingsRoute() {
-    screenComposable<AppRoute.Settings> {
+    composable<AppRoute.Settings> {
         SettingsRoute()
     }
 }
