@@ -15,6 +15,7 @@
  */
 plugins {
     alias(libs.plugins.reach.feature.module)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 android {
@@ -34,4 +35,6 @@ dependencies {
 
     implementation(libs.haze)
     implementation(libs.haze.materials)
+
+    implementation(libs.kotlinx.serialization.core)
 }

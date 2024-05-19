@@ -16,21 +16,32 @@
 
 package com.reach.modernandroid.core.ui.common.navigation
 
+import kotlinx.serialization.Serializable
+
 object AppRoute {
     // Top destination
-    const val ME = "route_me"
-    const val MORE = "route_more"
+    @Serializable
+    object Me
+
+    @Serializable
+    object More
 
     // Feature
-    const val SETTINGS = "route_settings"
+    @Serializable
+    object Settings
 
-    const val ALBUM = "route_album"
+    @Serializable
+    object Album
 
-    const val CAMERAX = "route_camerax"
+    @Serializable
+    object CameraX
 
-    const val LOTTIE = "route_lottie"
+    @Serializable
+    object Lottie
 
-    const val SKELETON_LOADER = "route_skeleton_loader"
+    @Serializable
+    object SkeletonLoader
 
-    const val BING_WALLPAPER = "route_bing_wallpaper"
+    @Serializable
+    object BingWallpaper
 }

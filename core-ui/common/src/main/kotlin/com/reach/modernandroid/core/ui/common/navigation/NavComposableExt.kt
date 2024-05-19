@@ -20,16 +20,56 @@ import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.SizeTransform
 import androidx.compose.runtime.Composable
 import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDeepLink
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import com.reach.modernandroid.core.ui.design.animation.enterScreenTransition
 import com.reach.modernandroid.core.ui.design.animation.exitScreenTransition
 import com.reach.modernandroid.core.ui.design.animation.popEnterScreenTransition
 import com.reach.modernandroid.core.ui.design.animation.popExitScreenTransition
+import kotlin.reflect.KType
+
+inline fun <reified T : Any> NavGraphBuilder.screenComposable(
+    typeMap: Map<KType, @JvmSuppressWildcards NavType<*>> = emptyMap(),
+    deepLinks: List<NavDeepLink> = emptyList(),
+    noinline enterTransition: (
+    AnimatedContentTransitionScope<NavBackStackEntry>.() ->
+    @JvmSuppressWildcards EnterTransition
+    ) = { enterScreenTransition() },
+    noinline exitTransition: (
+    AnimatedContentTransitionScope<NavBackStackEntry>.() ->
+    @JvmSuppressWildcards ExitTransition
+    ) = { exitScreenTransition() },
+    noinline popEnterTransition: (
+    AnimatedContentTransitionScope<NavBackStackEntry>.() ->
+    @JvmSuppressWildcards EnterTransition
+    ) = { popEnterScreenTransition() },
+    noinline popExitTransition: (
+    AnimatedContentTransitionScope<NavBackStackEntry>.() ->
+    @JvmSuppressWildcards ExitTransition
+    ) = { popExitScreenTransition() },
+    noinline sizeTransform: (
+        AnimatedContentTransitionScope<NavBackStackEntry>.() ->
+        @JvmSuppressWildcards SizeTransform?
+    )? = null,
+    noinline content: @Composable AnimatedContentScope.(NavBackStackEntry) -> Unit,
+) {
+    this.composable<T>(
+        typeMap = typeMap,
+        deepLinks = deepLinks,
+        enterTransition = enterTransition,
+        exitTransition = exitTransition,
+        popEnterTransition = popEnterTransition,
+        popExitTransition = popExitTransition,
+        sizeTransform = sizeTransform,
+        content = content,
+    )
+}
 
 fun NavGraphBuilder.screenComposable(
     route: String,

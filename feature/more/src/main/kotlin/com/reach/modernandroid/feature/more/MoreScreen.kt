@@ -48,8 +48,7 @@ import com.reach.modernandroid.core.ui.design.theme.AppTheme
 import org.koin.compose.koinInject
 
 fun NavGraphBuilder.moreRoute() {
-    composable(
-        route = AppRoute.MORE,
+    composable<AppRoute.More>(
         enterTransition = { topDestEnterTransition() },
         exitTransition = { topDestExitTransition() },
     ) {

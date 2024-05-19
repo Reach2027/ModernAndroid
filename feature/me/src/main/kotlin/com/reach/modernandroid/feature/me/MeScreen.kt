@@ -70,8 +70,7 @@ import org.koin.compose.koinInject
 private const val RATIO_16_9 = 16f / 9f
 
 fun NavGraphBuilder.meRoute() {
-    composable(
-        route = AppRoute.ME,
+    composable<AppRoute.Me>(
         enterTransition = { topDestEnterTransition() },
         exitTransition = { topDestExitTransition() },
     ) {
@@ -87,8 +86,8 @@ private fun MeRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     MeScreen(
-        onWallpaperClick = { appUiState.getNavController().navigate(AppRoute.BING_WALLPAPER) },
-        onSettingsClick = { appUiState.getNavController().navigate(AppRoute.SETTINGS) },
+        onWallpaperClick = { appUiState.getNavController().navigate(AppRoute.BingWallpaper) },
+        onSettingsClick = { appUiState.getNavController().navigate(AppRoute.Settings) },
         onStatusDarkModeSet = { appUiState.setStatusDarkMode(it) },
         windowSizeClass = appUiState.getWindowSizeClass(),
         uiState = uiState,

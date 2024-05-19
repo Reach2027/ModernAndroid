@@ -57,7 +57,7 @@ import com.reach.modernandroid.core.ui.design.theme.AppTheme
 import org.koin.compose.koinInject
 
 fun NavGraphBuilder.lottieRoute() {
-    screenComposable(AppRoute.LOTTIE) {
+    screenComposable<AppRoute.Lottie> {
         LottieRoute()
     }
 }

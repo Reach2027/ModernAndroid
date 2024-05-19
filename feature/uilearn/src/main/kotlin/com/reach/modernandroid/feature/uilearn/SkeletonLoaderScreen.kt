@@ -49,7 +49,7 @@ import com.reach.modernandroid.core.ui.design.theme.AppTheme
 import org.koin.compose.koinInject
 
 fun NavGraphBuilder.skeletonLoaderRoute() {
-    screenComposable(AppRoute.SKELETON_LOADER) {
+    screenComposable<AppRoute.SkeletonLoader> {
         SkeletonLoaderRoute()
     }
 }

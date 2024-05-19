@@ -38,7 +38,7 @@ internal fun AppNavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = AppRoute.ME,
+        startDestination = AppRoute.Me,
     ) {
         meRoute()
 

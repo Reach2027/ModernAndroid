@@ -56,7 +56,7 @@ import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
 fun NavGraphBuilder.settingsRoute() {
-    screenComposable(AppRoute.SETTINGS) {
+    screenComposable<AppRoute.Settings> {
         SettingsRoute()
     }
 }

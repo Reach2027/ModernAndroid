@@ -24,26 +24,28 @@ import com.reach.modernandroid.core.ui.common.navigation.screenComposable
 import com.reach.modernandroid.core.ui.common.state.AppUiState
 import com.reach.modernandroid.feature.album.AlbumRoute
 import com.reach.modernandroid.feature.album.preview.PreviewRoute
+import kotlinx.serialization.Serializable
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
-private const val ALBUM_GRAPH = "ALBUM_GRAPH"
+@Serializable
+object GraphAlbum
 
-internal const val ROUTE_ALBUM_PREVIEW = "route_album_preview"
+@Serializable
+object RoutePreview
 
 fun NavGraphBuilder.albumGraph() {
-    navigation(
-        startDestination = AppRoute.ALBUM,
-        route = ALBUM_GRAPH,
+    navigation<GraphAlbum>(
+        startDestination = AppRoute.Album,
     ) {
-        screenComposable(route = AppRoute.ALBUM) {
+        screenComposable<AppRoute.Album> {
             AlbumRoute()
         }
 
-        screenComposable(route = ROUTE_ALBUM_PREVIEW) {
+        screenComposable<RoutePreview> {
             val appUiState: AppUiState = koinInject()
             val albumEntry = remember(it) {
-                appUiState.getNavController().getBackStackEntry(AppRoute.ALBUM)
+                appUiState.getNavController().getBackStackEntry(AppRoute.Album)
             }
             PreviewRoute(
                 viewModel = koinNavViewModel(viewModelStoreOwner = albumEntry),

@@ -89,7 +89,7 @@ import org.koin.compose.koinInject
 private const val RATIO_16_9 = 16f / 9f
 
 fun NavGraphBuilder.bingWallpaperRoute() {
-    screenComposable(AppRoute.BING_WALLPAPER) {
+    screenComposable<AppRoute.BingWallpaper> {
         BingWallpaperRoute()
     }
 }

@@ -108,7 +108,7 @@ import com.reach.modernandroid.core.ui.design.animation.groupEnter
 import com.reach.modernandroid.core.ui.design.animation.groupExit
 import com.reach.modernandroid.core.ui.design.animation.widgetEnter
 import com.reach.modernandroid.core.ui.design.animation.widgetExit
-import com.reach.modernandroid.feature.album.navigation.ROUTE_ALBUM_PREVIEW
+import com.reach.modernandroid.feature.album.navigation.RoutePreview
 import com.reach.modernandroid.feature.data.album.model.LocalAlbumModel
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 import dev.chrisbanes.haze.HazeState
@@ -150,7 +150,7 @@ internal fun AlbumRoute(
             onAlbumClick = { viewModel.changeAlbum(it) },
             onImageClick = {
                 viewModel.setPreViewIndex(it)
-                appUiState.getNavController().navigate(ROUTE_ALBUM_PREVIEW)
+                appUiState.getNavController().navigate(RoutePreview)
             },
             windowSizeClass = appUiState.getWindowSizeClass(),
             localImages = viewModel.localImages,

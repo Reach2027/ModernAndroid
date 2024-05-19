@@ -15,6 +15,7 @@
  */
 plugins {
     alias(libs.plugins.reach.compose.library)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 android {
@@ -33,4 +34,6 @@ dependencies {
     implementation(projects.coreUi.design)
 
     implementation(libs.accompanist.permissions)
+
+    implementation(libs.kotlinx.serialization.core)
 }

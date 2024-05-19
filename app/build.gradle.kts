@@ -16,6 +16,7 @@
 
 plugins {
     alias(libs.plugins.reach.application)
+    alias(libs.plugins.kotlinxSerialization)
 }
 
 android {
@@ -67,4 +68,6 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.material3.adaptive.navigation)
+
+    implementation(libs.kotlinx.serialization.core)
 }

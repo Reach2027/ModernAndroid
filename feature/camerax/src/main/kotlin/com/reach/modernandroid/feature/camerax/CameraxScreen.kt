@@ -62,9 +62,7 @@ import org.koin.compose.koinInject
 private const val RATIO_3_4 = 3f / 4f
 
 fun NavGraphBuilder.cameraxRoute() {
-    screenComposable(
-        route = AppRoute.CAMERAX,
-    ) {
+    screenComposable<AppRoute.CameraX> {
         CameraxRoute()
     }
 }
@@ -93,7 +91,7 @@ internal fun CameraxRoute(
         onBackClick = { appUiState.getNavController().navigateUp() },
     ) {
         CameraxScreen(
-            navToAlbum = { appUiState.getNavController().navigate(AppRoute.ALBUM) },
+            navToAlbum = { appUiState.getNavController().navigate(AppRoute.Album) },
             takePhoto = { viewModel.takePhoto() },
             preview = viewModel.preview,
             imageCapture = viewModel.imageCapture,

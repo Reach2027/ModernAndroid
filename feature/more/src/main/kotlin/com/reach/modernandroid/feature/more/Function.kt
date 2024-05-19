@@ -31,12 +31,12 @@ internal enum class Function(
     ),
     Lottie(
         text = "Lottie Example",
-        navTo = { it.navigate(AppRoute.LOTTIE) },
+        navTo = { it.navigate(AppRoute.Lottie) },
         isTitle = false,
     ),
     SkeletonLoader(
         text = "Skeleton Loader",
-        navTo = { it.navigate(AppRoute.SKELETON_LOADER) },
+        navTo = { it.navigate(AppRoute.SkeletonLoader) },
         isTitle = false,
     ),
     Feature(
@@ -46,17 +46,17 @@ internal enum class Function(
     ),
     BingWallpaper(
         text = "Bing Wallpaper",
-        navTo = { it.navigate(AppRoute.BING_WALLPAPER) },
+        navTo = { it.navigate(AppRoute.BingWallpaper) },
         isTitle = false,
     ),
     LocalAlbum(
         text = "Local Album",
-        navTo = { it.navigate(AppRoute.ALBUM) },
+        navTo = { it.navigate(AppRoute.Album) },
         isTitle = false,
     ),
     Camerax(
         text = "Camerax",
-        navTo = { it.navigate(AppRoute.CAMERAX) },
+        navTo = { it.navigate(AppRoute.CameraX) },
         isTitle = false,
     ),
 }
