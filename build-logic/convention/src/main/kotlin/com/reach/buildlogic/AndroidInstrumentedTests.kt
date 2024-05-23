@@ -14,7 +14,6 @@ import org.gradle.api.Project
 internal fun LibraryAndroidComponentsExtension.disableUnnecessaryAndroidTests(
     project: Project,
 ) = beforeVariants {
-    @Suppress("UnstableApiUsage")
     it.androidTest.enable =
         it.androidTest.enable && project.projectDir.resolve("src/androidTest").exists()
 }

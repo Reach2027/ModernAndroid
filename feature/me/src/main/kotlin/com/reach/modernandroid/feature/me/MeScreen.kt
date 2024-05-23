@@ -16,6 +16,9 @@
 
 package com.reach.modernandroid.feature.me
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,6 +54,7 @@ import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import coil.compose.AsyncImagePainter
 import com.reach.base.ui.common.devicepreview.DevicePreviews
 import com.reach.base.ui.common.devicepreview.previewWindowSizeClass
 import com.reach.base.ui.common.toDp
@@ -64,6 +68,8 @@ import com.reach.modernandroid.core.ui.common.state.StatusDarkMode
 import com.reach.modernandroid.core.ui.design.AppIcons
 import com.reach.modernandroid.core.ui.design.animation.topDestEnterTransition
 import com.reach.modernandroid.core.ui.design.animation.topDestExitTransition
+import com.reach.modernandroid.core.ui.design.animation.widgetEnter
+import com.reach.modernandroid.core.ui.design.animation.widgetExit
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
@@ -173,26 +179,32 @@ private fun MeScreenCompat(
     onSettingsClick: () -> Unit,
     uiState: MeUiState,
 ) {
+    var showTransparentBg by remember { mutableStateOf(false) }
+
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             PersonInfo(
                 uiState = uiState,
                 onWallpaperClick = onWallpaperClick,
                 onSettingsClick = onSettingsClick,
+                needShowTransparentBg = { showTransparentBg = true },
             )
             Spacer(modifier = Modifier.height(16.dp))
             DeviceInfo(uiState = uiState)
         }
-        VerticalTransparentBg(
-            modifier = Modifier.height(
-                WindowInsets.systemBars
-                    .getTop(LocalDensity.current)
-                    .toDp(),
-            ),
-        )
+        AnimatedVisibility(
+            visible = uiState.isImageLoading.not() && showTransparentBg,
+            enter = fadeIn(animationSpec = widgetEnter()),
+            exit = fadeOut(animationSpec = widgetExit()),
+        ) {
+            VerticalTransparentBg(
+                modifier = Modifier.height(
+                    WindowInsets.systemBars
+                        .getTop(LocalDensity.current)
+                        .toDp(),
+                ),
+            )
+        }
     }
 }
 
@@ -201,6 +213,7 @@ private fun PersonInfo(
     uiState: MeUiState,
     onWallpaperClick: () -> Unit,
     onSettingsClick: () -> Unit,
+    needShowTransparentBg: (() -> Unit)? = null,
 ) {
     Box {
         if (uiState.isImageLoading) {
@@ -220,6 +233,14 @@ private fun PersonInfo(
                 placeHolderModifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(RATIO_16_9),
+                onState = { state ->
+                    if (needShowTransparentBg == null) {
+                        return@SkeletonAsyncImage
+                    }
+                    if (state is AsyncImagePainter.State.Success) {
+                        needShowTransparentBg()
+                    }
+                },
             )
         }
 

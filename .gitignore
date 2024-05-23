@@ -31,9 +31,6 @@ local.properties
 !.idea/copyright
 # Keep the code styles.
 !/.idea/codeStyles
-/.idea/codeStyles/*
-!/.idea/codeStyles/Project.xml
-!/.idea/codeStyles/codeStyleConfig.xml
 
 # Gradle cache
 .gradle
@@ -43,3 +40,6 @@ _sandbox
 
 # Android Studio captures folder
 captures/
+
+# Kotlin compile
+.kotlin
