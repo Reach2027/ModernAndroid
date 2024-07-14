@@ -33,23 +33,25 @@ fun topDestEnterTransition(): EnterTransition = fadeIn(animationSpec = groupEnte
 fun topDestExitTransition(): ExitTransition = fadeOut(animationSpec = groupExit())
 
 @Stable
-fun enterScreenTransition(): EnterTransition =
-    fadeIn(animationSpec = groupEnter()) +
-        slideInHorizontally(
-            animationSpec = groupEnter(visibilityThreshold = IntOffset.VisibilityThreshold),
-            initialOffsetX = { it },
-        )
+fun enterScreenTransition(): EnterTransition = slideInHorizontally(
+    animationSpec = groupEnter(visibilityThreshold = IntOffset.VisibilityThreshold),
+    initialOffsetX = { it },
+)
 
 @Stable
-fun exitScreenTransition(): ExitTransition = fadeOut(animationSpec = groupExit())
+fun exitScreenTransition(): ExitTransition = slideOutHorizontally(
+    animationSpec = groupExit(visibilityThreshold = IntOffset.VisibilityThreshold),
+    targetOffsetX = { -it / 4 },
+) + fadeOut(animationSpec = groupExit())
 
 @Stable
-fun popEnterScreenTransition(): EnterTransition = fadeIn(animationSpec = groupEnter())
+fun popEnterScreenTransition(): EnterTransition = slideInHorizontally(
+    animationSpec = groupEnter(visibilityThreshold = IntOffset.VisibilityThreshold),
+    initialOffsetX = { -it / 4 },
+) + fadeIn(animationSpec = groupEnter())
 
 @Stable
-fun popExitScreenTransition(): ExitTransition =
-    fadeOut(animationSpec = groupExit()) +
-        slideOutHorizontally(
-            animationSpec = groupExit(visibilityThreshold = IntOffset.VisibilityThreshold),
-            targetOffsetX = { it },
-        )
+fun popExitScreenTransition(): ExitTransition = slideOutHorizontally(
+    animationSpec = groupExit(visibilityThreshold = IntOffset.VisibilityThreshold),
+    targetOffsetX = { it },
+)

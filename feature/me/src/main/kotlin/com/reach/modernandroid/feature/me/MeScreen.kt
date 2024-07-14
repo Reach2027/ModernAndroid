@@ -22,7 +22,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
@@ -31,7 +30,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -110,7 +108,9 @@ private fun MeScreen(
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
-    if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded) {
+    if (windowSizeClass.widthSizeClass == WindowWidthSizeClass.Expanded ||
+        windowSizeClass.widthSizeClass == WindowWidthSizeClass.Medium
+    ) {
         isExpanded = true
         MeScreenExpanded(
             uiState = uiState,
@@ -146,15 +146,14 @@ private fun MeScreenExpanded(
 ) {
     val systemBarH = WindowInsets.systemBars.getTop(LocalDensity.current).toDp()
 
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = systemBarH)
-            .padding(horizontal = 16.dp),
+    Column(
+        modifier = Modifier.fillMaxSize()
+            .padding(top = systemBarH),
     ) {
         Box(
             modifier = Modifier
-                .weight(1f)
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
                 .clip(MaterialTheme.shapes.large),
         ) {
             PersonInfo(
@@ -163,13 +162,8 @@ private fun MeScreenExpanded(
                 onSettingsClick = onSettingsClick,
             )
         }
-        Spacer(modifier = Modifier.width(16.dp))
-        Box(
-            modifier = Modifier
-                .weight(1f),
-        ) {
-            DeviceInfo(uiState = uiState)
-        }
+        Spacer(modifier = Modifier.height(16.dp))
+        DeviceInfo(uiState = uiState)
     }
 }
 

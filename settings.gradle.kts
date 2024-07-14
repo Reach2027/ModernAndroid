@@ -1,6 +1,7 @@
 pluginManagement {
     includeBuild("build-logic")
     repositories {
+        // gradle https\://mirrors.tencent.com/gradle/gradle-8.9-all.zip
         maven("https://mirrors.tencent.com/nexus/repository/maven-public/") // google and mavenCentral
         maven("https://mirrors.tencent.com/nexus/repository/gradle-plugins/")
         google()

@@ -16,32 +16,19 @@
 
 package com.reach.modernandroid.ui
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.VisibilityThreshold
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.IntOffset
-import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.reach.modernandroid.core.ui.common.state.AppUiState
-import com.reach.modernandroid.core.ui.design.animation.AppAniSpec
-import com.reach.modernandroid.core.ui.design.animation.widgetEnter
-import com.reach.modernandroid.core.ui.design.animation.widgetExit
 import com.reach.modernandroid.navigation.AppNavHost
 import com.reach.modernandroid.navigation.TopDest
 import com.reach.modernandroid.navigation.isTopDest
@@ -67,71 +54,36 @@ internal fun App(
 private fun AppScreen(
     appUiState: AppUiState,
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-
     val currentDest = appUiState.getNavController()
         .currentBackStackEntryAsState()
         .value
         ?.destination
 
-    Scaffold(
-        modifier = Modifier
-            .fillMaxSize(),
-        bottomBar = {
-            AnimatedVisibility(
-                visible = currentDest.isTopDest(),
-                enter = slideInVertically(
-                    animationSpec = widgetEnter(
-                        dampingRatio = AppAniSpec.DAMPING_RATIO,
-                        visibilityThreshold = IntOffset.VisibilityThreshold,
-                    ),
-                    initialOffsetY = { it },
-                ),
-                exit = slideOutVertically(
-                    animationSpec = widgetExit(
-                        visibilityThreshold = IntOffset.VisibilityThreshold,
-                    ),
-                    targetOffsetY = { it },
-                ),
-            ) {
-                AppNavBar(
-                    destList = TopDest.entries,
-                    onNavToTopDest = { appUiState.getNavController().navToTopDest(it) },
-                    currentDest = currentDest,
+    NavigationSuiteScaffold(
+        navigationSuiteItems = {
+            TopDest.entries.forEach { topDest ->
+                val selected = currentDest.isTopDestInHierarchy(topDest)
+                item(
+                    selected = selected,
+                    onClick = { appUiState.getNavController().navToTopDest(topDest) },
+                    icon = {
+                        Icon(
+                            imageVector = if (selected) topDest.selectedIcon else topDest.unselectedIcon,
+                            contentDescription = "",
+                        )
+                    },
                 )
             }
         },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        contentWindowInsets = WindowInsets(0, 0, 0, 0),
-    ) { padding ->
+        layoutType = if (currentDest.isTopDest()) {
+            NavigationSuiteScaffoldDefaults.calculateFromAdaptiveInfo(currentWindowAdaptiveInfo())
+        } else {
+            NavigationSuiteType.None
+        },
+    ) {
         AppNavHost(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding),
+            modifier = Modifier.fillMaxSize(),
             navController = appUiState.getNavController(),
         )
-    }
-}
-
-@Composable
-private fun AppNavBar(
-    destList: List<TopDest>,
-    onNavToTopDest: (TopDest) -> Unit,
-    currentDest: NavDestination?,
-) {
-    NavigationBar {
-        destList.forEach { topDest ->
-            val selected = currentDest.isTopDestInHierarchy(topDest)
-            NavigationBarItem(
-                selected = selected,
-                onClick = { onNavToTopDest(topDest) },
-                icon = {
-                    Icon(
-                        imageVector = if (selected) topDest.selectedIcon else topDest.unselectedIcon,
-                        contentDescription = "",
-                    )
-                },
-            )
-        }
     }
 }

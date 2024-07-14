@@ -26,17 +26,17 @@ import com.reach.modernandroid.core.ui.common.navigation.AppRoute
 import com.reach.modernandroid.core.ui.design.AppIcons
 
 enum class TopDest(
-    val id: Int,
+    val route: String,
     val selectedIcon: ImageVector,
     val unselectedIcon: ImageVector,
 ) {
     More(
-        id = AppRoute.More.serializer().hashCode(),
+        route = AppRoute.More.serializer().descriptor.serialName,
         selectedIcon = AppIcons.MoreSelected,
         unselectedIcon = AppIcons.MoreUnselected,
     ),
     ME(
-        id = AppRoute.Me.serializer().hashCode(),
+        route = AppRoute.Me.serializer().descriptor.serialName,
         selectedIcon = AppIcons.MeSelected,
         unselectedIcon = AppIcons.MeUnselected,
     ),
@@ -57,12 +57,13 @@ fun NavHostController.navToTopDest(topDest: TopDest) {
     }
 }
 
-fun NavDestination?.isTopDestInHierarchy(topDest: TopDest) =
+fun NavDestination?.isTopDestInHierarchy(topDest: TopDest): Boolean =
     this?.hierarchy?.any {
-        it.id == topDest.id
+        it.route == topDest.route
     } ?: false
 
-fun NavDestination?.isTopDest() =
-    TopDest.entries.any { topDest ->
-        topDest.id == this?.id
+fun NavDestination?.isTopDest(): Boolean {
+    return TopDest.entries.any {
+        it.route == this?.route
     }
+}
