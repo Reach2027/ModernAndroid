@@ -34,7 +34,7 @@ internal class BingWallpaperPagingSource(
         val currentPage = params.key ?: 0
         val bingWallpaperModels = bingWallpaperApi.getBingWallpapers(
             beforeDays = currentPage * 7,
-            count = 8,
+            count = 7,
         )
         LoadResult.Page(
             data = bingWallpaperModels.images,

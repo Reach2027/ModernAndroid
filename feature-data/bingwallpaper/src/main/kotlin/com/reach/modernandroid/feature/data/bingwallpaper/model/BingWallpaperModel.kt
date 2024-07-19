@@ -21,7 +21,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BingWallpapersModel(
-    val images: MutableList<BingWallpaperModel>,
+    val images: List<BingWallpaperModel>,
 )
 
 @Serializable
@@ -31,5 +31,5 @@ data class BingWallpaperModel(
     val copyright: String,
     val title: String,
     @SerialName("startdate")
-    var startDate: String,
+    val startDate: String,
 )

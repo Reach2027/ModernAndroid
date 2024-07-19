@@ -4,7 +4,7 @@
 agp = "8.4.2"
 androidTools = "31.4.2"
 kotlin = "2.0.0"
-ksp = "2.0.0-1.0.22"
+ksp = "2.0.0-1.0.23"
 protobufPlugin = "0.9.4"
 
 detekt = "1.23.6"
@@ -51,7 +51,7 @@ ktor = "2.3.12"
 # Other
 koin = "3.5.6"
 
-coil = "2.6.0"
+coil = "2.7.0"
 
 okio = "3.9.0"
 
@@ -61,7 +61,7 @@ shimmer = "1.2.0"
 
 protobuf = "4.26.1"
 
-haze = "0.7.2"
+haze = "0.7.3"
 
 # Test
 junit = "4.13.2"

@@ -46,18 +46,9 @@ internal class DefaultBingWallpaperApi(
         check(beforeDays > -1) { "Before days must be >= 0" }
         check(beforeDays < 8) { "Before days must be < 8" }
         check(count > 0) { "Image count must be > 0" }
-        check(count < 9) { "Image count must be < 9" }
+        check(count < 8) { "Image count must be < 9" }
 
-        val removeFirst: Boolean
-        val finalCount = if (beforeDays > 6) {
-            removeFirst = true
-            count + 1
-        } else {
-            removeFirst = false
-            count
-        }
-
-        val result: BingWallpapersModel = httpClient.get(BING_BASE_URL + BING_IMAGE_URL) {
+        val response: BingWallpapersModel = httpClient.get(BING_BASE_URL + BING_IMAGE_URL) {
             url {
                 parameters.apply {
                     // response format json
@@ -68,27 +59,25 @@ internal class DefaultBingWallpaperApi(
                     // with 0 meaning the present day, range 0 .. 7
                     append("idx", beforeDays.toString())
                     // the number of images, range 1 .. 8
-                    append("n", finalCount.toString())
+                    append("n", count.toString())
                     // market code
                     append("mkt", Locale.getDefault().toLanguageTag())
                 }
             }
         }.body()
 
-        if (result.images.isEmpty()) {
+        if (response.images.isEmpty()) {
             throw RuntimeException("BingWallpaperApi return empty images")
         }
 
-        if (removeFirst) {
-            result.images.removeFirst()
-        }
         val responseFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
-        val localFormat = DateFormat.getDateInstance(DateFormat.SHORT)
-        result.images.map {
-            it.imageUrl = BING_BASE_URL + it.imageUrl
-            val date = responseFormat.parse(it.startDate)
-            it.startDate = localFormat.format(date)
-        }
-        return result
+        val targetFormat = DateFormat.getDateInstance(DateFormat.SHORT)
+
+        return BingWallpapersModel(response.images.map {
+            it.copy(
+                imageUrl = BING_BASE_URL + it.imageUrl,
+                startDate = targetFormat.format(responseFormat.parse(it.startDate)),
+            )
+        })
     }
 }

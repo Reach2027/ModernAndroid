@@ -18,6 +18,7 @@ package com.reach.modernandroid.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
@@ -44,6 +45,13 @@ internal fun App(
     val appUiState: AppUiState = koinInject()
     appUiState.setWindowSizeClass(windowSizeClass)
     appUiState.setNavController(navController)
+
+    Surface {
+        AppNavHost(
+            modifier = Modifier.fillMaxSize(),
+            navController = appUiState.getNavController(),
+        )
+    }
 
     AppScreen(
         appUiState = appUiState,

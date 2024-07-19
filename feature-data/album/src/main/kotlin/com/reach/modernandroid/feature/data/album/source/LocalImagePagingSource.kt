@@ -21,13 +21,15 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 
-internal const val PAGE_LIMIT = 500
-internal const val MAX_ITEM = PAGE_LIMIT * 3
-
 internal class LocalImagePagingSource(
     private val application: Application,
     private val albumId: Long? = null,
 ) : PagingSource<Int, LocalImageModel>() {
+
+    companion object {
+        internal const val PAGE_LIMIT = 500
+        internal const val MAX_ITEM = PAGE_LIMIT * 3
+    }
 
     override fun getRefreshKey(state: PagingState<Int, LocalImageModel>): Int? =
         state.anchorPosition?.let { position ->
