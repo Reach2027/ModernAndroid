@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reach.android.library)
+    alias(libs.plugins.reachFeatureData)
 }
 
 android {
-    namespace = "com.reach.modernandroid.data.feature.setting"
+    namespace = "com.reach.modernandroid.feature.data.setting"
 
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

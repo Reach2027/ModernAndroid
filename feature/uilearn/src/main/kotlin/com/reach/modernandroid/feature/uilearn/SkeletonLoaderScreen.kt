@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.reach.base.android.common.jni.AndroidCpp
 import com.reach.base.ui.common.widget.SkeletonLoader
 import com.reach.modernandroid.core.ui.common.navigation.AppRoute
 import com.reach.modernandroid.core.ui.common.state.AppUiState
@@ -90,6 +91,8 @@ private fun SkeletonLoaderScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             CustomLoader()
+
+            Text(AndroidCpp.stringFromJni())
         }
     }
 }

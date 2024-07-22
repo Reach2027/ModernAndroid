@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reach.compose.library)
+    alias(libs.plugins.reachComposeLibrary)
     alias(libs.plugins.kotlinxSerialization)
 }
 

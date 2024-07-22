@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reach.jvm.library)
+    alias(libs.plugins.reachJvmLibrary)
 }
 
 dependencies {

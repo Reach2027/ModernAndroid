@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reach.android.library)
+    alias(libs.plugins.reachAndroidLibrary)
     alias(libs.plugins.ksp)
 }
 

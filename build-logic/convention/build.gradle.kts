@@ -42,6 +42,12 @@ gradlePlugin {
             id = "reach.android.library"
             implementationClass = "AndroidLibraryPlugin"
         }
+
+        register("featureDataModule") {
+            id = "reach.feature.data.module"
+            implementationClass = "FeatureDataModulePlugin"
+        }
+
         register("composeLibrary") {
             id = "reach.compose.library"
             implementationClass = "ComposeLibraryPlugin"

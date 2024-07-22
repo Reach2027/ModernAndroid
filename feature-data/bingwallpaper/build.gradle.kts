@@ -14,8 +14,17 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reach.jvm.library)
+    alias(libs.plugins.reachFeatureData)
     alias(libs.plugins.kotlinxSerialization)
+}
+
+android {
+    namespace = "com.reach.modernandroid.feature.data.setting"
+
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles("consumer-rules.pro")
+    }
 }
 
 dependencies {

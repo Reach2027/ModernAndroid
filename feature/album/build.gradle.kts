@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reach.feature.module)
+    alias(libs.plugins.reachFeature)
     alias(libs.plugins.kotlinxSerialization)
 }
 

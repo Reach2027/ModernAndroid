@@ -45,11 +45,3 @@ internal fun Project.configureCompose(
         implementation(libs, "coil")
     }
 }
-
-internal fun Project.configureComposeFeature() {
-    dependencies {
-        add("implementation", project(":base-ui:common"))
-        add("implementation", project(":core-ui:design"))
-        add("implementation", project(":core-ui:common"))
-    }
-}

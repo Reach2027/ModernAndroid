@@ -1,10 +1,10 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.reach.buildlogic.configureAndroid
 import com.reach.buildlogic.configureCompose
-import com.reach.buildlogic.configureComposeFeature
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
 class ApplicationPlugin : Plugin<Project> {
@@ -24,7 +24,11 @@ class ApplicationPlugin : Plugin<Project> {
                 configureCompose(this)
             }
 
-            configureComposeFeature()
+            dependencies {
+                add("implementation", project(":base-ui:common"))
+                add("implementation", project(":core-ui:design"))
+                add("implementation", project(":core-ui:common"))
+            }
         }
     }
 }

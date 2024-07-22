@@ -188,10 +188,10 @@ protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 # Plugins defined by this project
-reach-jvm-library = { id = "reach.jvm.library", version = "unspecified" }
-reach-android-library = { id = "reach.android.library", version = "unspecified" }
-reach-compose-library = { id = "reach.compose.library", version = "unspecified" }
-
-reach-feature-module = { id = "reach.feature.module", version = "unspecified" }
+reachJvmLibrary = { id = "reach.jvm.library", version = "unspecified" }
+reachAndroidLibrary = { id = "reach.android.library", version = "unspecified" }
+reachComposeLibrary = { id = "reach.compose.library", version = "unspecified" }
+reachFeatureData = { id = "reach.feature.data.module", version = "unspecified" }
+reachFeature = { id = "reach.feature.module", version = "unspecified" }
 
 reach-application = { id = "reach.application", version = "unspecified" }

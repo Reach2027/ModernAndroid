@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reach.android.library)
+    alias(libs.plugins.reachAndroidLibrary)
 }
 
 android {
@@ -23,6 +23,12 @@ android {
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+    }
+
+    externalNativeBuild {
+        cmake {
+            path("src/main/cpp/CMakeLists.txt")
+        }
     }
 }
 
