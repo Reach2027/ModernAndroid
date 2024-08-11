@@ -20,8 +20,8 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.reach.modernandroid.core.ui.common.navigation.AppRoute
-import com.reach.modernandroid.core.ui.common.state.AppUiState
+import com.reach.modernandroid.ui.core.common.navigation.AppRoute
+import com.reach.modernandroid.ui.core.common.state.AppUiState
 import com.reach.modernandroid.feature.album.AlbumRoute
 import com.reach.modernandroid.feature.album.preview.PreviewRoute
 import kotlinx.serialization.Serializable

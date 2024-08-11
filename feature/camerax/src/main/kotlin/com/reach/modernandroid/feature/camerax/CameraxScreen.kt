@@ -16,6 +16,7 @@
 
 package com.reach.modernandroid.feature.camerax
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.pm.ActivityInfo
 import android.net.Uri
@@ -51,11 +52,11 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.reach.base.ui.common.toDp
-import com.reach.base.ui.common.widget.AsyncLocalImage
-import com.reach.modernandroid.core.ui.common.navigation.AppRoute
-import com.reach.modernandroid.core.ui.common.permission.RequestPermissionsScreen
-import com.reach.modernandroid.core.ui.common.state.AppUiState
+import com.reach.ui.base.common.toDp
+import com.reach.ui.base.common.widget.AsyncLocalImage
+import com.reach.modernandroid.ui.core.common.navigation.AppRoute
+import com.reach.modernandroid.ui.core.common.permission.RequestPermissionsScreen
+import com.reach.modernandroid.ui.core.common.state.AppUiState
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 
@@ -86,7 +87,7 @@ internal fun CameraxRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     RequestPermissionsScreen(
-        permissions = listOf(android.Manifest.permission.CAMERA),
+        permissions = listOf(Manifest.permission.CAMERA),
         requestTitle = R.string.camerax_request_permission,
         onBackClick = { appUiState.getNavController().navigateUp() },
     ) {

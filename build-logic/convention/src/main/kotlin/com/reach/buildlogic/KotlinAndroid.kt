@@ -18,12 +18,12 @@ internal fun Project.configureAndroid(
 ) {
     commonExtension.apply {
         if (this is ApplicationExtension) {
-            defaultConfig.targetSdk = 34
+            defaultConfig.targetSdk = 35
         } else {
-            lint.targetSdk = 34
+            lint.targetSdk = 35
         }
 
-        compileSdk = 34
+        compileSdk = 35
 
         defaultConfig {
             minSdk = 21

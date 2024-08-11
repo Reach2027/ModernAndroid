@@ -2,7 +2,8 @@ pluginManagement {
     includeBuild("build-logic")
     repositories {
         // gradle https\://mirrors.tencent.com/gradle/gradle-8.9-all.zip
-        maven("https://mirrors.tencent.com/nexus/repository/maven-public/") // google and mavenCentral
+        // google and mavenCentral
+        maven("https://mirrors.tencent.com/nexus/repository/maven-public/")
         maven("https://mirrors.tencent.com/nexus/repository/gradle-plugins/")
         google()
         mavenCentral()
@@ -31,27 +32,24 @@ include(":feature:uilearn")
 include(":feature:album")
 include(":feature:camerax")
 include(":feature:bingwallpaper")
+include(":feature:settings")
 
-// core ui
-include(":core-ui:design")
-include(":core-ui:common")
+// ui core
+include(":ui-core:design")
+include(":ui-core:common")
 
-// base ui
-include(":base-ui:common")
+// ui base
+include(":ui-base:common")
 
 // feature data
 include(":feature-data:album")
 include(":feature-data:bingwallpaper")
 include(":feature-data:settings")
 
-// core data
-include(":core-data:database")
-include(":core-data:network")
-include(":core-data:datastore")
+// data core
+include(":data-core:database")
+include(":data-core:network")
+include(":data-core:datastore")
 
-// base android
-include(":base-android:common")
-
-// base jvm
-include(":base-jvm:common")
-include(":feature:settings")
+// data base
+include(":data-base:common")

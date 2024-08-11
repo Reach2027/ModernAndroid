@@ -17,8 +17,8 @@
 package com.reach.modernandroid.feature.settings
 
 import androidx.lifecycle.ViewModel
-import com.reach.modernandroid.core.data.datastore.model.DarkThemeConfig
-import com.reach.modernandroid.core.data.datastore.model.UserSettings
+import com.reach.modernandroid.data.core.datastore.model.DarkThemeConfig
+import com.reach.modernandroid.data.core.datastore.model.UserSettings
 import com.reach.modernandroid.feature.data.settings.SettingsRepo
 import kotlinx.coroutines.flow.StateFlow
 

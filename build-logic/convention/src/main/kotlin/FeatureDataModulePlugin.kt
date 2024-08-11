@@ -24,8 +24,7 @@ class FeatureDataModulePlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("implementation", project(":base-android:common"))
-                add("implementation", project(":base-jvm:common"))
+                add("implementation", project(":data-base:common"))
             }
         }
     }

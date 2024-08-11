@@ -31,12 +31,11 @@ class FeatureModulePlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("implementation", project(":base-ui:common"))
-                add("implementation", project(":core-ui:design"))
-                add("implementation", project(":core-ui:common"))
+                add("implementation", project(":ui-base:common"))
+                add("implementation", project(":ui-core:design"))
+                add("implementation", project(":ui-core:common"))
 
-                add("implementation", project(":base-android:common"))
-                add("implementation", project(":base-jvm:common"))
+                add("implementation", project(":data-base:common"))
             }
         }
     }

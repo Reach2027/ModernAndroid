@@ -28,8 +28,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.baseJvm.common)
-    implementation(projects.coreData.network)
+    implementation(projects.dataCore.network)
 
     implementation(libs.ktor.core)
     implementation(libs.kotlinx.serialization.json)

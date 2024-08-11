@@ -18,7 +18,7 @@ package com.reach.modernandroid
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.reach.modernandroid.core.data.datastore.model.UserSettings
+import com.reach.modernandroid.data.core.datastore.model.UserSettings
 import com.reach.modernandroid.feature.data.settings.SettingsRepo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -17,7 +17,7 @@
 package com.reach.modernandroid.feature.more
 
 import androidx.navigation.NavController
-import com.reach.modernandroid.core.ui.common.navigation.AppRoute
+import com.reach.modernandroid.ui.core.common.navigation.AppRoute
 
 internal enum class Function(
     val text: String,

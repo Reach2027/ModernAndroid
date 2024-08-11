@@ -29,7 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.reach.modernandroid.core.ui.common.state.AppUiState
+import com.reach.modernandroid.ui.core.common.state.AppUiState
 import com.reach.modernandroid.navigation.AppNavHost
 import com.reach.modernandroid.navigation.TopDest
 import com.reach.modernandroid.navigation.isTopDest

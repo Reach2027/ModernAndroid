@@ -16,8 +16,8 @@
 
 package com.reach.modernandroid.feature.data.settings.di
 
-import com.reach.base.jvm.common.di.QualifierCoroutineScope
-import com.reach.modernandroid.core.data.datastore.di.dataStoreModule
+import com.reach.base.common.di.QualifierCoroutineScope
+import com.reach.modernandroid.data.core.datastore.di.dataStoreModule
 import com.reach.modernandroid.feature.data.settings.DefaultSettingsRepo
 import com.reach.modernandroid.feature.data.settings.SettingsRepo
 import org.koin.core.qualifier.qualifier

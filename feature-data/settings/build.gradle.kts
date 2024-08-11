@@ -27,6 +27,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.baseJvm.common)
-    api(projects.coreData.datastore)
+    api(projects.dataCore.datastore)
 }

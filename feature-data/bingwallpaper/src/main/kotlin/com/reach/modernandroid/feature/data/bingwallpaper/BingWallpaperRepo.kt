@@ -19,8 +19,8 @@ package com.reach.modernandroid.feature.data.bingwallpaper
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.reach.base.jvm.common.Result
-import com.reach.base.jvm.common.flowResult
+import com.reach.base.common.Result
+import com.reach.base.common.flowResult
 import com.reach.modernandroid.feature.data.bingwallpaper.model.BingWallpaperModel
 import com.reach.modernandroid.feature.data.bingwallpaper.source.BingWallpaperApi
 import com.reach.modernandroid.feature.data.bingwallpaper.source.BingWallpaperPagingSource

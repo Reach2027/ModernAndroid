@@ -62,6 +62,8 @@ dependencies {
 
     implementation(projects.featureData.settings)
 
+    implementation(projects.dataBase.common)
+
     implementation(libs.androidx.startup)
 
     implementation(libs.androidx.core)

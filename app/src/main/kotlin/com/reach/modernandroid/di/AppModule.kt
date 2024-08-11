@@ -17,7 +17,7 @@
 package com.reach.modernandroid.di
 
 import com.reach.modernandroid.MainActivityViewModel
-import com.reach.modernandroid.core.ui.common.di.appUiStateStateModule
+import com.reach.modernandroid.ui.core.common.di.appUiStateStateModule
 import com.reach.modernandroid.feature.album.di.albumModule
 import com.reach.modernandroid.feature.bingwallpaper.di.bingWallpaperModule
 import com.reach.modernandroid.feature.camerax.di.cameraxModule

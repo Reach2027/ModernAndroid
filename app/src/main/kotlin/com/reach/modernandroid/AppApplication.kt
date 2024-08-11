@@ -17,6 +17,7 @@
 package com.reach.modernandroid
 
 import android.app.Application
+import com.reach.base.common.jni.AndroidCpp
 import com.reach.modernandroid.di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -26,6 +27,8 @@ class AppApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
+        AndroidCpp.bindMainThread()
 
         setupKoin()
     }
