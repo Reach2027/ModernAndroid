@@ -49,11 +49,11 @@ import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.reach.ui.base.common.clickableNoVisualEffect
 import com.reach.modernandroid.ui.core.common.navigation.AppRoute
 import com.reach.modernandroid.ui.core.common.state.AppUiState
 import com.reach.modernandroid.ui.core.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.ui.core.design.theme.AppTheme
+import com.reach.ui.base.common.clickableNoVisualEffect
 import org.koin.compose.koinInject
 
 fun NavGraphBuilder.lottieRoute() {

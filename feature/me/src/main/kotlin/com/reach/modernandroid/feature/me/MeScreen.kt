@@ -53,12 +53,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import coil.compose.AsyncImagePainter
-import com.reach.ui.base.common.devicepreview.DevicePreviews
-import com.reach.ui.base.common.devicepreview.previewWindowSizeClass
-import com.reach.ui.base.common.toDp
-import com.reach.ui.base.common.widget.SkeletonAsyncImage
-import com.reach.ui.base.common.widget.SkeletonLoader
-import com.reach.ui.base.common.widget.VerticalTransparentBg
 import com.reach.modernandroid.ui.core.common.AppPreview
 import com.reach.modernandroid.ui.core.common.navigation.AppRoute
 import com.reach.modernandroid.ui.core.common.state.AppUiState
@@ -68,6 +62,12 @@ import com.reach.modernandroid.ui.core.design.animation.topDestEnterTransition
 import com.reach.modernandroid.ui.core.design.animation.topDestExitTransition
 import com.reach.modernandroid.ui.core.design.animation.widgetEnter
 import com.reach.modernandroid.ui.core.design.animation.widgetExit
+import com.reach.ui.base.common.devicepreview.DevicePreviews
+import com.reach.ui.base.common.devicepreview.previewWindowSizeClass
+import com.reach.ui.base.common.toDp
+import com.reach.ui.base.common.widget.SkeletonAsyncImage
+import com.reach.ui.base.common.widget.SkeletonLoader
+import com.reach.ui.base.common.widget.VerticalTransparentBg
 import org.koin.androidx.compose.navigation.koinNavViewModel
 import org.koin.compose.koinInject
 

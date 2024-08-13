@@ -17,13 +17,13 @@
 package com.reach.modernandroid.di
 
 import com.reach.modernandroid.MainActivityViewModel
-import com.reach.modernandroid.ui.core.common.di.appUiStateStateModule
 import com.reach.modernandroid.feature.album.di.albumModule
 import com.reach.modernandroid.feature.bingwallpaper.di.bingWallpaperModule
 import com.reach.modernandroid.feature.camerax.di.cameraxModule
 import com.reach.modernandroid.feature.data.settings.di.settingsDataModule
 import com.reach.modernandroid.feature.me.di.meModule
 import com.reach.modernandroid.feature.settings.di.settingsModule
+import com.reach.modernandroid.ui.core.common.di.appUiStateStateModule
 import org.koin.androidx.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 

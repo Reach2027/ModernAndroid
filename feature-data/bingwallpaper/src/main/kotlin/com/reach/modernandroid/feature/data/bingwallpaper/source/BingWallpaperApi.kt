@@ -73,11 +73,13 @@ internal class DefaultBingWallpaperApi(
         val responseFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
         val targetFormat = DateFormat.getDateInstance(DateFormat.SHORT)
 
-        return BingWallpapersModel(response.images.map {
-            it.copy(
-                imageUrl = BING_BASE_URL + it.imageUrl,
-                startDate = targetFormat.format(responseFormat.parse(it.startDate)),
-            )
-        })
+        return BingWallpapersModel(
+            response.images.map {
+                it.copy(
+                    imageUrl = BING_BASE_URL + it.imageUrl,
+                    startDate = targetFormat.format(responseFormat.parse(it.startDate)),
+                )
+            },
+        )
     }
 }

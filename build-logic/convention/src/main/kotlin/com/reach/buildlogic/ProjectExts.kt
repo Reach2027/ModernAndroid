@@ -9,6 +9,8 @@ import org.gradle.kotlin.dsl.getByType
 val Project.libs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
+internal fun Project.getPluginId(plugin: String) = libs.findPlugin(plugin).get().get().pluginId
+
 internal fun DependencyHandlerScope.implementation(libs: VersionCatalog, alias: String) {
     add("implementation", libs.findLibrary(alias).get())
 }

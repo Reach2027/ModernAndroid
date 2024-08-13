@@ -42,11 +42,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.reach.base.common.jni.AndroidCpp
-import com.reach.ui.base.common.widget.SkeletonLoader
 import com.reach.modernandroid.ui.core.common.navigation.AppRoute
 import com.reach.modernandroid.ui.core.common.state.AppUiState
 import com.reach.modernandroid.ui.core.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.ui.core.design.theme.AppTheme
+import com.reach.ui.base.common.widget.SkeletonLoader
 import org.koin.compose.koinInject
 
 fun NavGraphBuilder.skeletonLoaderRoute() {

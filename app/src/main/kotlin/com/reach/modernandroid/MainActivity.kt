@@ -34,10 +34,10 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.lifecycleScope
 import com.reach.modernandroid.data.core.datastore.model.DarkThemeConfig
+import com.reach.modernandroid.ui.App
 import com.reach.modernandroid.ui.core.common.state.AppUiState
 import com.reach.modernandroid.ui.core.common.state.StatusDarkMode
 import com.reach.modernandroid.ui.core.design.theme.AppTheme
-import com.reach.modernandroid.ui.App
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject

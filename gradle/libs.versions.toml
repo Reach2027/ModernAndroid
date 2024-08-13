@@ -6,8 +6,6 @@ kotlin = "2.0.10"
 ksp = "2.0.10-1.0.24"
 protobufPlugin = "0.9.4"
 
-detekt = "1.23.6"
-
 # Library
 # Compose
 composeBom = "2024.06.00"
@@ -69,7 +67,7 @@ junit = "4.13.2"
 # Compsoe
 compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 
-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "composeAnimation"  }
+compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "composeAnimation" }
 
 compose-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
 compose-material3-window-size = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3" }
@@ -183,13 +181,19 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinxSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 # Plugins defined by this project
-reachJvmLibrary = { id = "reach.jvm.library", version = "unspecified" }
-reachAndroidLibrary = { id = "reach.android.library", version = "unspecified" }
-reachComposeLibrary = { id = "reach.compose.library", version = "unspecified" }
-reachFeatureData = { id = "reach.feature.data.module", version = "unspecified" }
-reachFeature = { id = "reach.feature.module", version = "unspecified" }
-
 reach-application = { id = "reach.application", version = "unspecified" }
+
+reachFeature = { id = "reach.feature.module", version = "unspecified" }
+reachFeatureData = { id = "reach.feature.data.module", version = "unspecified" }
+
+reachUiCore = { id = "reach.ui.core.module", version = "unspecified" }
+reachUiBase = { id = "reach.ui.base.module", version = "unspecified" }
+
+reachDataCore = { id = "reach.data.core.module", version = "unspecified" }
+reachDataBase = { id = "reach.data.base.module", version = "unspecified" }
+
+reachJvmLibrary = { id = "reach.jvm.library", version = "unspecified" }
+
+reachAndroidLibrary = { id = "reach.android.library", version = "unspecified" }

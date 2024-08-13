@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reachAndroidLibrary)
+    alias(libs.plugins.reachDataCore)
     alias(libs.plugins.protobuf)
 }
 
@@ -55,8 +55,6 @@ androidComponents.beforeVariants {
 }
 
 dependencies {
-    implementation(projects.dataBase.common)
-
     implementation(libs.androidx.datastore)
     implementation(libs.protobuf.kotlin.lite)
 }

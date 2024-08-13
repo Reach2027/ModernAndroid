@@ -3,18 +3,20 @@ import com.android.build.gradle.LibraryExtension
 import com.reach.buildlogic.configureAndroid
 import com.reach.buildlogic.configureCompose
 import com.reach.buildlogic.disableUnnecessaryAndroidTests
+import com.reach.buildlogic.getPluginId
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
+import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
-class ComposeLibraryPlugin : Plugin<Project> {
+class UiBaseModulePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("com.android.library")
-                apply("org.jetbrains.kotlin.android")
-                apply("org.jetbrains.kotlin.plugin.compose")
+                apply(getPluginId("androidLibrary"))
+                apply(getPluginId("kotlinAndroid"))
+                apply(getPluginId("composeCompiler"))
             }
 
             extensions.configure<LibraryExtension> {
@@ -25,8 +27,8 @@ class ComposeLibraryPlugin : Plugin<Project> {
                 configureCompose(this)
             }
 
-            extensions.configure<LibraryAndroidComponentsExtension> {
-                disableUnnecessaryAndroidTests(target)
+            dependencies {
+                add("implementation", project(":data-base:common"))
             }
         }
     }

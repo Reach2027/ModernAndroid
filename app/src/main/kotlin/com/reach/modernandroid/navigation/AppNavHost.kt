@@ -20,11 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.reach.modernandroid.ui.core.common.navigation.AppRoute
-import com.reach.modernandroid.ui.core.design.animation.enterScreenTransition
-import com.reach.modernandroid.ui.core.design.animation.exitScreenTransition
-import com.reach.modernandroid.ui.core.design.animation.popEnterScreenTransition
-import com.reach.modernandroid.ui.core.design.animation.popExitScreenTransition
 import com.reach.modernandroid.feature.album.navigation.albumGraph
 import com.reach.modernandroid.feature.bingwallpaper.bingWallpaperRoute
 import com.reach.modernandroid.feature.camerax.cameraxRoute
@@ -33,6 +28,11 @@ import com.reach.modernandroid.feature.more.moreRoute
 import com.reach.modernandroid.feature.settings.settingsRoute
 import com.reach.modernandroid.feature.uilearn.lottieRoute
 import com.reach.modernandroid.feature.uilearn.skeletonLoaderRoute
+import com.reach.modernandroid.ui.core.common.navigation.AppRoute
+import com.reach.modernandroid.ui.core.design.animation.enterScreenTransition
+import com.reach.modernandroid.ui.core.design.animation.exitScreenTransition
+import com.reach.modernandroid.ui.core.design.animation.popEnterScreenTransition
+import com.reach.modernandroid.ui.core.design.animation.popExitScreenTransition
 
 @Composable
 internal fun AppNavHost(

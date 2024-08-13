@@ -8,7 +8,7 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 
-class FeatureDataModulePlugin : Plugin<Project> {
+class DataBaseModulePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
@@ -18,10 +18,6 @@ class FeatureDataModulePlugin : Plugin<Project> {
 
             extensions.configure<LibraryExtension> {
                 configureAndroid(this)
-            }
-
-            dependencies {
-                add("implementation", project(":data-base:common"))
             }
         }
     }

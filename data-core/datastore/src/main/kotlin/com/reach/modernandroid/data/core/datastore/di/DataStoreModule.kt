@@ -19,9 +19,9 @@ package com.reach.modernandroid.data.core.datastore.di
 import androidx.datastore.core.DataStore
 import com.reach.base.common.di.QualifierCoroutineScope
 import com.reach.base.common.di.coroutineScopeModule
+import com.reach.modernandroid.core.data.datastore.SettingsPb
 import com.reach.modernandroid.data.core.datastore.DefaultSettingsLocalSource
 import com.reach.modernandroid.data.core.datastore.SettingsLocalSource
-import com.reach.modernandroid.core.data.datastore.SettingsPb
 import com.reach.modernandroid.data.core.datastore.getSettingsDataStore
 import org.koin.android.ext.koin.androidApplication
 import org.koin.core.qualifier.qualifier

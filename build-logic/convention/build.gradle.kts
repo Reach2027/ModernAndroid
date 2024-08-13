@@ -32,24 +32,9 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("jvmLibrary") {
-            id = "reach.jvm.library"
-            implementationClass = "JvmLibraryPlugin"
-        }
-
-        register("androidLibrary") {
-            id = "reach.android.library"
-            implementationClass = "AndroidLibraryPlugin"
-        }
-
-        register("featureDataModule") {
-            id = "reach.feature.data.module"
-            implementationClass = "FeatureDataModulePlugin"
-        }
-
-        register("composeLibrary") {
-            id = "reach.compose.library"
-            implementationClass = "ComposeLibraryPlugin"
+        register("application") {
+            id = "reach.application"
+            implementationClass = "ApplicationPlugin"
         }
 
         register("featureModule") {
@@ -57,10 +42,34 @@ gradlePlugin {
             implementationClass = "FeatureModulePlugin"
         }
 
-        register("application") {
-            id = "reach.application"
-            implementationClass = "ApplicationPlugin"
+        register("featureDataModule") {
+            id = "reach.feature.data.module"
+            implementationClass = "FeatureDataModulePlugin"
         }
 
+        register("uiCoreModule") {
+            id = "reach.ui.core.module"
+            implementationClass = "UiCoreModulePlugin"
+        }
+
+        register("uiBaseModule") {
+            id = "reach.ui.base.module"
+            implementationClass = "UiBaseModulePlugin"
+        }
+
+        register("dataCoreModule") {
+            id = "reach.data.core.module"
+            implementationClass = "DataCoreModulePlugin"
+        }
+
+        register("dataBaseModule") {
+            id = "reach.data.base.module"
+            implementationClass = "DataBaseModulePlugin"
+        }
+
+        register("jvmLibrary") {
+            id = "reach.jvm.library"
+            implementationClass = "JvmLibraryPlugin"
+        }
     }
 }

@@ -1,5 +1,5 @@
-import com.android.build.api.dsl.LibraryExtension
 import com.android.build.api.variant.LibraryAndroidComponentsExtension
+import com.android.build.gradle.LibraryExtension
 import com.reach.buildlogic.configureAndroid
 import com.reach.buildlogic.configureCompose
 import com.reach.buildlogic.disableUnnecessaryAndroidTests
@@ -10,7 +10,7 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
-class FeatureModulePlugin : Plugin<Project> {
+class UiCoreModulePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
@@ -28,10 +28,6 @@ class FeatureModulePlugin : Plugin<Project> {
             }
 
             dependencies {
-                add("implementation", project(":ui-base:common"))
-                add("implementation", project(":ui-core:design"))
-                add("implementation", project(":ui-core:common"))
-
                 add("implementation", project(":data-base:common"))
             }
         }

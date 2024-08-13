@@ -10,7 +10,6 @@ internal fun Project.configureCompose(
 ) {
     with(composeCompilerGradlePluginExtension) {
         enableStrongSkippingMode.set(true)
-        enableNonSkippingGroupOptimization.set(true)
         targetKotlinPlatforms.set(setOf(KotlinPlatformType.androidJvm))
     }
 

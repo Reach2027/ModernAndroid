@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reachAndroidLibrary)
+    alias(libs.plugins.reachDataCore)
     alias(libs.plugins.ksp)
 }
 

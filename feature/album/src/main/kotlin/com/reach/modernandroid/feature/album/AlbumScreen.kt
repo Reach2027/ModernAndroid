@@ -93,10 +93,9 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.reach.base.common.util.getReadImagePermission
-import com.reach.ui.base.common.devicepreview.previewWindowSizeClass
-import com.reach.ui.base.common.toDp
-import com.reach.ui.base.common.widget.AsyncLocalImage
-import com.reach.ui.base.common.widget.VerticalTransparentBg
+import com.reach.modernandroid.feature.album.navigation.RoutePreview
+import com.reach.modernandroid.feature.data.album.model.LocalAlbumModel
+import com.reach.modernandroid.feature.data.album.model.LocalImageModel
 import com.reach.modernandroid.ui.core.common.AppPreview
 import com.reach.modernandroid.ui.core.common.permission.RequestPermissionsScreen
 import com.reach.modernandroid.ui.core.common.state.AppUiState
@@ -108,9 +107,10 @@ import com.reach.modernandroid.ui.core.design.animation.groupEnter
 import com.reach.modernandroid.ui.core.design.animation.groupExit
 import com.reach.modernandroid.ui.core.design.animation.widgetEnter
 import com.reach.modernandroid.ui.core.design.animation.widgetExit
-import com.reach.modernandroid.feature.album.navigation.RoutePreview
-import com.reach.modernandroid.feature.data.album.model.LocalAlbumModel
-import com.reach.modernandroid.feature.data.album.model.LocalImageModel
+import com.reach.ui.base.common.devicepreview.previewWindowSizeClass
+import com.reach.ui.base.common.toDp
+import com.reach.ui.base.common.widget.AsyncLocalImage
+import com.reach.ui.base.common.widget.VerticalTransparentBg
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
 import dev.chrisbanes.haze.hazeChild

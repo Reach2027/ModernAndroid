@@ -68,11 +68,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
-import com.reach.ui.base.common.devicepreview.DevicePreviews
-import com.reach.ui.base.common.toDp
-import com.reach.ui.base.common.widget.SkeletonAsyncImage
-import com.reach.ui.base.common.widget.SkeletonLoader
-import com.reach.ui.base.common.widget.VerticalTransparentBg
+import com.reach.modernandroid.feature.data.bingwallpaper.model.BingWallpaperModel
 import com.reach.modernandroid.ui.core.common.AppPreview
 import com.reach.modernandroid.ui.core.common.navigation.AppRoute
 import com.reach.modernandroid.ui.core.common.state.AppUiState
@@ -80,7 +76,11 @@ import com.reach.modernandroid.ui.core.common.state.StatusDarkMode
 import com.reach.modernandroid.ui.core.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.ui.core.design.animation.widgetEnter
 import com.reach.modernandroid.ui.core.design.animation.widgetExit
-import com.reach.modernandroid.feature.data.bingwallpaper.model.BingWallpaperModel
+import com.reach.ui.base.common.devicepreview.DevicePreviews
+import com.reach.ui.base.common.toDp
+import com.reach.ui.base.common.widget.SkeletonAsyncImage
+import com.reach.ui.base.common.widget.SkeletonLoader
+import com.reach.ui.base.common.widget.VerticalTransparentBg
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.koin.androidx.compose.navigation.koinNavViewModel
