@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reachDataCore)
+    alias(libs.plugins.dataCoreModule)
     alias(libs.plugins.ksp)
 }
 

@@ -32,42 +32,42 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("application") {
+        register("ApplicationPlugin") {
             id = "reach.application"
             implementationClass = "ApplicationPlugin"
         }
 
-        register("featureModule") {
+        register("FeatureModulePlugin") {
             id = "reach.feature.module"
             implementationClass = "FeatureModulePlugin"
         }
 
-        register("featureDataModule") {
+        register("FeatureDataModulePlugin") {
             id = "reach.feature.data.module"
             implementationClass = "FeatureDataModulePlugin"
         }
 
-        register("uiCoreModule") {
+        register("UiCoreModulePlugin") {
             id = "reach.ui.core.module"
             implementationClass = "UiCoreModulePlugin"
         }
 
-        register("uiBaseModule") {
+        register("UiBaseModulePlugin") {
             id = "reach.ui.base.module"
             implementationClass = "UiBaseModulePlugin"
         }
 
-        register("dataCoreModule") {
+        register("DataCoreModulePlugin") {
             id = "reach.data.core.module"
             implementationClass = "DataCoreModulePlugin"
         }
 
-        register("dataBaseModule") {
+        register("DataBaseModulePlugin") {
             id = "reach.data.base.module"
             implementationClass = "DataBaseModulePlugin"
         }
 
-        register("jvmLibrary") {
+        register("JvmLibraryPlugin") {
             id = "reach.jvm.library"
             implementationClass = "JvmLibraryPlugin"
         }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reachUiCore)
+    alias(libs.plugins.uiCoreModule)
     alias(libs.plugins.kotlinxSerialization)
 }
 

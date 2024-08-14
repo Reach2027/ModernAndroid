@@ -11,29 +11,27 @@ import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeCompilerGradlePluginExtension
 
 class FeatureModulePlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            with(pluginManager) {
-                apply(getPluginId("androidLibrary"))
-                apply(getPluginId("kotlinAndroid"))
-                apply(getPluginId("composeCompiler"))
-            }
+    override fun apply(target: Project) = with(target) {
+        with(pluginManager) {
+            apply(getPluginId("androidLibrary"))
+            apply(getPluginId("kotlinAndroid"))
+            apply(getPluginId("composeCompiler"))
+        }
 
-            extensions.configure<LibraryExtension> {
-                configureAndroid(this)
-            }
+        extensions.configure<LibraryExtension> {
+            configureAndroid(this)
+        }
 
-            extensions.configure<ComposeCompilerGradlePluginExtension> {
-                configureCompose(this)
-            }
+        extensions.configure<ComposeCompilerGradlePluginExtension> {
+            configureCompose(this)
+        }
 
-            dependencies {
-                add("implementation", project(":ui-base:common"))
-                add("implementation", project(":ui-core:design"))
-                add("implementation", project(":ui-core:common"))
+        dependencies {
+            add("implementation", project(":ui-base:common"))
+            add("implementation", project(":ui-core:design"))
+            add("implementation", project(":ui-core:common"))
 
-                add("implementation", project(":data-base:common"))
-            }
+            add("implementation", project(":data-base:common"))
         }
     }
 }

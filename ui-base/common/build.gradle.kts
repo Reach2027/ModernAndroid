@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reachUiBase)
+    alias(libs.plugins.uiBaseModule)
 }
 
 android {

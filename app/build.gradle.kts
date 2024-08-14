@@ -15,7 +15,7 @@
  */
 
 plugins {
-    alias(libs.plugins.reach.application)
+    alias(libs.plugins.application)
     alias(libs.plugins.kotlinxSerialization)
 }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reachFeatureData)
+    alias(libs.plugins.featureDataModule)
 }
 
 android {

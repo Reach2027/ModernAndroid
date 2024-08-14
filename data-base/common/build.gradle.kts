@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reachDataBase)
+    alias(libs.plugins.dataBaseModule)
 }
 
 android {

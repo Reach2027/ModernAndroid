@@ -4,13 +4,11 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class JvmLibraryPlugin : Plugin<Project> {
-    override fun apply(target: Project) {
-        with(target) {
-            with(pluginManager) {
-                apply(getPluginId("kotlinJvm"))
-            }
-
-            configureJvm()
+    override fun apply(target: Project) = with(target) {
+        with(pluginManager) {
+            apply(getPluginId("kotlinJvm"))
         }
+
+        configureJvm()
     }
 }

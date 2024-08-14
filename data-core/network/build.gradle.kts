@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 plugins {
-    alias(libs.plugins.reachJvmLibrary)
+    alias(libs.plugins.jvmLibrary)
     alias(libs.plugins.kotlinxSerialization)
 }
 
