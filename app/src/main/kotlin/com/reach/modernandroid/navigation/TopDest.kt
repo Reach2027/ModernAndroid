@@ -62,8 +62,6 @@ fun NavDestination?.isTopDestInHierarchy(topDest: TopDest): Boolean =
         it.route == topDest.route
     } ?: false
 
-fun NavDestination?.isTopDest(): Boolean {
-    return TopDest.entries.any {
-        it.route == this?.route
-    }
+fun NavDestination?.isTopDest(): Boolean = TopDest.entries.any {
+    it.route == this?.route
 }

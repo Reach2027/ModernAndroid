@@ -64,9 +64,7 @@ internal class DefaultAppUiState : AppUiState {
         MutableStateFlow(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED)
     override val requestedOrientation = _requestedOrientation.asStateFlow()
 
-    override fun getWindowSizeClass(): WindowSizeClass {
-        return requireNotNull(windowSizeClass)
-    }
+    override fun getWindowSizeClass(): WindowSizeClass = requireNotNull(windowSizeClass)
 
     override fun setWindowSizeClass(windowSizeClass: WindowSizeClass) {
         if (this.windowSizeClass != windowSizeClass) {
@@ -74,9 +72,7 @@ internal class DefaultAppUiState : AppUiState {
         }
     }
 
-    override fun getNavController(): NavHostController {
-        return requireNotNull(navController)
-    }
+    override fun getNavController(): NavHostController = requireNotNull(navController)
 
     override fun setNavController(navController: NavHostController) {
         if (this.navController != navController) {

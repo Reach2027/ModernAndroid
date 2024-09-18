@@ -1,7 +1,7 @@
-val ktlintVersion = "1.2.1"
+val ktlintVersion = "1.3.1"
 
 initscript {
-    val spotlessVersion = "6.25.0"
+    val spotlessVersion = "7.0.0.BETA2"
 
     repositories {
         maven("https://mirrors.tencent.com/nexus/repository/maven-public/")

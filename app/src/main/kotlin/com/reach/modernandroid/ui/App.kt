@@ -18,7 +18,6 @@ package com.reach.modernandroid.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
@@ -35,6 +34,7 @@ import com.reach.modernandroid.navigation.isTopDest
 import com.reach.modernandroid.navigation.isTopDestInHierarchy
 import com.reach.modernandroid.navigation.navToTopDest
 import com.reach.modernandroid.ui.core.common.state.AppUiState
+import org.koin.androidx.compose.KoinAndroidContext
 import org.koin.compose.koinInject
 
 @Composable
@@ -42,26 +42,17 @@ internal fun App(
     windowSizeClass: WindowSizeClass,
     navController: NavHostController = rememberNavController(),
 ) {
-    val appUiState: AppUiState = koinInject()
-    appUiState.setWindowSizeClass(windowSizeClass)
-    appUiState.setNavController(navController)
+    KoinAndroidContext {
+        val appUiState: AppUiState = koinInject()
+        appUiState.setWindowSizeClass(windowSizeClass)
+        appUiState.setNavController(navController)
 
-    Surface {
-        AppNavHost(
-            modifier = Modifier.fillMaxSize(),
-            navController = appUiState.getNavController(),
-        )
+        AppScreen(appUiState = appUiState)
     }
-
-    AppScreen(
-        appUiState = appUiState,
-    )
 }
 
 @Composable
-private fun AppScreen(
-    appUiState: AppUiState,
-) {
+private fun AppScreen(appUiState: AppUiState) {
     val currentDest = appUiState.getNavController()
         .currentBackStackEntryAsState()
         .value

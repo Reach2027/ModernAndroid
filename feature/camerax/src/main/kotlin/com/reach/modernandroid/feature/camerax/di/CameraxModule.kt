@@ -17,7 +17,7 @@
 package com.reach.modernandroid.feature.camerax.di
 
 import com.reach.modernandroid.feature.camerax.CameraxViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val cameraxModule = module {

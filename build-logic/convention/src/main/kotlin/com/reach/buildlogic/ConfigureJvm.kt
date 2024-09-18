@@ -20,6 +20,7 @@ internal fun Project.configureJvm() {
         implementation(libs, "kotlinx-coroutines-core")
 
         implementation(libs, "koin-core")
+        implementation(libs, "koin-core-coroutines")
 
         implementation(libs, "androidx-collection")
     }

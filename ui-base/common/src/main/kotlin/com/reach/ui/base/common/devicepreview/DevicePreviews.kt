@@ -24,10 +24,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 
-@Preview(name = "phone-port", device = "spec:shape=Normal,width=378,height=840,unit=dp,dpi=420")
-@Preview(name = "phone-land", device = "spec:shape=Normal,width=840,height=378,unit=dp,dpi=420")
-@Preview(name = "tablet-port", device = "spec:shape=Normal,width=720,height=1152,unit=dp,dpi=420")
-@Preview(name = "tablet-land", device = "spec:shape=Normal,width=1152,height=720,unit=dp,dpi=420")
+@Preview(name = "phone-port", device = "spec:width=378dp,height=840dp,dpi=420")
+@Preview(name = "phone-land", device = "spec:width=840dp,height=378dp,dpi=420")
+@Preview(name = "tablet-port", device = "spec:width=720dp,height=1152dp,dpi=420")
+@Preview(name = "tablet-land", device = "spec:width=1152dp,height=720dp,dpi=420")
 annotation class DevicePreviews
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)

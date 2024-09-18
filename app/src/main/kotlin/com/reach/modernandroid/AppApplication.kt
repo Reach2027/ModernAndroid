@@ -19,9 +19,11 @@ package com.reach.modernandroid
 import android.app.Application
 import com.reach.base.common.jni.AndroidCpp
 import com.reach.modernandroid.di.appModule
+import kotlinx.coroutines.Dispatchers
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.lazyModules
 
 class AppApplication : Application() {
 
@@ -37,7 +39,7 @@ class AppApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@AppApplication)
-            modules(appModule)
+            lazyModules(appModule, dispatcher = Dispatchers.Default)
         }
     }
 }

@@ -24,10 +24,10 @@ import com.reach.modernandroid.feature.data.settings.di.settingsDataModule
 import com.reach.modernandroid.feature.me.di.meModule
 import com.reach.modernandroid.feature.settings.di.settingsModule
 import com.reach.modernandroid.ui.core.common.di.appUiStateStateModule
-import org.koin.androidx.viewmodel.dsl.viewModelOf
-import org.koin.dsl.module
+import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.lazyModule
 
-internal val appModule = module {
+internal val appModule = lazyModule {
     includes(
         settingsDataModule,
         appUiStateStateModule,

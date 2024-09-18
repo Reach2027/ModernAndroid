@@ -43,10 +43,12 @@ internal fun Project.configureAndroid(
     }
 
     dependencies {
-        add("coreLibraryDesugaring", libs.findLibrary("android.desugar.jdk").get())
+        add("coreLibraryDesugaring", libs.findLibrary("android-desugar-jdk").get())
 
         implementation(libs, "kotlinx-coroutines-android")
 
+        implementation(libs, "koin-core")
+        implementation(libs, "koin-core-coroutines")
         implementation(libs, "koin-android")
 
         implementation(libs, "androidx-collection")

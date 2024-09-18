@@ -524,15 +524,14 @@ private fun LazyGridItemScope.LocalImageItem(
 }
 
 @Composable
-private fun rememberColumnCount(windowSizeClass: WindowSizeClass): IntArray {
-    return remember(windowSizeClass) {
+private fun rememberColumnCount(windowSizeClass: WindowSizeClass): IntArray =
+    remember(windowSizeClass) {
         when (windowSizeClass.widthSizeClass) {
             WindowWidthSizeClass.Compact -> intArrayOf(1, 3, 4)
             WindowWidthSizeClass.Medium -> intArrayOf(2, 4, 5)
             else -> intArrayOf(3, 5, 6)
         }
     }
-}
 
 @Preview
 @Composable

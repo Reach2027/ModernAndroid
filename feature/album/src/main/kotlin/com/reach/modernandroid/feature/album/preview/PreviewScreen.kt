@@ -30,7 +30,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
@@ -79,7 +78,6 @@ import com.reach.modernandroid.ui.core.common.AppPreview
 import com.reach.modernandroid.ui.core.common.state.AppUiState
 import com.reach.modernandroid.ui.core.common.widget.AppTopBarWithBack
 import com.reach.modernandroid.ui.core.design.animation.widgetEnter
-import com.reach.ui.base.common.toPx
 import com.reach.ui.base.common.widget.AsyncLocalImage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -107,7 +105,6 @@ internal fun PreviewRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun PreviewScreen(
     onBackClick: () -> Unit,
@@ -134,8 +131,6 @@ private fun PreviewScreen(
         }
     }
 
-    val overOffsetY = 10.dp.toPx()
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -158,7 +153,6 @@ private fun PreviewScreen(
                 exitPreview = onBackClick,
                 localImageModel = items[index],
                 fullScreen = fullScreen,
-                overOffsetY = overOffsetY,
             )
         }
 
@@ -210,7 +204,6 @@ private fun PreviewItem(
     exitPreview: () -> Unit,
     localImageModel: LocalImageModel?,
     fullScreen: Boolean,
-    overOffsetY: Float,
 ) {
     if (localImageModel == null) {
         return
@@ -309,7 +302,6 @@ private fun PreviewItem(
                             maxOffsetState = maxOffsetState,
                         )
                         updateOffset(
-                            overOffsetY = overOffsetY,
                             scale = targetScale,
                             targetOffset = targetOffset,
                             offsetState = offsetState,
@@ -343,7 +335,6 @@ private fun PreviewItem(
                                     maxOffsetState = maxOffsetState,
                                 )
                                 updateOffset(
-                                    overOffsetY = overOffsetY,
                                     scale = 1f,
                                     targetOffset = Offset.Zero,
                                     offsetState = offsetState,
@@ -379,7 +370,6 @@ private fun PreviewItem(
                         )
                     }
                     updateOffset(
-                        overOffsetY = overOffsetY,
                         scale = scaleState.floatValue,
                         targetOffset = offsetState.value + pan / zoom,
                         offsetState = offsetState,
@@ -446,7 +436,6 @@ private fun updateScale(
 }
 
 private fun updateOffset(
-    overOffsetY: Float,
     scale: Float,
     targetOffset: Offset,
     offsetState: MutableState<Offset>,

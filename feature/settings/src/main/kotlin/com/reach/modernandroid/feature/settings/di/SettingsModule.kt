@@ -18,7 +18,7 @@ package com.reach.modernandroid.feature.settings.di
 
 import com.reach.modernandroid.feature.data.settings.di.settingsDataModule
 import com.reach.modernandroid.feature.settings.SettingsViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val settingsModule = module {

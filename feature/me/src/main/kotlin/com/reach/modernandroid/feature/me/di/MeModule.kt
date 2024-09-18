@@ -19,7 +19,7 @@ package com.reach.modernandroid.feature.me.di
 import com.reach.base.common.di.deviceStateModule
 import com.reach.modernandroid.feature.data.bingwallpaper.di.bingWallpaperDataModule
 import com.reach.modernandroid.feature.me.MeViewModel
-import org.koin.androidx.viewmodel.dsl.viewModelOf
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
 
 val meModule = module {
